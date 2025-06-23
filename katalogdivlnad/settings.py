@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,6 +35,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -46,7 +48,7 @@ ROOT_URLCONF = "katalogdivlnad.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -103,8 +105,8 @@ USE_TZ = config("USE_TZ", cast=bool)
 
 
 LANGUAGES = [
-    ("cs", "Čeština"),
-    ("en", "English"),
+    ("cs", _("Czech")),
+    ("en", _("English")),
 ]
 
 
