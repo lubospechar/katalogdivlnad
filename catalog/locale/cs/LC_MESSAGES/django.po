@@ -1,33 +1,10 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
-msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 20:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
-"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-
 #: catalog/models.py:14
 msgid "Group Name (Czech)"
 msgstr ""
 
 #: catalog/models.py:19
-#, fuzzy
-#| msgid "Advantage (English)"
 msgid "Group Name (English)"
-msgstr "Výhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:34
 msgid "The Czech and English group name must be different."
@@ -35,19 +12,19 @@ msgstr ""
 
 #: catalog/models.py:39 catalog/models.py:305
 msgid "Group"
-msgstr "Skupina"
+msgstr ""
 
 #: catalog/models.py:40
 msgid "Groups"
-msgstr "Skupiny"
+msgstr ""
 
 #: catalog/models.py:53
 msgid "Advantage (Czech)"
-msgstr "Výhoda (Česky)"
+msgstr ""
 
 #: catalog/models.py:58
 msgid "Advantage (English)"
-msgstr "Výhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:73
 msgid "The names for the Czech and English advantages must be different."
@@ -55,19 +32,19 @@ msgstr ""
 
 #: catalog/models.py:78
 msgid "Advantage"
-msgstr "Výhoda"
+msgstr ""
 
 #: catalog/models.py:79 catalog/models.py:330
 msgid "Advantages"
-msgstr "Výhody"
+msgstr ""
 
 #: catalog/models.py:93
 msgid "Disadvantage (Czech)"
-msgstr "Nevýhoda (Česky)"
+msgstr ""
 
 #: catalog/models.py:98
 msgid "Disadvantage (English)"
-msgstr "Nevýhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:114
 msgid "The names for the Czech and English disadvantages must be different."
@@ -75,11 +52,11 @@ msgstr ""
 
 #: catalog/models.py:120
 msgid "Disadvantage"
-msgstr "Nevýhoda"
+msgstr ""
 
 #: catalog/models.py:121 catalog/models.py:333
 msgid "Disadvantages"
-msgstr "Nevýhody"
+msgstr ""
 
 #: catalog/models.py:155
 msgid "The option names for Czech and English must be different."
@@ -94,10 +71,8 @@ msgid "Option (Czech)"
 msgstr ""
 
 #: catalog/models.py:182
-#, fuzzy
-#| msgid "Disadvantage (English)"
 msgid "Option (English)"
-msgstr "Nevýhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:185
 msgid "Order"
@@ -108,10 +83,8 @@ msgid "Description (Czech)"
 msgstr ""
 
 #: catalog/models.py:194 catalog/models.py:326 catalog/models.py:512
-#, fuzzy
-#| msgid "Disadvantage (English)"
 msgid "Description (English)"
-msgstr "Nevýhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:203
 msgid "The Czech and English option names must be different."
@@ -130,16 +103,12 @@ msgid "Options"
 msgstr ""
 
 #: catalog/models.py:245
-#, fuzzy
-#| msgid "Advantage (Czech)"
 msgid "Impact Category (Czech)"
-msgstr "Výhoda (Česky)"
+msgstr ""
 
 #: catalog/models.py:248
-#, fuzzy
-#| msgid "Advantage (English)"
 msgid "Impact Category (English)"
-msgstr "Výhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:270
 msgid "Impact Category"
@@ -150,10 +119,8 @@ msgid "Impact detail (Czech)"
 msgstr ""
 
 #: catalog/models.py:276
-#, fuzzy
-#| msgid "Disadvantage (English)"
 msgid "Impact detail (English)"
-msgstr "Nevýhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:286
 msgid "Impact detail"
@@ -164,32 +131,24 @@ msgid "Impact details"
 msgstr ""
 
 #: catalog/models.py:308
-#, fuzzy
-#| msgid "Advantage (Czech)"
 msgid "Measure name (Czech)"
-msgstr "Výhoda (Česky)"
+msgstr ""
 
 #: catalog/models.py:311
-#, fuzzy
-#| msgid "Advantage (English)"
 msgid "Measure name (English)"
-msgstr "Výhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:313
 msgid "Code"
 msgstr ""
 
 #: catalog/models.py:316
-#, fuzzy
-#| msgid "Advantage (Czech)"
 msgid "Abstract (Czech)"
-msgstr "Výhoda (Česky)"
+msgstr ""
 
 #: catalog/models.py:319
-#, fuzzy
-#| msgid "Advantage (English)"
 msgid "Abstract (English)"
-msgstr "Výhoda (Anglicky)"
+msgstr ""
 
 #: catalog/models.py:339
 msgid "Environmental compartment"
