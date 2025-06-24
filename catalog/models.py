@@ -495,3 +495,29 @@ class Measure(models.Model):
                 name="unique_measure_names_and_code",
             )
         ]
+
+class Example(models.Model):
+
+    LOCATION_CHOICES = (
+        (1, _("in the Czech Republic")),
+        (2, _("abroad")),
+        (3, _("within DIVILAND")),  # No translation provided for DIVILAND, as it seems like a name
+    )
+
+    measure = models.ForeignKey(
+        Measure, verbose_name=_("Measure"), on_delete=models.CASCADE
+    )
+    example_name = models.CharField(verbose_name=_("Example name"), max_length=100)
+    description_cs = models.TextField(verbose_name=_("Description (Czech)"))
+    description_en = models.TextField(verbose_name=_("Description (English)"))
+    web = models.URLField(verbose_name=_("URL"))
+    location = models.PositiveSmallIntegerField(
+        choices=LOCATION_CHOICES, verbose_name=_("Location")
+    )
+
+    class Meta:
+        verbose_name = _("Implemented (example)")
+        verbose_name_plural = _("Implemented (examples)")
+
+    def __str__(self):
+        return f"{self.subgroup} - {self.example_name}"
