@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 14:38+0200\n"
+"POT-Creation-Date: 2025-06-24 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
+#: catalog/models.py:14
+msgid "Group Name (Czech)"
+msgstr ""
+
+#: catalog/models.py:19
+#, fuzzy
+#| msgid "Advantage (English)"
+msgid "Group Name (English)"
+msgstr "Výhoda (Anglicky)"
+
+#: catalog/models.py:34
+msgid "The Czech and English group name must be different."
+msgstr ""
+
+#: catalog/models.py:39
+msgid "Group"
+msgstr "Skupina"
+
+#: catalog/models.py:40
+msgid "Groups"
+msgstr "Skupiny"
+
 #: catalog/models.py:53
 msgid "Advantage (Czech)"
 msgstr "Výhoda (Česky)"
@@ -26,6 +48,10 @@ msgstr "Výhoda (Česky)"
 #: catalog/models.py:58
 msgid "Advantage (English)"
 msgstr "Výhoda (Anglicky)"
+
+#: catalog/models.py:73
+msgid "The names for the Czech and English advantages must be different."
+msgstr ""
 
 #: catalog/models.py:78
 msgid "Advantage"
@@ -42,6 +68,10 @@ msgstr "Nevýhoda (Česky)"
 #: catalog/models.py:98
 msgid "Disadvantage (English)"
 msgstr "Nevýhoda (Anglicky)"
+
+#: catalog/models.py:114
+msgid "The names for the Czech and English disadvantages must be different."
+msgstr ""
 
 #: catalog/models.py:120
 msgid "Disadvantage"
