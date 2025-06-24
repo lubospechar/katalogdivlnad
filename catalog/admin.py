@@ -7,7 +7,8 @@ from .models import (
     Option,
     ImpactCategory,
     ImpactDetail,
-    Measure
+    Measure,
+    Example
 )
 
 
@@ -159,10 +160,6 @@ class ImpactDetailAdmin(BaseAdmin):
     readonly_fields = ("id",)
 
 
-from django.contrib import admin
-from .models import Measure
-
-
 @admin.register(Measure)
 class MeasureAdmin(admin.ModelAdmin):
     list_display = (
@@ -282,3 +279,71 @@ class MeasureAdmin(admin.ModelAdmin):
         "interconnection",
     )  # Many-to-many fields displayed horizontally for better usability
     ordering = ("measure_name_cs", "code")  # Default ordering in the admin
+
+
+@admin.register(Example)
+class ExampleAdmin(admin.ModelAdmin):
+    """Admin configuration for the Example model."""
+
+    # Fields displayed in the list view
+    list_display = (
+        "example_name",
+        "measure",
+        "location",
+        "web",
+    )
+
+    # Filters available in the sidebar
+    list_filter = (
+        "location",
+        "measure",
+    )
+
+    # Fields to include in the search functionality
+    search_fields = (
+        "example_name",
+        "description_cs",
+        "description_en",
+        "web",
+    )
+
+    # Organize fields into collapsible sections in the detail view
+    fieldsets = (
+        (
+            "General Information",
+            {
+                "fields": (
+                    "example_name",
+                    "measure",
+                    "location",
+                )
+            },
+        ),
+        (
+            "Descriptions",
+            {
+                "fields": ("description_cs", "description_en"),
+                "classes": ("collapse",),  # Make this section collapsible
+            },
+        ),
+        (
+            "Web Information",
+            {
+                "fields": ("web",),
+            },
+        ),
+    )
+
+    # Preload related foreign key data to optimize database queries
+    def get_queryset(self, request):
+        """
+        Optimize the query to preload related Measure objects (foreign key).
+        """
+        queryset = super().get_queryset(request)
+        return queryset.select_related("measure")
+
+    # Default ordering of records in the list view
+    ordering = ("example_name",)
+
+    # Autocomplete support for ForeignKey fields in the admin
+    autocomplete_fields = ["measure"]
