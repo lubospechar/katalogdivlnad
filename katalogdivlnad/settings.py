@@ -111,6 +111,7 @@ LANGUAGES = [
 
 
 STATIC_URL = config("STATIC_URL")
+STATIC_ROOT = config("STATIC_ROOT")
 
 
 
