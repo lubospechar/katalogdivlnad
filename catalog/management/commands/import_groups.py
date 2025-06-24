@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 id=row["id"],  # Use 'id' column for update_or_create
                 defaults={
                     "group_name_cs": row["cs"],
-                    "group_name_eng": row["en"]
+                    "group_name_en": row["en"]
                 }
             )
             if created:
