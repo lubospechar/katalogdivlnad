@@ -31,7 +31,7 @@ class Command(BaseCommand):
             "description_cs",
             "description_en",
             "price_czk",
-            "rice_eu",
+            "price_eu",
         ]
 
         # Check for missing fields

@@ -305,10 +305,10 @@ class Measure(models.Model):
         verbose_name=_("Group"),
     )
     measure_name_cs = models.CharField(
-        max_length=100, verbose_name=_("Measure name (Czech)"), unique=True
+        max_length=100, verbose_name=_("Measure name (Czech)")
     )
     measure_name_en = models.CharField(
-        max_length=100, verbose_name=_("Measure name (English)"), unique=True
+        max_length=100, verbose_name=_("Measure name (English)")
     )
     code = models.CharField(max_length=10, verbose_name=_("Code"), unique=True)
 
@@ -491,7 +491,7 @@ class Measure(models.Model):
         verbose_name_plural = _("Measures")
         constraints = [
             models.UniqueConstraint(
-                fields=["measure_name_cs", "measure_name_en", "code"],
+                fields=["group", "measure_name_cs", "measure_name_en", "code"],
                 name="unique_measure_names_and_code",
             )
         ]
