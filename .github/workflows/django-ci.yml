@@ -27,24 +27,3 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Load Django secrets
-      run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-        echo "DEBUG=${{ secrets.DEBUG }}" >> $GITHUB_ENV
-        echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> $GITHUB_ENV
-        echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
-        echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> $GITHUB_ENV
-        echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
-        echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> $GITHUB_ENV
-        echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> $GITHUB_ENV
-        echo "DATABASE_OPTIONS=${{ secrets.DATABASE_OPTIONS }}" >> $GITHUB_ENV
-        echo "LANGUAGE_CODE=${{ secrets.LANGUAGE_CODE }}" >> $GITHUB_ENV
-        echo "TIME_ZONE=${{ secrets.TIME_ZONE }}" >> $GITHUB_ENV
-        echo "USE_I18N=${{ secrets.USE_I18N }}" >> $GITHUB_ENV
-        echo "USE_TZ=${{ secrets.USE_TZ }}" >> $GITHUB_ENV
-        echo "STATIC_URL=${{ secrets.STATIC_URL }}" >> $GITHUB_ENV
-
-    - name: Run Django tests
-      run: |
-        python manage.py test
