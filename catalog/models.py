@@ -15,7 +15,7 @@ class Group(models.Model):
     )
 
     # Group name in the English language, used for internationalized representation
-    group_name_eng: str = models.CharField(
+    group_name_en: str = models.CharField(
         max_length=MAX_NAME_LENGTH, verbose_name=_("Group Name (English)"), unique=True
     )
 
@@ -24,12 +24,12 @@ class Group(models.Model):
         lang: str = get_language()
         if lang == "cs":
             return self.group_name_cs
-        return self.group_name_eng
+        return self.group_name_en
 
     # Ensures that Czech and English group names are not identical
     def clean(self) -> None:
         super().clean()
-        if self.group_name_cs == self.group_name_eng:
+        if self.group_name_cs == self.group_name_en:
             raise ValidationError(
                 _("The Czech and English group name must be different.")
             )
@@ -42,7 +42,7 @@ class Group(models.Model):
         # Ensures the combination of Czech and English group names is unique
         constraints = [
             models.UniqueConstraint(
-                fields=["group_name_cs", "group_name_eng"], name="unique_group_names"
+                fields=["group_name_cs", "group_name_en"], name="unique_group_names"
             )
         ]
 

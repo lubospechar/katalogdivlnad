@@ -19,13 +19,13 @@ class GroupAdmin(BaseAdmin):
     Admin configuration for the Group model.
     """
     # Admin list view configuration
-    list_display = ("group_name_cs", "group_name_eng", "__str__")
-    list_filter = ("group_name_cs", "group_name_eng")
-    search_fields = ("group_name_cs", "group_name_eng")
+    list_display = ("group_name_cs", "group_name_en", "__str__")
+    list_filter = ("group_name_cs", "group_name_en")
+    search_fields = ("group_name_cs", "group_name_en")
     ordering = ("group_name_cs",)
 
     # Admin form configuration
-    fields = ("group_name_cs", "group_name_eng")
+    fields = ("group_name_cs", "group_name_en")
 
 
 @admin.register(Advantage)
