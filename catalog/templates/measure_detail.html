@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail opatření</title>
+</head>
+<body>
+<h1>Detail opatření</h1>
+<p><strong>ID:</strong> {{ measure.id }}</p>
+<p><strong>Název (Česky):</strong> {{ measure.measure_name_cs }}</p>
+<p><strong>Kód:</strong> {{ measure.code }}</p>
+<p><strong>Popis (Česky):</strong> {{ measure.description_cs }}</p>
+
+<!-- Odkaz zpět na skupinu -->
+<p><a href="{% url 'group-detail' measure.group.id %}">Zpět na skupinu</a></p>
+
+<!-- Odkaz zpět na domovskou stránku -->
+<p><a href="{% url 'home' %}">Zpět na domovskou stránku</a></p>
+</body>
+</html>

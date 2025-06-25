@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail skupiny</title>
+</head>
+<body>
+
+    <h1>Katalog divland</h1>
+
+
+    <h2>Seznam skupin</h2>
+    <ul>
+        <li><a href="{% url 'home' %}">Vše</a></li> <!-- Odkaz na domovskou stránku -->
+        {% for group_item in groups %}
+            <li><a href="{% url 'group-detail' group_item.id %}">{{ group_item }}</a></li>
+        {% empty %}
+            <li>Žádné skupiny nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+
+    <h2>Detail skupiny</h2>
+    <p><strong>Název skupiny:</strong> {{ group.group_name_cs }}</p>
+
+
+    <h2>Opatření této skupiny</h2>
+    <ul>
+        {% for measure in measures %}
+            <li>
+                <a href="{% url 'measure-detail' measure.id %}">{{ measure.measure_name_cs }}</a>
+            </li>
+            {% empty %}
+            <li>Žádná opatření nejsou k dispozici pro tuto skupinu.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <p><a href="{% url 'home' %}">Zpět na seznam skupin</a></p>
+</body>
+</html>

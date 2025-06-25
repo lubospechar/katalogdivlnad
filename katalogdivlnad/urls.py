@@ -18,10 +18,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
+from catalog.views import Home, GroupDetailView, MeasureDetailView
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', Home.as_view(), name='home'),
+    path('group/<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
+    path('measure/<int:pk>/', MeasureDetailView.as_view(), name='measure-detail'),
+
+
+
+
+
 ]
 
 urlpatterns += [

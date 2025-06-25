@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Katalog divland</title>
+</head>
+<body>
+    <h1>Katalog divland</h1>
+
+    <!-- Seznam skupin -->
+    <h2>Skupiny</h2>
+    <ul>
+        <li><a href="{% url 'home' %}">Vše</a></li>
+        {% for group in groups %}
+            <li><a href="{% url 'group-detail' group.id %}">{{ group }}</a></li>
+        {% empty %}
+            <li>Žádné skupiny nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Seznam opatření -->
+    <h2>Opatření</h2>
+    <ul>
+        {% for measure in measures %}
+            <li>
+                <a href="{% url 'measure-detail' measure.id %}">{{ measure.measure_name_cs }}</a>
+            </li>
+            {% empty %}
+            <li>Žádná opatření nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
