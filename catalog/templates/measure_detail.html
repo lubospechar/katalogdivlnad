@@ -52,7 +52,7 @@
 <!-- Reference -->
 <p><strong>Reference:</strong>
     {% for reference in measure.references.all %}
-        {{ reference.reference }}{% if not forloop.last %}, {% endif %}
+        <a href="{{  reference.url  }}">{{ reference.reference }}</a>{% if not forloop.last %}, {% endif %}
         {% empty %}
         Žádné reference nejsou k dispozici.
     {% endfor %}
