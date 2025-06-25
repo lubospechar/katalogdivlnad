@@ -6,15 +6,70 @@
 </head>
 <body>
 <h1>Detail opatření</h1>
-<p><strong>ID:</strong> {{ measure.id }}</p>
-<p><strong>Název (Česky):</strong> {{ measure.measure_name_cs }}</p>
+
+<!-- Základní informace -->
+<p><strong>Název opatření:</strong> {{ measure.measure_name_cs }}</p>
 <p><strong>Kód:</strong> {{ measure.code }}</p>
-<p><strong>Popis (Česky):</strong> {{ measure.description_cs }}</p>
+<p><strong>Skupina:</strong> {{ measure.group }}</p>
 
-<!-- Odkaz zpět na skupinu -->
+<!-- Abstrakt -->
+<p><strong>Abstrakt:</strong> {{ measure.abstract_cs }}</p>
+
+<!-- Detailní popis -->
+<p><strong>Popis:</strong> {{ measure.description_cs }}</p>
+
+<!-- Výhody a nevýhody -->
+<p><strong>Výhody:</strong>
+    {% for advantage in measure.advantages.all %}
+        {{ advantage.advantage_description_cs }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné výhody nejsou k dispozici.
+    {% endfor %}
+</p>
+<p><strong>Nevýhody:</strong>
+    {% for disadvantage in measure.disadvantages.all %}
+        {{ disadvantage.disadvantage_description_cs }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné nevýhody nejsou k dispozici.
+    {% endfor %}
+</p>
+
+<!-- Environmentální informace -->
+<p><strong>Environmentální poznámka:</strong> {{ measure.env_desc }}</p>
+
+<!-- Podmínky implementace -->
+<p><strong>Podmínky implementace:</strong> {{ measure.conditions_for_implementation_cs }}</p>
+
+<!-- Ceny -->
+<p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>
+
+<!-- Komentář -->
+<p><strong>Komentář:</strong> {{ measure.comment_cs }}</p>
+
+<!-- Historie -->
+<p><strong>Historie:</strong> {{ measure.history_cs }}</p>
+
+<!-- Reference -->
+<p><strong>Reference:</strong>
+    {% for reference in measure.references.all %}
+        {{ reference.reference }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné reference nejsou k dispozici.
+    {% endfor %}
+</p>
+
+<!-- Kontaktní osoby -->
+{% if measure.contact_persons %}
+    <p><strong>Kontaktní osoba:</strong>
+        {{ measure.contact_persons.first_name }} {{ measure.contact_persons.last_name }}
+        ({{ measure.contact_persons.expertise }})
+    </p>
+{% else %}
+    <p><strong>Kontaktní osoba:</strong> Žádná kontaktní osoba není přiřazena.</p>
+{% endif %}
+
+<!-- Odkaz zpět -->
 <p><a href="{% url 'group-detail' measure.group.id %}">Zpět na skupinu</a></p>
-
-<!-- Odkaz zpět na domovskou stránku -->
 <p><a href="{% url 'home' %}">Zpět na domovskou stránku</a></p>
 </body>
 </html>
