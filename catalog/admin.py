@@ -8,7 +8,9 @@ from .models import (
     ImpactCategory,
     ImpactDetail,
     Measure,
-    Example
+    Example,
+    MeasureImage,
+    ContactPerson,
 )
 
 
@@ -160,28 +162,104 @@ class ImpactDetailAdmin(BaseAdmin):
     readonly_fields = ("id",)
 
 
+@admin.register(ContactPerson)
+class ContactPersonAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the ContactPerson model.
+    """
+
+    # Fields displayed in the list view
+    list_display = (
+        "first_name",
+        "last_name",
+        "expertise",
+        "email",
+        "phone",
+    )
+
+    # Fields to include in the search functionality
+    search_fields = (
+        "first_name",
+        "last_name",
+        "expertise",
+        "email",
+        "phone",
+    )
+
+    # Organize fields into sections for better usability
+    fieldsets = [
+        (
+            "Personal Information",
+            {
+                "fields": [
+                    "first_name",
+                    "last_name",
+                ]
+            },
+        ),
+        (
+            "Contact Details",
+            {
+                "fields": [
+                    "email",
+                    "phone",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+        (
+            "Professional Information",
+            {
+                "fields": [
+                    "expertise",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+    ]
+
+    # Default ordering of records in the admin
+    ordering = ("last_name", "first_name")
+
 @admin.register(Measure)
 class MeasureAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Measure model.
+    """
+
+    # Fields displayed in the list view
     list_display = (
         "measure_name_cs",
         "measure_name_en",
-        "code",
         "group",
-        "price_czk",
-        "price_eu",
-    )  # Fields shown in the list view
+        "code",
+        "price_czk_min",
+        "price_czk_max",
+        "price_eu_min",
+        "price_eu_max",
+    )
+
+    # Filters available in the sidebar
     list_filter = (
         "group",
         "advantages",
         "disadvantages",
         "env",
-        "sdg",
-    )  # Filters in the sidebar
+        "potential",
+        "size",
+        "difficulty_of_implementation",
+        "quantification",
+        "time_horizon",
+    )
+
+    # Fields to include in the search functionality
     search_fields = (
         "measure_name_cs",
         "measure_name_en",
         "code",
-    )  # Fields included in the search box
+    )
+
+    # Fields with autocomplete enabled for related models
     autocomplete_fields = (
         "group",
         "advantages",
@@ -198,21 +276,32 @@ class MeasureAdmin(admin.ModelAdmin):
         "other_impacts_details",
         "sdg",
         "unit",
-    )  # Enable autocompletion for foreign key and many-to-many fields
+        "contact_persons",
+    )
+
+    # Organize fields into sections for better usability
     fieldsets = [
         (
-            "General Information",
+            "Basic Information",
             {
                 "fields": [
                     "group",
                     "measure_name_cs",
                     "measure_name_en",
                     "code",
-                    "abstract_cs",
-                    "abstract_en",
-                    "description_cs",
-                    "description_en",
                 ]
+            },
+        ),
+        (
+            "Price Details",
+            {
+                "fields": [
+                    "price_czk_min",
+                    "price_czk_max",
+                    "price_eu_min",
+                    "price_eu_max",
+                    "unit",
+                ],
             },
         ),
         (
@@ -227,7 +316,7 @@ class MeasureAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Implementation Details",
+            "Implementation and Complexity",
             {
                 "fields": [
                     "potential",
@@ -240,7 +329,7 @@ class MeasureAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Impact Details",
+            "Impact and Categories",
             {
                 "fields": [
                     "impact_details",
@@ -252,33 +341,58 @@ class MeasureAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Miscellaneous",
+            "Additional Information",
             {
                 "fields": [
-                    "price_czk",
-                    "price_eu",
-                    "unit",
-                    "comment_cs",
-                    "comment_en",
                     "sdg",
                     "interconnection",
                     "conflict",
                     "other_conflict",
+                    "references",
+                    "contact_persons",
                 ],
                 "classes": ["collapse"],
             },
         ),
-    ]  # Organize fields into collapsible sections
+        (
+            "Images and History",
+            {
+                "fields": [
+                    "title_image",
+                    "history_cs",
+                    "history_en",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+        (
+            "Abstracts and Descriptions",
+            {
+                "fields": [
+                    "abstract_cs",
+                    "abstract_en",
+                    "description_cs",
+                    "description_en",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+    ]
+
+    # Display many-to-many fields horizontally for better usability
     filter_horizontal = (
         "advantages",
         "disadvantages",
-        "sdg",
         "env_secondary",
         "other_impacts_details",
+        "sdg",
         "conflict",
         "interconnection",
-    )  # Many-to-many fields displayed horizontally for better usability
-    ordering = ("measure_name_cs", "code")  # Default ordering in the admin
+        "references",
+    )
+
+    # Default ordering of records in the admin
+    ordering = ("measure_name_cs", "code")
 
 
 @admin.register(Example)
@@ -347,3 +461,49 @@ class ExampleAdmin(admin.ModelAdmin):
 
     # Autocomplete support for ForeignKey fields in the admin
     autocomplete_fields = ["measure"]
+
+
+@admin.register(MeasureImage)
+class MeasureImageAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the MeasureImage model.
+    """
+
+    # Admin list view configuration
+    list_display = (
+        "measure",
+        "caption_cs",
+        "caption_en",
+        "author",
+        "license",
+    )
+    list_filter = ("measure", "author", "license")
+    search_fields = ("caption_cs", "caption_en", "author", "license")
+    ordering = ("measure", "caption_cs")
+
+    # Admin form configuration
+    fieldsets = (
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "measure",
+                    "original_image",
+                ),
+            },
+        ),
+        (
+            "Captions",
+            {
+                "fields": ("caption_cs", "caption_en"),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Author and License",
+            {
+                "fields": ("author", "license", "license_url"),
+                "classes": ("collapse",),
+            },
+        ),
+    )

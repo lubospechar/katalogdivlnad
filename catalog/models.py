@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.core.exceptions import ValidationError
 from typing import Final
+from imagekit.models import ProcessedImageField, ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 class Group(models.Model):
@@ -292,10 +294,36 @@ class ImpactDetail(models.Model):
             ),
         ]
 
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import get_language
-from django.core.exceptions import ValidationError
+class Reference(models.Model):
+    reference = models.CharField(
+        verbose_name=_("Reference"),
+        max_length=255,
+    )
+    url = models.URLField(
+        verbose_name=_("URL"),
+    )
+
+
+class ContactPerson(models.Model):
+    # First name of the contact person
+    first_name = models.CharField(max_length=100, verbose_name=_("First Name"))
+    # Last name of the contact person
+    last_name = models.CharField(max_length=100, verbose_name=_("Last Name"))
+    # Expertise of the contact person
+    expertise = models.CharField(max_length=255, verbose_name=_("Expertise"))
+    # Email of the contact person (optional)
+    email = models.EmailField(verbose_name=_("Email"), blank=True, null=True)
+    # Phone number of the contact person (optional)
+    phone = models.CharField(max_length=20, verbose_name=_("Phone"), blank=True, null=True)
+
+    def __str__(self):
+        # Returns a combination of first name, last name, and expertise
+        return f"{self.first_name} {self.last_name} ({self.expertise})"
+
+    class Meta:
+        # Human-readable names for the Django admin interface
+        verbose_name = _("Contact Person")
+        verbose_name_plural = _("Contact Persons")
 
 
 class Measure(models.Model):
@@ -453,8 +481,18 @@ class Measure(models.Model):
         blank=True,
     )
 
-    price_czk = models.PositiveIntegerField(verbose_name=_("Price (CZK)"), default=0)
-    price_eu = models.PositiveIntegerField(verbose_name=_("Price (Euro)"), default=0)
+    price_czk_min = models.PositiveIntegerField(
+        verbose_name=_("Price (CZK) - From"), default=0
+    )
+    price_czk_max = models.PositiveIntegerField(
+        verbose_name=_("Price (CZK) - To"), default=0
+    )
+    price_eu_min = models.PositiveIntegerField(
+        verbose_name=_("Price (Euro) - From"), default=0
+    )
+    price_eu_max = models.PositiveIntegerField(
+        verbose_name=_("Price (Euro) - To"), default=0
+    )
 
     unit = models.ForeignKey(
         "Option",
@@ -472,6 +510,49 @@ class Measure(models.Model):
         max_length=255, verbose_name=_("Comment (en)"), blank=True, null=True
     )
 
+    references = models.ManyToManyField(
+        "Reference",
+        verbose_name=_("References"),
+        related_name="measure_references",
+        blank=True,
+    )
+
+    contact_persons = models.ForeignKey(
+        "ContactPerson",
+        verbose_name=_("Contact person"),
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="contact_persons",
+    )
+
+    # title image field for Measure
+    title_image = models.ImageField(
+        verbose_name=_("Original Image"),
+        upload_to="measure_images/originals/",  # Directory for original images
+        blank=True,
+        null=True,
+    )
+
+    # Processed title image field for Measure (resized)
+    processed_title_image =  ImageSpecField(
+        source="title_image",
+        processors=[ResizeToFill(800, 600)],  # Resize image to 800x600 (crop if needed)
+        format="JPEG",
+        options={"quality": 90},
+    )
+
+    history_cs = models.TextField(
+        verbose_name=_("History (Czech)"),
+        blank=True,
+        null=True,
+    )
+
+    history_en = models.TextField(
+        verbose_name=_("History (English)"),
+        blank=True,
+        null=True,
+    )
+
     def clean(self):
         # Example: Validate that descriptions in Czech and English are different
         super().clean()
@@ -483,8 +564,8 @@ class Measure(models.Model):
     def __str__(self):
         lang = get_language()
         if lang == "cs":
-            return self.measure_name_cs
-        return self.measure_name_en
+            return f'{self.measure_name_cs} ({self.group.group_name_cs})'
+        return f'{self.measure_name_en} ({self.group.group_name_en})'
 
     class Meta:
         verbose_name = _("Measure")
@@ -495,6 +576,66 @@ class Measure(models.Model):
                 name="unique_measure_names_and_code",
             )
         ]
+
+class MeasureImage(models.Model):
+    """
+    Gallery images connected to a specific Measure.
+    """
+    measure = models.ForeignKey(
+        Measure,
+        on_delete=models.CASCADE,
+        related_name="gallery",
+        verbose_name=_("Related Measure"),
+    )
+    # Original image stored by date (year/month/day)
+    original_image = models.ImageField(
+        verbose_name=_("Original Image"),
+        upload_to="photos/%Y/%m/%d/",
+        blank=False,
+        null=False,
+    )
+    # Resized version of the image
+    processed_image = ImageSpecField(
+        source="original_image",
+        processors=[ResizeToFill(1024, 768)],  # Resize to 1024x768
+        format="JPEG",
+        options={"quality": 85},  # 85% quality compression
+    )
+    # Optional captions
+    caption_cs = models.CharField(
+        max_length=255,
+        verbose_name=_("Caption (Czech)"),
+    )
+    caption_en = models.CharField(
+        max_length=255,
+        verbose_name=_("Caption (English)"),
+    )
+
+    # Author of the image
+    author = models.CharField(
+        max_length=255,
+        verbose_name=_("Author"),
+    )
+    # License details
+    license = models.CharField(
+        max_length=255,
+        verbose_name=_("License"),
+    )
+    # Optional URL to the license information
+    license_url = models.URLField(
+        verbose_name=_("License URL"),
+        blank=True,
+        null=True,
+    )
+
+
+    def __str__(self):
+        return f"Image for {self.measure} - {self.caption_cs}"
+
+    class Meta:
+        verbose_name = _("Measure Image")
+        verbose_name_plural = _("Measure Images")
+
 
 class Example(models.Model):
 
