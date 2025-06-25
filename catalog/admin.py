@@ -11,6 +11,7 @@ from .models import (
     Example,
     MeasureImage,
     ContactPerson,
+    Reference
 )
 
 
@@ -507,3 +508,17 @@ class MeasureImageAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+@admin.register(Reference)
+class ReferenceAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Reference model.
+    """
+
+    # Admin list view configuration
+    list_display = ("reference", "url")
+    search_fields = ("reference", "url")
+    ordering = ("reference",)
+
+    # Admin form configuration
+    fields = ("reference", "url")
