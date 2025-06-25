@@ -290,6 +290,8 @@ class MeasureAdmin(admin.ModelAdmin):
                     "measure_name_cs",
                     "measure_name_en",
                     "code",
+                    "advantages",
+                    "disadvantages"
                 ]
             },
         ),
