@@ -68,6 +68,47 @@
     <p><strong>Kontaktní osoba:</strong> Žádná kontaktní osoba není přiřazena.</p>
 {% endif %}
 
+<!-- Fotogalerie -->
+<h2>Fotogalerie</h2>
+{% if measure.gallery.all %}
+    <div>
+        {% for image in measure.gallery.all %}
+            <div>
+                <img src="{{ image.processed_image.url }}" alt="{{ image.caption_cs }}" style="width:300px; height:auto;">
+                <p><strong>Popis:</strong> {{ image.caption_cs }}</p>
+                <p><strong>Autor:</strong> {{ image.author }}</p>
+                <p><strong>Licence:</strong> {{ image.license }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Žádné fotografie nejsou k dispozici.</p>
+{% endif %}
+
+<!-- Příklady -->
+<h2>Příklady realizace</h2>
+{% if measure.example_set.all %}
+    <ul>
+        {% for example in measure.example_set.all %}
+            <li>
+                <strong>Název:</strong> {{ example.example_name }}<br>
+                <strong>Popis:</strong> {{ example.description_cs }}<br>
+                <strong>Odkaz:</strong> <a href="{{ example.web }}" target="_blank">{{ example.web }}</a><br>
+                <strong>Lokace:</strong>
+                {% if example.location == 1 %}
+                    v České republice
+                {% elif example.location == 2 %}
+                    v zahraničí
+                {% else %}
+                    v DIVILANDu
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Žádné příklady nejsou k dispozici.</p>
+{% endif %}
+
 <!-- Odkaz zpět -->
 <p><a href="{% url 'group-detail' measure.group.id %}">Zpět na skupinu</a></p>
 <p><a href="{% url 'home' %}">Zpět na domovskou stránku</a></p>
