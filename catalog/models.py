@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.core.exceptions import ValidationError
 from typing import Final
-from imagekit.models import ProcessedImageField, ImageSpecField
+from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
 
@@ -134,12 +134,12 @@ class Disadvantage(models.Model):
 class OptionName(models.Model):
     # Option name in the Czech language, used for localized representation
     option_name_cs = models.CharField(
-        max_length=255, verbose_name="Option name (Czech)"
+        max_length=255, verbose_name=_("Option name (Czech)")
     )
 
     # Option name in the English language, used for internationalized representation
     option_name_en = models.CharField(
-        max_length=255, verbose_name="Option name (English)"
+        max_length=255, verbose_name=_("Option name (English)")
     )
 
     # Returns the option name based on the active language (Czech or English)
@@ -159,8 +159,8 @@ class OptionName(models.Model):
 
     class Meta:
         # Human-readable names for the admin interface
-        verbose_name = "Option name"
-        verbose_name_plural = "Option names"
+        verbose_name = _("Option name")
+        verbose_name_plural = _("Option names")
 
         # Ensures the combination of Czech and English option names is unique
         constraints = [
@@ -257,8 +257,8 @@ class ImpactCategory(models.Model):
         return self.impact_category_name_en
 
     class Meta:
-        verbose_name = "Impact category"
-        verbose_name_plural = "Impact categories"
+        verbose_name = _("Impact category")
+        verbose_name_plural = _("Impact categories")
         constraints = [
             models.UniqueConstraint(
                 fields=["impact_category_name_cs", "impact_category_name_en"],
@@ -536,7 +536,7 @@ class Measure(models.Model):
     # Processed title image field for Measure (resized)
     processed_title_image =  ImageSpecField(
         source="title_image",
-        processors=[ResizeToFill(800, 600)],  # Resize image to 800x600 (crop if needed)
+        processors=[ResizeToFill(800, 600)],
         format="JPEG",
         options={"quality": 90},
     )
@@ -661,4 +661,4 @@ class Example(models.Model):
         verbose_name_plural = _("Implemented (examples)")
 
     def __str__(self):
-        return f"{self.subgroup} - {self.example_name}"
+        return f"{self.measure} - {self.example_name}"
