@@ -9,8 +9,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: ${{ secrets.DATABASE_NAME }}
+          POSTGRES_USER: ${{ secrets.DATABASE_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     strategy:
-      max-parallel: 4
       matrix:
         python-version: [3.11, 3.12, 3.13]
 
@@ -28,16 +43,34 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-
-    - name: Create .env file
+    - name: Export environment variables
       run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+        echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> $GITHUB_ENV
+        echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
+        echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> $GITHUB_ENV
+        echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
+        echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> $GITHUB_ENV
+        echo "DATABASE_OPTIONS=${{ secrets.DATABASE_OPTIONS }}" >> $GITHUB_ENV
+        echo "DB_HOST=localhost" >> $GITHUB_ENV
+        echo "DEBUG=${{ secrets.DEBUG }}" >> $GITHUB_ENV
+        echo "LANGUAGE_CODE=${{ secrets.LANGUAGE_CODE }}" >> $GITHUB_ENV
+        echo "MEDIA_ROOT=${{ secrets.MEDIA_ROOT }}" >> $GITHUB_ENV
+        echo "MEDIA_URL=${{ secrets.MEDIA_URL }}" >> $GITHUB_ENV
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+        echo "STATIC_ROOT=${{ secrets.STATIC_ROOT }}" >> $GITHUB_ENV
+        echo "STATIC_URL=${{ secrets.STATIC_URL }}" >> $GITHUB_ENV
+        echo "TIME_ZONE=${{ secrets.TIME_ZONE }}" >> $GITHUB_ENV
+        echo "USE_I18N=${{ secrets.USE_I18N }}" >> $GITHUB_ENV
+        echo "USE_TZ=${{ secrets.USE_TZ }}" >> $GITHUB_ENV
+
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432 -U $DATABASE_USER; do
+          echo "Waiting for PostgreSQL..."; sleep 2;
+        done
 
     - name: Run migrations
-      run: |
-        python manage.py migrate
+      run: python manage.py migrate
 
     - name: Run tests
-      run: |
-        python manage.py test
+      run: python manage.py test
