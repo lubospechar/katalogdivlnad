@@ -17,7 +17,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -H vps.example.com >> ~/.ssh/known_hosts
+        ssh-keyscan -H 37.205.13.147 >> ~/.ssh/known_hosts
       env:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
 
