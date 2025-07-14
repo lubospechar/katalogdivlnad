@@ -30,15 +30,17 @@ class GroupModelCleanTest(TestCase):
         Test that the `clean()` method raises a ValidationError if the Czech
         and English group names are identical.
         """
-        # Create a group with identical Czech and English names
         group = Group(group_name_cs="Same Name", group_name_en="Same Name")
 
+        # Aktivuj češtinu dřív
+        activate("cs")
         with self.assertRaises(ValidationError) as context:
             group.clean()
-
-        # Assert that the ValidationError contains the expected error message
-        activate("cs")
         self.assertIn("České i anglické pojmenování skupiny musí být odlišné", str(context.exception))
 
+        # Pak aktivuj angličtinu a proveď znovu test
         activate("en")
+        with self.assertRaises(ValidationError) as context:
+            group.clean()
         self.assertIn("The Czech and English group name must be different", str(context.exception))
+
