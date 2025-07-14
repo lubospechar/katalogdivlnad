@@ -40,6 +40,147 @@
 <!-- Podmínky implementace -->
 <p><strong>Podmínky implementace:</strong> {{ measure.conditions_for_implementation_cs }}</p>
 
+<p><strong>Složky ŽP:</strong>
+    {% for env in measure.envs.all %}
+        {{ env.option_name.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné složky ŽP nejsou k dispozici.
+    {% endfor %}
+</p>
+
+
+<p><strong>Složky ŽP (přesah):</strong>
+    {% for env_secondary in measure.envs_sec.all %}
+        {{ env_secondary.option_name.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné složky ŽP (přesah) nejsou k dispozici.
+    {% endfor %}
+</p>
+
+
+<p><strong>Aplikační potenciál:</strong>
+    {% if measure.potential %}
+        {{ measure.potential.option_name.name }}
+    {% else %}
+        Žádný rozsah není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Velikost:</strong>
+    {% if measure.size %}
+        {{ measure.size.option_name.name }}
+    {% else %}
+        Žádná velikost není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Náročnost realizace:</strong>
+    {% if measure.difficulty_of_implementation %}
+        {{ measure.difficulty_of_implementation.option_name.name }}
+    {% else %}
+        Žádná náročnost realizace není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Podmínky implementace:</strong>
+    {% if measure.conditions_for_implementation_cs %}
+        {{ measure.conditions_for_implementation_cs }}
+    {% else %}
+        Žádné podmínky implementace nejsou k dispozici.
+    {% endif %}
+</p>
+
+
+<p><strong>Kvantifikace:</strong>
+    {% if measure.quantification %}
+        {{ measure.quantification.option_name.name }}
+    {% else %}
+        Žádná kvantifikace není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Časový horizont:</strong>
+    {% if measure.time_horizon %}
+        {{ measure.time_horizon.option_name.name }}
+    {% else %}
+        Žádný časový horizont není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Návaznost:</strong>
+    {% if measure.interconnection.exists %}
+        <ul>
+            {% for item in measure.interconnection.all %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádná návaznost není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Střety:</strong>
+    {% if measure.conflict.exists %}
+        <ul>
+            {% for conflict in measure.conflict.all %}
+                <li>{{ conflict.option_name.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné střety nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Jiné střety:</strong>
+    {% if measure.other_conflict %}
+        {{ measure.other_conflict }}
+    {% else %}
+        Žádné jiné střety nejsou k dispozici.
+    {% endif %}
+</p>
+
+
+<p><strong>Dopad:</strong>
+    {% if measure.impact_details %}
+        {{ measure.impact_details.name }}
+    {% else %}
+        Žádné kategorie dopadů nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Další dopady:</strong>
+    {% if measure.other_impacts_details.exists %}
+        <ul>
+            {% for impact in measure.other_impacts_details.all %}
+                <li>{{ impact.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné další kategorie dopadů nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Poznámka dopady (Česky):</strong>
+    {% if measure.impact_desc_cs %}
+        {{ measure.impact_desc_cs }}
+    {% else %}
+        Žádná poznámka není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Cíle udržitelného rozvoje (SDG):</strong>
+    {% if measure.sdg.exists %}
+        <ul>
+            {% for goal in measure.sdg.all %}
+                <li>{{ goal.option_name.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné cíle udržitelného rozvoje nejsou k dispozici.
+    {% endif %}
+</p>
+
+
 <!-- Ceny -->
 <p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>
 
