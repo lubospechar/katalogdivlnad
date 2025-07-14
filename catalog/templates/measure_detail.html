@@ -123,7 +123,7 @@
     {% if measure.conflict.exists %}
         <ul>
             {% for conflict in measure.conflict.all %}
-                <li>{{ conflict.option_name.name }}</li>
+                <li>{{ conflict }}</li>
             {% endfor %}
         </ul>
     {% else %}
@@ -152,7 +152,7 @@
     {% if measure.other_impacts_details.exists %}
         <ul>
             {% for impact in measure.other_impacts_details.all %}
-                <li>{{ impact.name }}</li>
+                <li>{{ impact }}</li>
             {% endfor %}
         </ul>
     {% else %}
@@ -172,7 +172,7 @@
     {% if measure.sdg.exists %}
         <ul>
             {% for goal in measure.sdg.all %}
-                <li>{{ goal.option_name.name }}</li>
+                <li>{{ goal }}</li>
             {% endfor %}
         </ul>
     {% else %}
