@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-24 20:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
+"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+
+#: catalog/models.py:14
+msgid "Group Name (Czech)"
+msgstr "Pojmenování skupiny (Česky)"
+
+#: catalog/models.py:19
+msgid "Group Name (English)"
+msgstr "Pojmenování skupiny (Anglicky)"
+
+#: catalog/models.py:34
+msgid "The Czech and English group name must be different."
+msgstr "České i anglické pojmenování skupiny musí být odlišné"
+
+#: catalog/models.py:39 catalog/models.py:305
+msgid "Group"
+msgstr "Skupina"
+
+#: catalog/models.py:40
+msgid "Groups"
+msgstr "Skupiny"
+
+#: catalog/models.py:53
+msgid "Advantage (Czech)"
+msgstr "Výhoda (Česky)"
+
+#: catalog/models.py:58
+msgid "Advantage (English)"
+msgstr "Výhoda (Anglicky)"
+
+#: catalog/models.py:73
+msgid "The names for the Czech and English advantages must be different."
+msgstr "České i anglické výhody musí být odlišné"
+
+#: catalog/models.py:78
+msgid "Advantage"
+msgstr "Výhoda"
+
+#: catalog/models.py:79 catalog/models.py:330
+msgid "Advantages"
+msgstr "Výhody"
+
+#: catalog/models.py:93
+msgid "Disadvantage (Czech)"
+msgstr "Nevýhoda (Česky)"
+
+#: catalog/models.py:98
+msgid "Disadvantage (English)"
+msgstr "Nevýhoda (Anglicky)"
+
+#: catalog/models.py:114
+msgid "The names for the Czech and English disadvantages must be different."
+msgstr "České i anglické nevýhody musí být odlišné"
+
+#: catalog/models.py:120
+msgid "Disadvantage"
+msgstr "Nevýhoda"
+
+#: catalog/models.py:121 catalog/models.py:333
+msgid "Disadvantages"
+msgstr "Nevýhody"
+
+#: catalog/models.py:155
+msgid "The option names for Czech and English must be different."
+msgstr "České i anglické výhody musí být odlišné"
+
+#: catalog/models.py:175
+msgid "Option Name"
+msgstr "Název volby"
+
+#: catalog/models.py:179
+msgid "Option (Czech)"
+msgstr "Volba (Česky)"
+
+#: catalog/models.py:182
+msgid "Option (English)"
+msgstr "Volba (Anglicky)"
+
+#: catalog/models.py:185
+msgid "Order"
+msgstr "Pořadí"
+
+#: catalog/models.py:189 catalog/models.py:323 catalog/models.py:511
+msgid "Description (Czech)"
+msgstr "Popis (Česky)"
+
+#: catalog/models.py:194 catalog/models.py:326 catalog/models.py:512
+msgid "Description (English)"
+msgstr "Popis (Anglicky)"
+
+#: catalog/models.py:203
+msgid "The Czech and English option names must be different."
+msgstr "České i anglické názvy voleb musí být odlišné"
+
+#: catalog/models.py:212 catalog/models.py:480
+msgid "The Czech and English descriptions must be different."
+msgstr "České i anglické popisy musí být odlišné"
+
+#: catalog/models.py:224
+msgid "Option"
+msgstr "Popis"
+
+#: catalog/models.py:225
+msgid "Options"
+msgstr "Popisy"
+
+#: catalog/models.py:245
+msgid "Impact Category (Czech)"
+msgstr "Kategorie dopadu (Česky)"
+
+#: catalog/models.py:248
+msgid "Impact Category (English)"
+msgstr "Kategorie dopadu (Anglicky)"
+
+#: catalog/models.py:270
+msgid "Impact Category"
+msgstr "Kategorie dopadu"
+
+#: catalog/models.py:273
+msgid "Impact detail (Czech)"
+msgstr "Dopady (Česky)"
+
+#: catalog/models.py:276
+msgid "Impact detail (English)"
+msgstr "Dopady (Anglicky)"
+
+#: catalog/models.py:286
+msgid "Impact detail"
+msgstr "Dopady"
+
+#: catalog/models.py:287
+msgid "Impact details"
+msgstr "Dopady"
+
+#: catalog/models.py:308
+msgid "Measure name (Czech)"
+msgstr "Opatření (Česky)"
+
+#: catalog/models.py:311
+msgid "Measure name (English)"
+msgstr "Opatření (Anglicky)"
+
+#: catalog/models.py:313
+msgid "Code"
+msgstr "Kód opatření"
+
+#: catalog/models.py:316
+msgid "Abstract (Czech)"
+msgstr "Shrnutí (Česky)"
+
+#: catalog/models.py:319
+msgid "Abstract (English)"
+msgstr "Shrnutí (Anglicky)"
+
+#: catalog/models.py:339
+msgid "Environmental compartment"
+msgstr "Složka ŽP"
+
+#: catalog/models.py:347
+msgid "Environmental compartment (overlap)"
+msgstr "Složka ŽP (přesah)"
+
+#: catalog/models.py:354
+msgid "Environmental compartment (overlap) - note"
+msgstr "Složka ŽP (přesahu - poznámka"
+
+#: catalog/models.py:361
+msgid "Application potential"
+msgstr "Aplikační potenciál"
+
+#: catalog/models.py:369
+msgid "Scale / extent"
+msgstr "Rozsah / velikost"
+
+#: catalog/models.py:377
+msgid "Implementation complexity"
+msgstr "Náročnost realizace"
+
+#: catalog/models.py:384
+msgid "Conditions of implementation (Czech)"
+msgstr "Podmínky implementace (Česky)"
+
+#: catalog/models.py:387
+msgid "Conditions of implementation (English)"
+msgstr "Podmínky implementace (Anglicky)"
+
+#: catalog/models.py:392
+msgid "Impact quantification"
+msgstr "Kvantifikace dopadu"
+
+#: catalog/models.py:400
+msgid "Impact time horizon"
+msgstr "Časový horizont dopadu"
+
+#: catalog/models.py:408
+msgid "Interconnection"
+msgstr "Návaznost"
+
+#: catalog/models.py:413
+msgid "Conflicts"
+msgstr "Střet"
+
+#: catalog/models.py:420
+msgid "Other conflicts"
+msgstr "Jiné střety"
+
+#: catalog/models.py:425
+msgid "Impact categories of climate change"
+msgstr "Kategorie dopadu změny klimatu"
+
+#: catalog/models.py:433
+msgid "Secondary impact categories of climate change"
+msgstr "Vedlejší kategorie dopadu změny klimatu"
+
+#: catalog/models.py:438
+msgid "Impact categories of climate change - note (Czech)"
+msgstr "Vedlejší kategorie dopadu změny klimatu - poznámka (Česky)"
+
+#: catalog/models.py:443
+msgid "Impact categories of climate change - note (English)"
+msgstr "Vedlejší kategorie dopadu změny klimatu - poznámka (Česky)"
+
+#: catalog/models.py:450
+msgid "Sustainable Development Goals (SDG)"
+msgstr "Cíle udržitelného rozvoje (SDG)"
+
+#: catalog/models.py:456
+msgid "Price (CZK)"
+msgstr "Cena (CZK)"
+
+#: catalog/models.py:457
+msgid "Price (Euro)"
+msgstr "Cena (EUR)"
+
+#: catalog/models.py:461
+msgid "Unit"
+msgstr "Jednotka"
+
+#: catalog/models.py:469
+msgid "Comment (cs)"
+msgstr "Komentář (Česky)"
+
+#: catalog/models.py:472
+msgid "Comment (en)"
+msgstr "Komentář (Anglicky)"
+
+#: catalog/models.py:490 catalog/models.py:508
+msgid "Measure"
+msgstr "Opatření"
+
+#: catalog/models.py:491
+msgid "Measures"
+msgstr "Opatření"
+
+#: catalog/models.py:502
+msgid "in the Czech Republic"
+msgstr "v Česku"
+
+#: catalog/models.py:503
+msgid "abroad"
+msgstr "V zahraničí"
+
+#: catalog/models.py:504
+msgid "within DIVILAND"
+msgstr "v rámci projektu Divland"
+
+#: catalog/models.py:510
+msgid "Example name"
+msgstr "Název příkladu"
+
+#: catalog/models.py:513
+msgid "URL"
+msgstr "URL"
+
+#: catalog/models.py:515
+msgid "Location"
+msgstr ""
+
+#: catalog/models.py:519
+msgid "Implemented (example)"
+msgstr "Realizováno (příklad)"
+
+#: catalog/models.py:520
+msgid "Implemented (examples)"
+msgstr "Realizováno (Příklady)"

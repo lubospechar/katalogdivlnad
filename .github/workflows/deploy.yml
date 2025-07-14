@@ -1,0 +1,26 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H vps.example.com >> ~/.ssh/known_hosts
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+
+    - name: Deploy via SSH
+      run: |
+        ssh dev.katalog-divland@37.205.13.147 "/home/dev.katalog-divland/bin/deploy.sh"

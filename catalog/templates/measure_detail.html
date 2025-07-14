@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail opatření</title>
+</head>
+<body>
+<h1>Detail opatření</h1>
+
+<!-- Základní informace -->
+<p><strong>Název opatření:</strong> {{ measure.measure_name_cs }}</p>
+<p><strong>Kód:</strong> {{ measure.code }}</p>
+<p><strong>Skupina:</strong> {{ measure.group }}</p>
+
+<!-- Abstrakt -->
+<p><strong>Abstrakt:</strong> {{ measure.abstract_cs }}</p>
+
+<!-- Detailní popis -->
+<p><strong>Popis:</strong> {{ measure.description_cs }}</p>
+
+<!-- Výhody a nevýhody -->
+<p><strong>Výhody:</strong>
+    {% for advantage in measure.advantages.all %}
+        {{ advantage.advantage_description_cs }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné výhody nejsou k dispozici.
+    {% endfor %}
+</p>
+<p><strong>Nevýhody:</strong>
+    {% for disadvantage in measure.disadvantages.all %}
+        {{ disadvantage.disadvantage_description_cs }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné nevýhody nejsou k dispozici.
+    {% endfor %}
+</p>
+
+<!-- Environmentální informace -->
+<p><strong>Environmentální poznámka:</strong> {{ measure.env_desc }}</p>
+
+<!-- Podmínky implementace -->
+<p><strong>Podmínky implementace:</strong> {{ measure.conditions_for_implementation_cs }}</p>
+
+<p><strong>Složky ŽP:</strong>
+    {% for env in measure.envs.all %}
+        {{ env.option_name.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné složky ŽP nejsou k dispozici.
+    {% endfor %}
+</p>
+
+
+<p><strong>Složky ŽP (přesah):</strong>
+    {% for env_secondary in measure.envs_sec.all %}
+        {{ env_secondary.option_name.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné složky ŽP (přesah) nejsou k dispozici.
+    {% endfor %}
+</p>
+
+
+<p><strong>Aplikační potenciál:</strong>
+    {% if measure.potential %}
+        {{ measure.potential.option_name.name }}
+    {% else %}
+        Žádný rozsah není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Velikost:</strong>
+    {% if measure.size %}
+        {{ measure.size.option_name.name }}
+    {% else %}
+        Žádná velikost není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Náročnost realizace:</strong>
+    {% if measure.difficulty_of_implementation %}
+        {{ measure.difficulty_of_implementation.option_name.name }}
+    {% else %}
+        Žádná náročnost realizace není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Podmínky implementace:</strong>
+    {% if measure.conditions_for_implementation_cs %}
+        {{ measure.conditions_for_implementation_cs }}
+    {% else %}
+        Žádné podmínky implementace nejsou k dispozici.
+    {% endif %}
+</p>
+
+
+<p><strong>Kvantifikace:</strong>
+    {% if measure.quantification %}
+        {{ measure.quantification.option_name.name }}
+    {% else %}
+        Žádná kvantifikace není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Časový horizont:</strong>
+    {% if measure.time_horizon %}
+        {{ measure.time_horizon.option_name.name }}
+    {% else %}
+        Žádný časový horizont není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Návaznost:</strong>
+    {% if measure.interconnection.exists %}
+        <ul>
+            {% for item in measure.interconnection.all %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádná návaznost není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Střety:</strong>
+    {% if measure.conflict.exists %}
+        <ul>
+            {% for conflict in measure.conflict.all %}
+                <li>{{ conflict }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné střety nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Jiné střety:</strong>
+    {% if measure.other_conflict %}
+        {{ measure.other_conflict }}
+    {% else %}
+        Žádné jiné střety nejsou k dispozici.
+    {% endif %}
+</p>
+
+
+<p><strong>Dopad:</strong>
+    {% if measure.impact_details %}
+        {{ measure.impact_details.name }}
+    {% else %}
+        Žádné kategorie dopadů nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Další dopady:</strong>
+    {% if measure.other_impacts_details.exists %}
+        <ul>
+            {% for impact in measure.other_impacts_details.all %}
+                <li>{{ impact }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné další kategorie dopadů nejsou k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Poznámka dopady (Česky):</strong>
+    {% if measure.impact_desc_cs %}
+        {{ measure.impact_desc_cs }}
+    {% else %}
+        Žádná poznámka není k dispozici.
+    {% endif %}
+</p>
+
+<p><strong>Cíle udržitelného rozvoje (SDG):</strong>
+    {% if measure.sdg.exists %}
+        <ul>
+            {% for goal in measure.sdg.all %}
+                <li>{{ goal }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Žádné cíle udržitelného rozvoje nejsou k dispozici.
+    {% endif %}
+</p>
+
+
+<!-- Ceny -->
+<p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>
+
+<!-- Komentář -->
+<p><strong>Komentář:</strong> {{ measure.comment_cs }}</p>
+
+<!-- Historie -->
+<p><strong>Historie:</strong> {{ measure.history_cs }}</p>
+
+<!-- Reference -->
+<p><strong>Reference:</strong>
+    {% for reference in measure.references.all %}
+        <a href="{{  reference.url  }}">{{ reference.reference }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        Žádné reference nejsou k dispozici.
+    {% endfor %}
+</p>
+
+<!-- Kontaktní osoby -->
+{% if measure.contact_persons %}
+    <p><strong>Kontaktní osoba:</strong>
+        {{ measure.contact_persons.first_name }} {{ measure.contact_persons.last_name }}
+        ({{ measure.contact_persons.expertise }})
+    </p>
+{% else %}
+    <p><strong>Kontaktní osoba:</strong> Žádná kontaktní osoba není přiřazena.</p>
+{% endif %}
+
+<!-- Fotogalerie -->
+<h2>Fotogalerie</h2>
+{% if measure.gallery.all %}
+    <div>
+        {% for image in measure.gallery.all %}
+            <div>
+                <img src="{{ image.processed_image.url }}" alt="{{ image.caption_cs }}" style="width:300px; height:auto;">
+                <p><strong>Popis:</strong> {{ image.caption_cs }}</p>
+                <p><strong>Autor:</strong> {{ image.author }}</p>
+                <p><strong>Licence:</strong> {{ image.license }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Žádné fotografie nejsou k dispozici.</p>
+{% endif %}
+
+<!-- Příklady -->
+<h2>Příklady realizace</h2>
+{% if measure.example_set.all %}
+    <ul>
+        {% for example in measure.example_set.all %}
+            <li>
+                <strong>Název:</strong> {{ example.example_name }}<br>
+                <strong>Popis:</strong> {{ example.description_cs }}<br>
+                <strong>Odkaz:</strong> <a href="{{ example.web }}" target="_blank">{{ example.web }}</a><br>
+                <strong>Lokace:</strong>
+                {% if example.location == 1 %}
+                    v České republice
+                {% elif example.location == 2 %}
+                    v zahraničí
+                {% else %}
+                    v DIVILANDu
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Žádné příklady nejsou k dispozici.</p>
+{% endif %}
+
+<!-- Odkaz zpět -->
+<p><a href="{% url 'group-detail' measure.group.id %}">Zpět na skupinu</a></p>
+<p><a href="{% url 'home' %}">Zpět na domovskou stránku</a></p>
+</body>
+</html>

@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
-
+from django.utils.translation import gettext_lazy as _
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +35,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -46,7 +48,7 @@ ROOT_URLCONF = "katalogdivlnad.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -74,7 +76,13 @@ DATABASES = {
     },
 }
 
-
+if 'test' in sys.argv:
+    DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.sqlite3',
+              'NAME': ':memory:',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,13 +111,15 @@ USE_TZ = config("USE_TZ", cast=bool)
 
 
 LANGUAGES = [
-    ("cs", "Čeština"),
-    ("en", "English"),
+    ("cs", _("Czech")),
+    ("en", _("English")),
 ]
 
 
 STATIC_URL = config("STATIC_URL")
+STATIC_ROOT = config("STATIC_ROOT")
 
-
+MEDIA_URL = config("MEDIA_URL")
+MEDIA_ROOT = config("MEDIA_ROOT")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

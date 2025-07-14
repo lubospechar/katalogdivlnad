@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Katalog divland</title>
+    <style>
+        .measure-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .measure-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+        .measure-item img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .measure-item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .measure-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Katalog divland</h1>
+
+<!-- Seznam skupin -->
+<h2>Skupiny</h2>
+<ul>
+    <li><a href="{% url 'home' %}">Vše</a></li>
+    {% for group in groups %}
+        <li><a href="{% url 'group-detail' group.id %}">{{ group }}</a></li>
+        {% empty %}
+        <li>Žádné skupiny nejsou k dispozici.</li>
+    {% endfor %}
+</ul>
+
+<!-- Seznam opatření -->
+<h2>Opatření</h2>
+<ul class="measure-list">
+    {% for measure in measures %}
+        <li class="measure-item">
+            {% if measure.title_image %}
+                <!-- Náhled obrázku opatření -->
+                <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name_cs }}">
+            {% endif %}
+            <!-- Název opatření -->
+            <a href="{% url 'measure-detail' measure.id %}">{{ measure.measure_name_cs }}</a>
+        </li>
+        {% empty %}
+        <li>Žádná opatření nejsou k dispozici.</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
