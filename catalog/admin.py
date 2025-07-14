@@ -332,6 +332,16 @@ class MeasureAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Effectiveness",
+            {
+                'fields': [
+                    "quantification",
+                    "time_horizon",
+                ],
+                "classes": ["collapse"],
+            },
+        ),
+        (
             "Impact and Categories",
             {
                 "fields": [
