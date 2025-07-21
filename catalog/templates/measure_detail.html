@@ -190,6 +190,17 @@
         </ul>
 {% endif %}
 
+
+{% if measure.pph.exists %}
+<p><strong>PPH</strong></p>
+
+        <ul>
+        {% for pph in measure.pph.all %}
+            <li><a href="{{  pph.url_cs }}">{{ pph.code }}</a>, {{ pph.name_cs }}</li>
+        {% endfor %}
+        </ul>
+{% endif %}
+
 <!-- Ceny -->
 <p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>
 
