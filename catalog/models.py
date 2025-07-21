@@ -678,3 +678,7 @@ class Dzes(models.Model):
 
     def __str__(self):
         return f'DZES{self.code}'
+
+    class Meta:
+        verbose_name = "Dzes"  # Singular form in the admin
+        verbose_name_plural = "Dzes"  # Plural form in the admin
