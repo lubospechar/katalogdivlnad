@@ -79,6 +79,17 @@ class DisadvantageAdmin(BaseAdmin):
     fields = ("disadvantage_description_cs", "disadvantage_description_en")
 
 
+class OptionInline(admin.TabularInline):
+    """
+    Inline configuration for the Option model within the OptionNameAdmin.
+    Displays associated Option instances in the OptionName admin detail view.
+    """
+    model = Option
+    extra = 1  # Number of empty forms to display
+    fields = ("option_cs", "option_en", "order", "description_cs", "description_en")
+    readonly_fields = ("id",)  # Make ID field readonly if needed
+
+
 @admin.register(OptionName)
 class OptionNameAdmin(BaseAdmin):
     """
@@ -89,6 +100,7 @@ class OptionNameAdmin(BaseAdmin):
     list_filter = ("option_name_cs", "option_name_en")
     search_fields = ("option_name_cs", "option_name_en")
     ordering = ("option_name_cs",)
+    inlines = [OptionInline]
 
 
 @admin.register(Option)
