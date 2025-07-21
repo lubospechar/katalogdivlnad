@@ -180,14 +180,26 @@
     {% endif %}
 </p>
 
+{% if measure.dzes.exists %}
 <p><strong>DZES</strong></p>
-    {% if measure.dzes.exists %}
+
         <ul>
         {% for dzes in measure.dzes.all %}
             <li><a href="{{  dzes.url_cs }}">{{ dzes.code }}</a>, {{ dzes.name_cs }}</li>
         {% endfor %}
         </ul>
-    {% endif %}
+{% endif %}
+
+
+{% if measure.pph.exists %}
+<p><strong>PPH</strong></p>
+
+        <ul>
+        {% for pph in measure.pph.all %}
+            <li><a href="{{  pph.url_cs }}">{{ pph.code }}</a>, {{ pph.name_cs }}</li>
+        {% endfor %}
+        </ul>
+{% endif %}
 
 <!-- Ceny -->
 <p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>

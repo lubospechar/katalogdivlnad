@@ -12,7 +12,7 @@ from .models import (
     MeasureImage,
     ContactPerson,
     Reference,
-    Dzes
+    Dzes, Pph
 )
 
 
@@ -365,6 +365,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "references",
                     "contact_persons",
                     "dzes",
+                    "ppt"
                 ],
                 "classes": ["collapse"],
             },
@@ -552,6 +553,17 @@ class DzesAdmin(admin.ModelAdmin):
     # Define the fields visible and editable in the form when creating or editing a record
     fields = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
 
-    class Meta:
-        verbose_name = "Dzes"  # Singular form in the admin
-        verbose_name_plural = "Dzes"  # Plural form in the admin
+@admin.register(Pph)
+class PptAdmin(admin.ModelAdmin):
+    # Define the columns to display on the model's list page in the admin interface
+    list_display = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
+
+    # Enable search functionality for code, Czech name, and English name fields
+    search_fields = ('code', 'name_cs', 'name_en')
+
+    # Add filtering options by code
+    list_filter = ('code',)
+
+    # Define the fields visible and editable in the form when creating or editing a record
+    fields = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
+
