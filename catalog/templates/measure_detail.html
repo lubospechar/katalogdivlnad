@@ -201,6 +201,11 @@
         </ul>
 {% endif %}
 
+
+{% if measure.invasion %}
+    <p><strong>Problematika invazních druhů</strong>/p>
+    <p>{{ measure.invasion }}</p>
+{% endif %}
 <!-- Ceny -->
 <p><strong>Cena (CZK):</strong> od {{ measure.price_czk_min }} do {{ measure.price_czk_max }}</p>
 

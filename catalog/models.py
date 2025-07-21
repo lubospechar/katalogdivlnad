@@ -563,6 +563,12 @@ class Measure(models.Model):
         verbose_name=_("PPh"),
     )
 
+    invasion = models.TextField(
+        verbose_name=_("invasive species issue"),
+        blank=True,
+        null=True,
+    )
+
     def clean(self):
         # Example: Validate that descriptions in Czech and English are different
         super().clean()

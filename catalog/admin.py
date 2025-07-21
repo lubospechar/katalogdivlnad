@@ -365,7 +365,8 @@ class MeasureAdmin(admin.ModelAdmin):
                     "references",
                     "contact_persons",
                     "dzes",
-                    "ppt"
+                    "ppt",
+                    'invasion'
                 ],
                 "classes": ["collapse"],
             },
