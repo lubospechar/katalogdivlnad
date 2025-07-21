@@ -553,6 +553,11 @@ class Measure(models.Model):
         null=True,
     )
 
+    dzes = models.ManyToManyField(
+        "Dzes",
+        verbose_name=_("Dzes"),
+    )
+
     def clean(self):
         # Example: Validate that descriptions in Czech and English are different
         super().clean()
@@ -662,3 +667,14 @@ class Example(models.Model):
 
     def __str__(self):
         return f"{self.measure} - {self.example_name}"
+
+
+class Dzes(models.Model):
+    code = models.CharField(max_length=10, verbose_name=_("Code DZES"))
+    name_cs = models.CharField(verbose_name=_("Name (Czech)"), max_length=100)
+    name_en = models.CharField(verbose_name=_("Name (English)"), max_length=100)
+    url_cs = models.URLField(verbose_name=_("URL (Czech)"), blank=True, null=True)
+    url_en = models.URLField(verbose_name=_("URL (English)"), blank=True, null=True)
+
+    def __str__(self):
+        return f'DZES{self.code}'
