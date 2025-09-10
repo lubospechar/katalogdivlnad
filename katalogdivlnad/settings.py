@@ -24,6 +24,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "markdownx",
 ]
 
 LOCAL_APPS = [
