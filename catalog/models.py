@@ -563,8 +563,14 @@ class Measure(models.Model):
         verbose_name=_("PPh"),
     )
 
-    invasion = MarkdownxField(
-        verbose_name=_("invasive species issue"),
+    invasion_cs = MarkdownxField(
+        verbose_name=_("invasive species issue (cs)"),
+        blank=True,
+        null=True,
+    )
+
+    invasion_em = MarkdownxField(
+        verbose_name=_("invasive species issue (en)"),
         blank=True,
         null=True,
     )
