@@ -481,6 +481,14 @@ class Measure(models.Model):
         blank=True,
     )
 
+    pre_project_preparation = models.ManyToManyField(
+        "Option",
+        verbose_name=_("Pre-project preparation"),
+        limit_choices_to={"option_name__id": 13},
+        related_name="rel_ppp",
+        blank=True,
+    )
+
     price_czk_min = models.PositiveIntegerField(
         verbose_name=_("Price (CZK) - From"), default=0
     )
