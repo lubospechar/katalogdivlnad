@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from typing import Final
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
-
+from markdownx.models import MarkdownxField
 
 class Group(models.Model):
     # Maximum length for group name fields
@@ -347,10 +347,10 @@ class Measure(models.Model):
         max_length=255, verbose_name=_("Abstract (English)"), blank=True, null=True
     )
 
-    description_cs = models.TextField(
+    description_cs = MarkdownxField(
         verbose_name=_("Description (Czech)"),
     )
-    description_en = models.TextField(
+    description_en = MarkdownxField(
         verbose_name=_("Description (English)"),
     )
 
@@ -408,10 +408,10 @@ class Measure(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
-    conditions_for_implementation_cs = models.TextField(
+    conditions_for_implementation_cs = MarkdownxField(
         verbose_name=_("Conditions of implementation (Czech)"), blank=True, null=True
     )
-    conditions_for_implementation_en = models.TextField(
+    conditions_for_implementation_en = MarkdownxField(
         verbose_name=_("Conditions of implementation (English)"), blank=True, null=True
     )
 
@@ -541,13 +541,13 @@ class Measure(models.Model):
         options={"quality": 90},
     )
 
-    history_cs = models.TextField(
+    history_cs = MarkdownxField(
         verbose_name=_("History (Czech)"),
         blank=True,
         null=True,
     )
 
-    history_en = models.TextField(
+    history_en = MarkdownxField(
         verbose_name=_("History (English)"),
         blank=True,
         null=True,
@@ -563,8 +563,14 @@ class Measure(models.Model):
         verbose_name=_("PPh"),
     )
 
-    invasion = models.TextField(
-        verbose_name=_("invasive species issue"),
+    invasion_cs = MarkdownxField(
+        verbose_name=_("invasive species issue (cs)"),
+        blank=True,
+        null=True,
+    )
+
+    invasion_en = MarkdownxField(
+        verbose_name=_("invasive species issue (en)"),
         blank=True,
         null=True,
     )

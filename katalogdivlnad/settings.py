@@ -24,6 +24,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "markdownx",
 ]
 
 LOCAL_APPS = [
@@ -123,3 +124,6 @@ MEDIA_URL = config("MEDIA_URL")
 MEDIA_ROOT = config("MEDIA_ROOT")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+ENVIRONMENT = config("ENVIRONMENT")
