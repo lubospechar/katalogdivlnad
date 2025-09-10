@@ -63,7 +63,7 @@ jobs:
         echo "TIME_ZONE=${{ secrets.TIME_ZONE }}" >> $GITHUB_ENV
         echo "USE_I18N=${{ secrets.USE_I18N }}" >> $GITHUB_ENV
         echo "USE_TZ=${{ secrets.USE_TZ }}" >> $GITHUB_ENV
-        echo "USE_TZ=${{ secrets.ENVIRONMENT }}" >> $GITHUB_ENV
+        echo "ENVIRONMENT=${{ secrets.ENVIRONMENT }}" >> $GITHUB_ENV
 
     - name: Wait for PostgreSQL
       run: |
