@@ -340,6 +340,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "difficulty_of_implementation",
                     "conditions_for_implementation_cs",
                     "conditions_for_implementation_en",
+                    "pre_project_preparation"
                 ],
                 "classes": ["collapse"],
             },
