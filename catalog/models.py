@@ -347,10 +347,10 @@ class Measure(models.Model):
         max_length=255, verbose_name=_("Abstract (English)"), blank=True, null=True
     )
 
-    description_cs = models.TextField(
+    description_cs = MarkdownxField(
         verbose_name=_("Description (Czech)"),
     )
-    description_en = models.TextField(
+    description_en = MarkdownxField(
         verbose_name=_("Description (English)"),
     )
 
@@ -563,7 +563,7 @@ class Measure(models.Model):
         verbose_name=_("PPh"),
     )
 
-    invasion = models.TextField(
+    invasion = MarkdownxField(
         verbose_name=_("invasive species issue"),
         blank=True,
         null=True,
