@@ -3,7 +3,6 @@ name: Django CI
 on:
   push:
     branches: [ "dev" ]
-    branches-ignore: [ "feature/**" ]
   pull_request:
     branches: [ "dev" ]
 
