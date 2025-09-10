@@ -378,7 +378,8 @@ class MeasureAdmin(admin.ModelAdmin):
                     "contact_persons",
                     "dzes",
                     "pph",
-                    'invasion'
+                    'invasion_cs',
+                    'invasion_en'
                 ],
                 "classes": ["collapse"],
             },

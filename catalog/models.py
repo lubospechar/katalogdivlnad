@@ -569,7 +569,7 @@ class Measure(models.Model):
         null=True,
     )
 
-    invasion_em = MarkdownxField(
+    invasion_en = MarkdownxField(
         verbose_name=_("invasive species issue (en)"),
         blank=True,
         null=True,
