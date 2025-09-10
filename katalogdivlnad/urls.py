@@ -19,20 +19,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
 from catalog.views import Home, GroupDetailView, MeasureDetailView
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', Home.as_view(), name='home'),
     path('group/<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
     path('measure/<int:pk>/', MeasureDetailView.as_view(), name='measure-detail'),
-
-
-
-
-
 ]
 
 urlpatterns += [
     path('i18n/set_language/', set_language, name='set_language'),
 ]
+
+if settings.DEBUG and settings.ENVIRONMENT == 'local':
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
