@@ -12,7 +12,9 @@ from .models import (
     MeasureImage,
     ContactPerson,
     Reference,
-    Dzes, Pph
+    Dzes,
+    Pph,
+    NatureRestorationLaw,
 )
 
 
@@ -380,7 +382,8 @@ class MeasureAdmin(admin.ModelAdmin):
                     "dzes",
                     "pph",
                     'invasion_cs',
-                    'invasion_en'
+                    'invasion_en',
+                    'nature_restoration_law'
                 ],
                 "classes": ["collapse"],
             },
@@ -582,3 +585,13 @@ class PptAdmin(admin.ModelAdmin):
     # Define the fields visible and editable in the form when creating or editing a record
     fields = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
 
+@admin.register(NatureRestorationLaw)
+class NatureRestorationLaw(admin.ModelAdmin):
+    # Define the columns to display on the model's list page in the admin interface
+    list_display = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
+    # Enable search functionality for code, Czech name, and English name fields
+    search_fields = ('code', 'name_cs', 'name_en')
+    # Add filtering options by code
+    list_filter = ('code',)
+    # Define the fields visible and editable in the form when creating or editing a record
+    fields = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
