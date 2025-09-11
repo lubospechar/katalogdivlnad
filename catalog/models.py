@@ -7,6 +7,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from markdownx.models import MarkdownxField
 
+
 class Group(models.Model):
     # Maximum length for group name fields
     MAX_NAME_LENGTH: Final[int] = 60
@@ -294,6 +295,7 @@ class ImpactDetail(models.Model):
             ),
         ]
 
+
 class Reference(models.Model):
     reference = models.CharField(
         verbose_name=_("Reference"),
@@ -314,7 +316,9 @@ class ContactPerson(models.Model):
     # Email of the contact person (optional)
     email = models.EmailField(verbose_name=_("Email"), blank=True, null=True)
     # Phone number of the contact person (optional)
-    phone = models.CharField(max_length=20, verbose_name=_("Phone"), blank=True, null=True)
+    phone = models.CharField(
+        max_length=20, verbose_name=_("Phone"), blank=True, null=True
+    )
 
     def __str__(self):
         # Returns a combination of first name, last name, and expertise
@@ -542,7 +546,7 @@ class Measure(models.Model):
     )
 
     # Processed title image field for Measure (resized)
-    processed_title_image =  ImageSpecField(
+    processed_title_image = ImageSpecField(
         source="title_image",
         processors=[ResizeToFill(800, 600)],
         format="JPEG",
@@ -594,8 +598,8 @@ class Measure(models.Model):
     def __str__(self):
         lang = get_language()
         if lang == "cs":
-            return f'{self.measure_name_cs} ({self.group.group_name_cs})'
-        return f'{self.measure_name_en} ({self.group.group_name_en})'
+            return f"{self.measure_name_cs} ({self.group.group_name_cs})"
+        return f"{self.measure_name_en} ({self.group.group_name_en})"
 
     class Meta:
         verbose_name = _("Measure")
@@ -607,10 +611,12 @@ class Measure(models.Model):
             )
         ]
 
+
 class MeasureImage(models.Model):
     """
     Gallery images connected to a specific Measure.
     """
+
     measure = models.ForeignKey(
         Measure,
         on_delete=models.CASCADE,
@@ -658,7 +664,6 @@ class MeasureImage(models.Model):
         null=True,
     )
 
-
     def __str__(self):
         return f"Image for {self.measure} - {self.caption_cs}"
 
@@ -672,7 +677,10 @@ class Example(models.Model):
     LOCATION_CHOICES = (
         (1, _("in the Czech Republic")),
         (2, _("abroad")),
-        (3, _("within DIVILAND")),  # No translation provided for DIVILAND, as it seems like a name
+        (
+            3,
+            _("within DIVILAND"),
+        ),  # No translation provided for DIVILAND, as it seems like a name
     )
 
     measure = models.ForeignKey(
@@ -707,6 +715,7 @@ class Dzes(models.Model):
     class Meta:
         verbose_name = "Dzes"  # Singular form in the admin
         verbose_name_plural = "Dzes"  # Plural form in the admin
+
 
 class Pph(models.Model):
     code = models.CharField(max_length=10, verbose_name=_("Code PPH"))
