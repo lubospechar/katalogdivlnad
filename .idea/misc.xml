@@ -4,7 +4,7 @@
     <option name="enabledOnReformat" value="true" />
     <option name="executionMode" value="BINARY" />
     <option name="pathToExecutable" value="/usr/bin/black" />
-    <option name="sdkName" value="Python 3.13 (katalogdivlnad)" />
+    <option name="sdkName" value="Python 3.13 (katalog-divland)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (katalog-divland)" project-jdk-type="Python SDK" />
 </project>
