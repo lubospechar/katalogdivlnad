@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from .models import Group, Measure
+from django.utils import translation
 
 class Home(ListView):
     model = Group
@@ -8,9 +9,12 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['measures'] = Measure.objects.all()
         return context
 
+    def get_queryset(self):
+        lang = translation.get_language()
+        field = f"group_name_{lang}"
+        return Group.objects.all().order_by(field)
 
 class GroupDetailView(DetailView):
     model = Group

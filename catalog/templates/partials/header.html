@@ -15,9 +15,11 @@
                 <li class="dropdown">
                     <a href="#">{% trans "Skupiny" %}</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">{% trans "Skupina 1" %}</a></li>
-                        <li><a href="#">{% trans "Skupina 2" %}</a></li>
-                        <li><a href="#">{% trans "Skupina 3" %}</a></li>
+                        <li><a href="#">{% trans "Vše" %}</a></li>
+                        {% for group in groups %}
+                            <li><a href="#">{{ group }}</a></li>
+                        {% endfor %}
+
                     </ul>
                 </li>
                 <li><a href="#">{% trans "Opatření" %}</a></li>
