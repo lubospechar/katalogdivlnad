@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (
+    Page,
     Group,
     Advantage,
     Disadvantage,
@@ -16,6 +17,30 @@ from .models import (
     Pph,
     NatureRestorationLaw,
 )
+
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    list_display = ("title_cs", "title_en", "slug", "is_home")
+    list_filter = ("is_home",)
+    search_fields = ("title_cs", "title_en", "slug", "content_cs", "content_en")
+    ordering = ("title_cs",)
+    prepopulated_fields = {"slug": ("title_cs",)}
+    save_on_top = True
+
+    fieldsets = (
+        ("Obecné", {
+            "fields": ("slug", "is_home"),
+        }),
+        ("Čeština", {
+            "fields": ("title_cs", "content_cs"),
+        }),
+        ("Angličtina", {
+            "fields": ("title_en", "content_en"),
+        }),
+    )
+
+    def view_on_site(self, obj):
+        return obj.get_absolute_url()
 
 
 class BaseAdmin(admin.ModelAdmin):

@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import UniqueConstraint, Q
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.core.exceptions import ValidationError
@@ -6,6 +8,36 @@ from typing import Final
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from markdownx.models import MarkdownxField
+
+
+class Page(models.Model):
+    title_cs = models.CharField(max_length=200)
+    title_en = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    content_cs = MarkdownxField()
+    content_en = MarkdownxField()
+    is_home = models.BooleanField(default=False, help_text="Tahle stránka je titulka")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_home"],
+                condition=Q(is_home=True),
+                name="only_one_homepage",
+            )
+        ]
+
+        verbose_name = _("Page")
+        verbose_name_plural = _("Pages")
+
+    def __str__(self) -> str:
+        lang: str = get_language()
+        if lang == "cs":
+            return self.title_cs
+        return self.title_en
+
+    def get_absolute_url(self):
+        return reverse("page_detail", args=[self.slug])
 
 
 class Group(models.Model):
