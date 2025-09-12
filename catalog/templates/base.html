@@ -1,0 +1,27 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'cs' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Katalog DIVLAND" %}</title>
+    <link rel="stylesheet" href="{% static 'catalog/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'catalog/css/header.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% include "partials/header.html" %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

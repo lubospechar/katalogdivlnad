@@ -120,6 +120,10 @@ LANGUAGES = [
 STATIC_URL = config("STATIC_URL")
 STATIC_ROOT = config("STATIC_ROOT")
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 MEDIA_URL = config("MEDIA_URL")
 MEDIA_ROOT = config("MEDIA_ROOT")
 

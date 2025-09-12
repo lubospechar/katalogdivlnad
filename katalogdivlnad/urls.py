@@ -36,3 +36,4 @@ urlpatterns += [
 
 if settings.DEBUG and settings.ENVIRONMENT == 'local':
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
