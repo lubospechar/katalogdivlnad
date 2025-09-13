@@ -36,8 +36,8 @@ class Page(models.Model):
             return self.title_cs
         return self.title_en
 
-    def get_absolute_url(self):
-        return reverse("page_detail", args=[self.slug])
+    # def get_absolute_url(self):
+    #     return reverse("page_detail", args=[self.slug])
 
 
 class Group(models.Model):

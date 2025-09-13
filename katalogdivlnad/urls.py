@@ -28,6 +28,7 @@ urlpatterns = [
     path('group/<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
     path('measure/<int:pk>/', MeasureDetailView.as_view(), name='measure-detail'),
     path("markdownx/", include("markdownx.urls")),
+    #path("<slug:slug>/", views.page_detail, name="page_detail"),
 ]
 
 urlpatterns += [

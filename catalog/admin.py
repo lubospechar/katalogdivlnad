@@ -39,9 +39,6 @@ class PageAdmin(admin.ModelAdmin):
         }),
     )
 
-    def view_on_site(self, obj):
-        return obj.get_absolute_url()
-
 
 class BaseAdmin(admin.ModelAdmin):
     """
