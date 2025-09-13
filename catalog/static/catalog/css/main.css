@@ -5,3 +5,29 @@ main {
     margin: 2rem auto;
     padding: 0 1rem;
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.card {
+  text-decoration: none;
+  color: black;
+  border-bottom: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.card p {
+    margin: 10px 0 5px 0;
+    text-align: center;
+}
