@@ -11,19 +11,19 @@
 
         <nav class="header-nav">
             <ul>
-                <li><a href="#">{% trans "Katalog" %}</a></li>
+                <li><a href="#">{% trans "Catalogue" %}</a></li>
                 <li class="dropdown">
-                    <a href="#">{% trans "Skupiny" %}</a>
+                    <a href="#">{% trans "Groups" %}</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">{% trans "Vše" %}</a></li>
+                        <li><a href="#">{% trans "All" %}</a></li>
                         {% for group in groups %}
                             <li><a href="#">{{ group }}</a></li>
                         {% endfor %}
 
                     </ul>
                 </li>
-                <li><a href="#">{% trans "Opatření" %}</a></li>
-                <li><a href="#">{% trans "Galerie" %}</a></li>
+                <li><a href="#">{% trans "Measure" %}</a></li>
+                <li><a href="#">{% trans "Gallery" %}</a></li>
             </ul>
         </nav>
 
