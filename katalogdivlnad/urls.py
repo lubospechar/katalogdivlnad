@@ -18,14 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
-from catalog.views import Home, GroupDetailView, MeasureDetailView
+from catalog.views import Home, MeasuresListByGroupView, MeasureDetailView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', Home.as_view(), name='home'),
-    path('group/<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
+    path('groups/', MeasuresListByGroupView.as_view(), name='groups-all'),
+    path('groups/group-<int:pk>/', MeasuresListByGroupView.as_view(), name='group-filter'),
     path('measure/<int:pk>/', MeasureDetailView.as_view(), name='measure-detail'),
     path("markdownx/", include("markdownx.urls")),
     #path("<slug:slug>/", views.page_detail, name="page_detail"),

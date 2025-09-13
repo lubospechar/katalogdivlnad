@@ -31,15 +31,25 @@ class Home(ListView):
 
         return context
 
-class GroupDetailView(DetailView):
-    model = Group
-    template_name = "group_detail.html"
-    context_object_name = "group"
+class MeasuresListByGroupView(ListView):
+    model = Measure
+    template_name = "measure_list.html"
+    context_object_name = "measures"
+
+    def get_queryset(self):
+        lang = translation.get_language()
+        qs = super().get_queryset().select_related("group")
+        group_id = self.kwargs.get("pk")
+        if group_id:
+            qs = qs.filter(group_id=group_id)
+        return qs.order_by(f"measure_name_{ lang }")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['groups'] = Group.objects.all()
-        context['measures'] = Measure.objects.filter(group=self.object)
+        group_id = self.kwargs.get("pk")
+        context["selected_group"] = None
+        if group_id:
+            context["selected_group"] = get_object_or_404(Group, pk=group_id)
         return context
 
 class MeasureDetailView(DetailView):
