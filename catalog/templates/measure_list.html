@@ -3,5 +3,14 @@
 {% block content %}
 <main class="measure-list">
     <h1>{{ selected_group }}</h1>
+    <div class="grid">
+        {% for measure in measures %}
+            <a href="odkaz1.html" class="card">
+                <img src="{{ measure.title_image }}" alt="{{ measure.measure_name_cs }}">
+                <p>{{ measure.measure_name_cs }}</p>
+            </a>
+        {% endfor %}
+    </div>
+
 </main>
 {% endblock %}
