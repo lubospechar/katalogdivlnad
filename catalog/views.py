@@ -60,11 +60,11 @@ class MeasureDetailView(DetailView):
     context_object_name = "measure"
 
 
-
 class HeroCssView(DetailView):
     model = Measure
     template_name = "css/hero.css"
     content_type = "text/css; charset=utf-8"
+    context_object_name = "measure"
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs.setdefault("content_type", self.content_type)

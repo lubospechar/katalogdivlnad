@@ -4,3 +4,10 @@
 {% block extra_head %}
     <link rel="stylesheet" href="{% url 'hero_css' pk=measure.pk %}">
 {% endblock %}
+
+{% block title_image %}
+    <div class="measure-header-hero">
+        <h1 class="hero-title">{{ measure.measure_name }}</h1>
+        <h2 class="hero-subtitle">{% trans "Catalogue of measures to strengthen the stability and resilience of the landscape" %}</h2>
+    </div>
+{% endblock %}

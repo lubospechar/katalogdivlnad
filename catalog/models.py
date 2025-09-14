@@ -1,6 +1,5 @@
 from django.db import models
-from django.db.models import UniqueConstraint, Q
-from django.urls import reverse
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.core.exceptions import ValidationError
@@ -9,6 +8,21 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from markdownx.models import MarkdownxField
 
+from django.conf import settings
+from django.utils.translation import get_language
+
+
+class TranslateMixin:
+    def translate(self, base: str):
+        lang = (get_language() or settings.LANGUAGE_CODE or "en").lower()
+        candidates = [lang, lang.split("-")[0], getattr(settings, "LANGUAGE_CODE", "en"), "en", "cs"]
+        for code in candidates:
+            field = f"{base}_{code}"
+            if hasattr(self, field):
+                val = getattr(self, field)
+                if val:
+                    return val
+        return ""
 
 class Page(models.Model):
     title_cs = models.CharField(max_length=200)
@@ -362,7 +376,7 @@ class ContactPerson(models.Model):
         verbose_name_plural = _("Contact Persons")
 
 
-class Measure(models.Model):
+class Measure(models.Model, TranslateMixin):
     group = models.ForeignKey(
         "Group",
         on_delete=models.CASCADE,
@@ -665,6 +679,10 @@ class Measure(models.Model):
         if lang == "cs":
             return f"{self.measure_name_cs} ({self.group.group_name_cs})"
         return f"{self.measure_name_en} ({self.group.group_name_en})"
+
+    @property
+    def measure_name(self):
+        return self.translate("measure_name")
 
     class Meta:
         verbose_name = _("Measure")

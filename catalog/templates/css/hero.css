@@ -1,0 +1,39 @@
+/* ==========================================
+   Responsive background images from database
+   ========================================== */
+
+@media (min-width: 1281px) and (max-width: 1440px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_1440.url }}");
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1920px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_1920.url }}");
+    }
+}
+
+@media (min-width: 1921px) and (max-width: 2560px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_2560.url }}");
+    }
+}
+
+@media (min-width: 2561px) and (max-width: 3200px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_3200.url }}");
+    }
+}
+
+@media (min-width: 3201px) and (max-width: 3840px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_3840.url }}");
+    }
+}
+
+@media (min-width: 3841px) {
+    .measure-header-hero {
+        background-image: url("{{ measure.image_5000.url }}");
+    }
+}

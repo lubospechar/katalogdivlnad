@@ -11,8 +11,8 @@
     <div class="grid">
         {% for measure in measures %}
             <a href="{%  url 'measure-detail' measure.pk %}" class="card">
-                <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name_cs }}">
-                <p>{{ measure.measure_name_cs }}</p>
+                <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name }}">
+                <p>{{ measure.measure_name }}</p>
             </a>
         {% endfor %}
     </div>
