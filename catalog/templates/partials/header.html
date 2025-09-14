@@ -1,55 +1,46 @@
 {% load i18n static %}
 
-<header>
-    <!-- Top bar with logos, nav, language -->
-    <div class="header-bar">
-        <div class="header-logos">
-            <a href="#"><img src="{% static 'catalog/img/logos/logo-divland.png' %}" alt="DIVLAND"></a>
-            <a href="https://tacr.cz" target="_blank" rel="noopener"><img src="{% static 'catalog/img/logos/logo-tacr.png' %}" alt="TAČR"></a>
-            <a href="https://fzp.czu.cz" target="_blank" rel="noopener"><img src="{% static 'catalog/img/logos/logo-czu-fzp.png' %}" alt="ČZU FŽP"></a>
-        </div>
-
-        <nav class="header-nav">
-            <ul>
-                <li><a href="#">{% trans "Catalogue" %}</a></li>
-                <li class="dropdown">
-                    <a href="{% url 'groups-all' %}">{% trans "Groups" %}</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'groups-all' %}">{% trans "All" %}</a></li>
-                        {% for group in groups %}
-                            <li><a href="{% url 'group-filter' group.id %}">{{ group }}</a></li>
-                        {% endfor %}
-
-                    </ul>
-                </li>
-                <li><a href="#">{% trans "Gallery" %}</a></li>
-            </ul>
-        </nav>
-
-        <div class="header-lang">
-            <form action="{% url 'set_language' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.get_full_path }}">
-
-                <!-- Czech flag -->
-                <button type="submit" name="language" value="cs"
-                        class="{% if LANGUAGE_CODE == 'cs' %}active{% endif %}">
-                    <span class="fi fi-cz"></span>
-                </button>
-
-                <!-- English flag -->
-                <button type="submit" name="language" value="en"
-                        class="{% if LANGUAGE_CODE == 'en' %}active{% endif %}">
-                    <span class="fi fi-gb"></span>
-                </button>
-            </form>
-        </div>
+<!-- Top bar with logos, nav, language -->
+<div class="header-bar">
+    <div class="header-logos">
+        <a href="{% url 'home' %}"><img src="{% static 'catalog/img/logos/logo-divland.png' %}" alt="DIVLAND"></a>
+        <a href="https://tacr.cz" target="_blank" rel="noopener"><img src="{% static 'catalog/img/logos/logo-tacr.png' %}" alt="TAČR"></a>
+        <a href="https://fzp.czu.cz" target="_blank" rel="noopener"><img src="{% static 'catalog/img/logos/logo-czu-fzp.png' %}" alt="ČZU FŽP"></a>
     </div>
 
-    <!-- Hero image with title inside -->
-    <div class="header-hero">
-        <h1 class="hero-title">
-            {% trans "Catalogue of measures to strengthen the stability and resilience of the landscape" %}
-        </h1>
+    <nav class="header-nav">
+        <ul>
+            <li><a href="{% url 'home' %}">{% trans "Catalogue" %}</a></li>
+            <li class="dropdown">
+                <a href="{% url 'groups-all' %}">{% trans "Groups" %}</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'groups-all' %}">{% trans "All" %}</a></li>
+                    {% for group in groups %}
+                        <li><a href="{% url 'group-filter' group.id %}">{{ group }}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </li>
+            <li><a href="#">{% trans "Gallery" %}</a></li>
+        </ul>
+    </nav>
+
+    <div class="header-lang">
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+            <!-- Czech flag -->
+            <button type="submit" name="language" value="cs"
+                    class="{% if LANGUAGE_CODE == 'cs' %}active{% endif %}">
+                <span class="fi fi-cz"></span>
+            </button>
+
+            <!-- English flag -->
+            <button type="submit" name="language" value="en"
+                    class="{% if LANGUAGE_CODE == 'en' %}active{% endif %}">
+                <span class="fi fi-gb"></span>
+            </button>
+        </form>
     </div>
-</header>
+</div>

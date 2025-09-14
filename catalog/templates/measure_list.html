@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
+{% block title_image %}
+    {% include 'partials/title_image.html' %}
+{%  endblock %}
+
 {% block content %}
 <main class="measure-list">
     <h1>{% if selected_group %}{{ selected_group }}{% else %}{% trans 'All' %}{% endif %}</h1>

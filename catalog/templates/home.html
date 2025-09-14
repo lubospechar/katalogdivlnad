@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
+{% block title_image %}
+    {% include 'partials/title_image.html' %}
+{%  endblock %}
+
 {% block content %}
-<main class="home-content">
-<h1>{{ title }}</h1>
-{{ content }}
-</main>
+    <main class="home-content">
+        <h1>{{ title }}</h1>
+        {{ content }}
+    </main>
 {% endblock %}

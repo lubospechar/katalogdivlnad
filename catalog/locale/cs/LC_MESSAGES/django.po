@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 18:17+0200\n"
+"POT-Creation-Date: 2025-09-14 13:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "České i anglické pojmenování skupiny musí být odlišné"
 msgid "Group"
 msgstr "Skupina"
 
-#: catalog/models.py:75 catalog/templates/partials/header.html:16
+#: catalog/models.py:75 catalog/templates/partials/header.html:15
 msgid "Groups"
 msgstr "Skupiny"
 
@@ -410,7 +410,6 @@ msgid "invasive species issue (en)"
 msgstr ""
 
 #: catalog/models.py:642 catalog/models.py:724
-#: catalog/templates/partials/header.html:25
 msgid "Measure"
 msgstr "Opatření"
 
@@ -528,19 +527,21 @@ msgstr "Kód opatření"
 msgid "DIVLAND Catalogue"
 msgstr "Katalog DIVLAND"
 
-#: catalog/templates/partials/header.html:14
-msgid "Catalogue"
-msgstr "Katalog"
-
-#: catalog/templates/partials/header.html:18
+#: catalog/templates/measure_list.html:10
+#: catalog/templates/partials/header.html:17
 msgid "All"
 msgstr "Vše"
 
-#: catalog/templates/partials/header.html:26
+#: catalog/templates/partials/header.html:13
+msgid "Catalogue"
+msgstr "Katalog"
+
+#: catalog/templates/partials/header.html:24
 msgid "Gallery"
 msgstr "Galerie"
 
-#: catalog/templates/partials/header.html:53
+#: catalog/templates/partials/title_image.html:6
 msgid ""
-"Katalog opatření na posílení stability<br /> a resilientní schopnosti krajiny"
-msgstr ""
+"Catalogue of measures to strengthen the stability and resilience of the "
+"landscape"
+msgstr "Katalog opatření na posílení stability a resilientní schopnosti krajiny"

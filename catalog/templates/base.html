@@ -13,8 +13,10 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    {% include "partials/header.html" %}
-
+    <header>
+        {% include "partials/header.html" %}
+        {% block title_image %}{% endblock %}
+    </header>
 
     {% block content %}{% endblock %}
 
