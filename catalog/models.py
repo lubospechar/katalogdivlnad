@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.core.exceptions import ValidationError
@@ -10,6 +11,7 @@ from markdownx.models import MarkdownxField
 
 from django.conf import settings
 from django.utils.translation import get_language
+from markdownx.utils import markdownify
 
 
 class TranslateMixin:
@@ -695,7 +697,7 @@ class Measure(models.Model, TranslateMixin):
 
     @property
     def description(self):
-        return self.translate("description")
+        return mark_safe(markdownify(self.translate("description")))
 
     class Meta:
         verbose_name = _("Measure")
