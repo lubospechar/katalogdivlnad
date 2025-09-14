@@ -54,7 +54,7 @@ class Page(models.Model):
     #     return reverse("page_detail", args=[self.slug])
 
 
-class Group(models.Model):
+class Group(models.Model, TranslateMixin):
     # Maximum length for group name fields
     MAX_NAME_LENGTH: Final[int] = 60
 
@@ -83,6 +83,10 @@ class Group(models.Model):
                 _("The Czech and English group name must be different.")
             )
 
+    @property
+    def group_name(self):
+        return self.translate('group_name')
+
     class Meta:
         # Human-readable names for the admin interface
         verbose_name: str = _("Group")
@@ -96,7 +100,7 @@ class Group(models.Model):
         ]
 
 
-class Advantage(models.Model):
+class Advantage(models.Model, TranslateMixin):
     # Description of the advantage in Czech language, used for localized representation
     advantage_description_cs: str = models.CharField(
         max_length=255, verbose_name=_("Advantage (Czech)"), unique=True
@@ -109,10 +113,7 @@ class Advantage(models.Model):
 
     # Returns the description based on the active language (Czech or English)
     def __str__(self) -> str:
-        lang: str = get_language()
-        if lang == "cs":
-            return self.advantage_description_cs
-        return self.advantage_description_en
+        return self.translate('advantage_description')
 
     # Ensures that Czech and English descriptions are not identical
     def clean(self) -> None:
@@ -136,7 +137,7 @@ class Advantage(models.Model):
         ]
 
 
-class Disadvantage(models.Model):
+class Disadvantage(models.Model, TranslateMixin):
     # Description of the disadvantage in Czech language, used for localized representation
     disadvantage_description_cs: str = models.CharField(
         max_length=255, verbose_name=_("Disadvantage (Czech)"), unique=True
@@ -149,10 +150,7 @@ class Disadvantage(models.Model):
 
     # Returns the description based on the active language (Czech or English)
     def __str__(self) -> str:
-        lang: str = get_language()
-        if lang == "cs":
-            return self.disadvantage_description_cs
-        return self.disadvantage_description_en
+        return self.translate('disadvantage_description')
 
     # Ensures that Czech and English descriptions are not identical
     def clean(self) -> None:
@@ -690,6 +688,14 @@ class Measure(models.Model, TranslateMixin):
     @property
     def measure_name(self):
         return self.translate("measure_name")
+
+    @property
+    def abstract(self):
+        return self.translate("abstract")
+
+    @property
+    def description(self):
+        return self.translate("description")
 
     class Meta:
         verbose_name = _("Measure")

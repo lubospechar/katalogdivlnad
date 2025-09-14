@@ -11,3 +11,15 @@
         <h2 class="hero-subtitle">{% trans "Catalogue of measures to strengthen the stability and resilience of the landscape" %}</h2>
     </div>
 {% endblock %}
+
+{% block content %}
+    <main class="measure-list">
+        <h1>{{ measure.measure_name }}</h1>
+        <h2>{% trans "Group" %}: <span>{{ measure.group.group_name }}</span></h2>
+        <h3>{{ measure.abstract }}</h3>
+        <hr />
+        <p>{{ measure.description }}</p>
+        <p><strong>{% translate "Advantages" %}:</strong> {{ measure.advantages.all|join:", " }}</p>
+        <p><strong>{% translate "Disadvantages" %}:</strong> {{ measure.disadvantages.all|join:", " }}</p>
+    </main>
+{% endblock %}
