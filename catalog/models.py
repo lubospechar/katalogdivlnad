@@ -351,6 +351,13 @@ class Reference(models.Model):
         verbose_name=_("URL"),
     )
 
+    def __str__(self):
+        return self.reference
+
+    class Meta:
+        verbose_name = _("Reference")
+        verbose_name_plural = _("References")
+
 
 class ContactPerson(models.Model):
     # First name of the contact person
