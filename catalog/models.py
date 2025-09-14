@@ -585,6 +585,34 @@ class Measure(models.Model):
         options={"quality": 90},
     )
 
+    image_1280 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(1280, 305)],
+        format='JPEG', options={'quality': 85})
+
+    image_1440 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(1440, 343)],
+        format='JPEG', options={'quality': 85})
+
+    image_1920 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(1920, 457)],
+        format='JPEG', options={'quality': 82})
+
+    image_2560 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(2560, 610)],
+        format='JPEG', options={'quality': 82})
+
+    image_3200 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(3200, 762)],
+        format='JPEG', options={'quality': 80})
+
+    image_3840 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(3840, 915)],
+        format='JPEG', options={'quality': 78})
+
+    image_5000 = ImageSpecField(source='title_image',
+        processors=[ResizeToFill(5000, 1191)],
+        format='JPEG', options={'quality': 76})
+
     history_cs = MarkdownxField(
         verbose_name=_("History (Czech)"),
         blank=True,

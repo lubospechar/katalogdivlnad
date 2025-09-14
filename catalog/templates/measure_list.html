@@ -10,7 +10,7 @@
     <h1>{% if selected_group %}{{ selected_group }}{% else %}{% trans 'All' %}{% endif %}</h1>
     <div class="grid">
         {% for measure in measures %}
-            <a href="" class="card">
+            <a href="{%  url 'measure-detail' measure.pk %}" class="card">
                 <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name_cs }}">
                 <p>{{ measure.measure_name_cs }}</p>
             </a>

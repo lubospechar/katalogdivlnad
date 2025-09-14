@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from django.utils.http import http_date
+from django.utils.timezone import now
 from django.views.generic import ListView, DetailView
 from .models import Group, Measure, Page
 from django.utils import translation
@@ -54,5 +56,19 @@ class MeasuresListByGroupView(ListView):
 
 class MeasureDetailView(DetailView):
     model = Measure
-    template_name = "measure_detail.html"  # Šablona pro detail opatření
+    template_name = "measure_detail.html"
     context_object_name = "measure"
+
+
+
+class HeroCssView(DetailView):
+    model = Measure
+    template_name = "css/hero.css"
+    content_type = "text/css; charset=utf-8"
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs.setdefault("content_type", self.content_type)
+        response = super().render_to_response(context, **response_kwargs)
+        response["Cache-Control"] = "public, max-age=86400"
+        response["Last-Modified"] = http_date(now().timestamp())
+        return response
