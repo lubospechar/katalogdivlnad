@@ -698,6 +698,10 @@ class Measure(models.Model, TranslateMixin):
     def description(self):
         return mark_safe(markdownify(self.translate("description")))
 
+    @property
+    def conditions_for_implementation(self):
+        return mark_safe(markdownify(self.translate("conditions_for_implementation")))
+
     class Meta:
         verbose_name = _("Measure")
         verbose_name_plural = _("Measures")

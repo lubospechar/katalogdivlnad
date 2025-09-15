@@ -19,7 +19,17 @@
         <h3>{{ measure.abstract }}</h3>
         <hr />
         <p>{{ measure.description }}</p>
-        <p><strong>{% translate "Advantages" %}:</strong> {{ measure.advantages.all|join:", " }}</p>
-        <p><strong>{% translate "Disadvantages" %}:</strong> {{ measure.disadvantages.all|join:", " }}</p>
+        <p><strong>{% translate "Advantages" %}: </strong>{{ measure.advantages.all|join:", " }}</p>
+        <p><strong>{% translate "Disadvantages" %}: </strong>{{ measure.disadvantages.all|join:", " }}</p>
+        <p><strong>{% translate "Conditions of implementation" %}: </strong>{{ measure.conditions_for_implementation }}</p>
+        <p><strong>{% translate "Environmental compartment" %}: </strong>{{ measure.env }}</p>
+        <p><strong>{% translate "Environmental compartment (overlap)" %}: </strong>{{ measure.env_secondary.all|join:", " }}</p>
+        <hr />
+        <p><strong>{% translate "Application potential" %}: </strong>{{ measure.potential }}</p>
+        <p><strong>{% translate "Scale / extent" %}: </strong>{{ measure.size }}</p>
+        <p><strong>{% translate "Implementation complexity" %}: </strong>{{ measure.difficulty_of_implementation }}</p>
+        <p><strong>{% translate "Impact quantification" %}: </strong>{{ measure.quantification }}</p>
+        <p><strong>{% translate "Impact time horizon" %}: </strong> {{ measure.time_horizon }}</p>
+        <hr />
     </main>
 {% endblock %}
