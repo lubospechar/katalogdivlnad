@@ -313,8 +313,8 @@ class MeasureAdmin(admin.ModelAdmin):
         "impact_details",
         "other_impacts_details",
         "sdg",
-        "unit",
-        "contact_persons",
+        "unit_czk",
+        "contact_person",
     )
 
     # Organize fields into sections for better usability
@@ -340,7 +340,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "price_czk_max",
                     "price_eu_min",
                     "price_eu_max",
-                    "unit",
+                    "unit_czk",
                 ],
             },
         ),
@@ -406,7 +406,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "other_conflict_cs",
                     "other_conflict_en",
                     "references",
-                    "contact_persons",
+                    "contact_person",
                     "dzes",
                     "pph",
                     'invasion_cs',

@@ -612,7 +612,7 @@ class Measure(models.Model, TranslateMixin):
         verbose_name=_("Price (Euro) - To"), default=0
     )
 
-    unit = models.ForeignKey(
+    unit_czk = models.ForeignKey(
         "Option",
         verbose_name=_("Unit"),
         limit_choices_to={"option_name__id": 11},
@@ -635,7 +635,7 @@ class Measure(models.Model, TranslateMixin):
         blank=True,
     )
 
-    contact_persons = models.ForeignKey(
+    contact_person = models.ForeignKey(
         "ContactPerson",
         verbose_name=_("Contact person"),
         on_delete=models.CASCADE,
@@ -765,6 +765,10 @@ class Measure(models.Model, TranslateMixin):
     def impact_desc(self):
         return self.translate("impact_desc")
 
+    @property
+    def history(self):
+        return mark_safe(markdownify(self.translate("history")))
+
     class Meta:
         verbose_name = _("Measure")
         verbose_name_plural = _("Measures")
@@ -836,7 +840,7 @@ class MeasureImage(models.Model):
         verbose_name_plural = _("Measure Images")
 
 
-class Example(models.Model):
+class Example(models.Model, TranslateMixin):
 
     LOCATION_CHOICES = (
         (1, _("in the Czech Republic")),
@@ -848,7 +852,7 @@ class Example(models.Model):
     )
 
     measure = models.ForeignKey(
-        Measure, verbose_name=_("Measure"), on_delete=models.CASCADE
+        Measure, verbose_name=_("Measure"), on_delete=models.CASCADE, related_name="examples"
     )
     example_name = models.CharField(verbose_name=_("Example name"), max_length=100)
     description_cs = models.TextField(verbose_name=_("Description (Czech)"))
@@ -865,6 +869,8 @@ class Example(models.Model):
     def __str__(self):
         return f"{self.measure} - {self.example_name}"
 
+    def description(self):
+        return mark_safe(markdownify(self.translate("description")))
 
 class Dzes(models.Model, TranslateMixin):
     code = models.CharField(max_length=10, verbose_name=_("Code DZES"))
@@ -904,15 +910,19 @@ class Pph(models.Model, TranslateMixin):
         verbose_name_plural = "PPH"
 
 
-class NatureRestorationLaw(models.Model):
-    code = models.CharField(max_length=10, verbose_name=_("Code DZES"))
+class NatureRestorationLaw(models.Model, TranslateMixin):
+    code = models.CharField(max_length=10, verbose_name=_("Code NPOP"))
     name_cs = models.CharField(verbose_name=_("Name (Czech)"), max_length=100)
     name_en = models.CharField(verbose_name=_("Name (English)"), max_length=100)
     url_cs = models.URLField(verbose_name=_("URL (Czech)"), blank=True, null=True)
     url_en = models.URLField(verbose_name=_("URL (English)"), blank=True, null=True)
 
     def __str__(self):
-        return self.code
+        name = self.translate("name")
+        return f'{self.code} - {name}'
+
+    def url(self):
+        return self.translate('url')
 
     class Meta:
         verbose_name = _("Nature Restoration Law")

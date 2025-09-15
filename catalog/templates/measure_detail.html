@@ -24,6 +24,7 @@
         <p><strong>{% translate "Conditions of implementation" %}: </strong>{{ measure.conditions_for_implementation }}</p>
         <p><strong>{% translate "Environmental compartment" %}: </strong>{{ measure.env }}</p>
         <p><strong>{% translate "Environmental compartment (overlap)" %}: </strong>{{ measure.env_secondary.all|join:", " }}</p>
+
         <hr />
         <p><strong>{% translate "Application potential" %}: </strong>{{ measure.potential }}</p>
         <p><strong>{% translate "Scale / extent" %}: </strong>{{ measure.size }}</p>
@@ -33,6 +34,7 @@
         <hr />
         <p><strong>{% translate "Invasive species issue" %}: </strong>{{ measure.invasion }}</p>
         <hr />
+
 
 
         <section class="boxgrid">
@@ -125,23 +127,40 @@
     </article>
 
 
-=
-<article class="boxcard">
-<div class="card-inner">
-<header class="card-header"><h2 class="card-title">Typologie NPOP</h2></header>
-<div class="card-body">
-<ul>
-<li>3. Ochrana volně žijících ptáků</li>
-</ul>
-</div>
-</div>
-</article>
+
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "Nature Restoration Law" %}</h2></header>
+            <div class="card-body">
+                <ul>
+                    {% for nrl in measure.nature_restoration_law.all %}
+                        <li><a href="{{ nrl.url }}">{{ nrl }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </article>
+
+
 </section>
 
 
+     <p><strong>{% translate "History" %}: </strong>{{ measure.history }}</p>
+     <p><strong>{% translate "Reference" %}: </strong>
+        {% for reference in measure.references.all %}
+            <br /><a href="{{ reference.url }}">{{ reference }}</a>
+        {%  endfor %}
+     </p>
+    <p><strong>{% translate 'Contact person' %}: </strong>{{ measure.contact_person }}</p>
 
 
-
+    <h2>Příklady realizace</h2>
+    {% for example in measure.examples.all %}
+        <h3>{% translate "Example name" %}: {{ example.example_name }} </h3>
+        <p><strong>{% translate "Description" %}: </strong>{{ example.description }}</p>
+        <p><strong>{% translate "Web page" %}: </strong><a href="{{ example.web }}">{{ example.web }}</a></p>
+        <p><strong>{% translate "Location" %}: </strong>{{ example.get_location_display }}</p>
+    {% endfor %}
 
     </main>
 {% endblock %}
