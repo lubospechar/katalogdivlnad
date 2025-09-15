@@ -360,8 +360,11 @@ class MeasureAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "potential",
+                    "potential_scale",
                     "size",
+                    "size_scale",
                     "difficulty_of_implementation",
+                    "difficulty_of_implementation_scale",
                     "conditions_for_implementation_cs",
                     "conditions_for_implementation_en",
                     "pre_project_preparation"
@@ -374,7 +377,9 @@ class MeasureAdmin(admin.ModelAdmin):
             {
                 'fields': [
                     "quantification",
+                    "quantification_scale",
                     "time_horizon",
+                    "time_horizon_scale"
                 ],
                 "classes": ["collapse"],
             },

@@ -383,6 +383,11 @@ class ContactPerson(models.Model):
 
 
 class Measure(models.Model, TranslateMixin):
+    class Size(models.TextChoices):
+        SMALL = "S", _("Small")
+        MEDIUM = "M", _("Medium")
+        LARGE = "L", _("Large")
+
     group = models.ForeignKey(
         "Group",
         on_delete=models.CASCADE,
@@ -448,6 +453,16 @@ class Measure(models.Model, TranslateMixin):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    potential_scale=models.CharField(
+        max_length=1,
+        choices=Size.choices,
+        default=Size.MEDIUM,
+        verbose_name=_("Application potential scale"),
+    )
+
+
+
     size = models.ForeignKey(
         "Option",
         verbose_name=_("Scale / extent"),
@@ -456,6 +471,17 @@ class Measure(models.Model, TranslateMixin):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    size_scale=models.CharField(
+        max_length=1,
+        choices=Size.choices,
+        default=Size.MEDIUM,
+        verbose_name=_("Scale / extent - scale"),
+    )
+
+
+
+
     difficulty_of_implementation = models.ForeignKey(
         "Option",
         verbose_name=_("Implementation complexity"),
@@ -464,6 +490,14 @@ class Measure(models.Model, TranslateMixin):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    difficulty_of_implementation_scale=models.CharField(
+        max_length=1,
+        choices=Size.choices,
+        default=Size.MEDIUM,
+        verbose_name=_("Implementation complexity - scale"),
+    )
+
     conditions_for_implementation_cs = MarkdownxField(
         verbose_name=_("Conditions of implementation (Czech)"), blank=True, null=True
     )
@@ -479,6 +513,15 @@ class Measure(models.Model, TranslateMixin):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    quantification_scale=models.CharField(
+        max_length=1,
+        choices=Size.choices,
+        default=Size.MEDIUM,
+        verbose_name=_("Impact quantification - scale"),
+    )
+
+
     time_horizon = models.ForeignKey(
         "Option",
         verbose_name=_("Impact time horizon"),
@@ -486,6 +529,13 @@ class Measure(models.Model, TranslateMixin):
         related_name="time_horizons",
         on_delete=models.CASCADE,
         null=True,
+    )
+
+    time_horizon_scale=models.CharField(
+        max_length=1,
+        choices=Size.choices,
+        default=Size.MEDIUM,
+        verbose_name=_("Impact time horizon - scale"),
     )
 
     interconnection = models.ManyToManyField(
