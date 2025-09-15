@@ -501,7 +501,11 @@ class Measure(models.Model, TranslateMixin):
     )
 
     other_conflict_cs = models.CharField(
-        max_length=255, verbose_name=_("Other conflicts"), blank=True, null=True
+        max_length=255, verbose_name=_("Other conflicts (Czech)"), blank=True, null=True
+    )
+
+    other_conflict_en = models.CharField(
+        max_length=255, verbose_name=_("Other conflicts (English)"), blank=True, null=True
     )
 
     impact_details = models.ForeignKey(
