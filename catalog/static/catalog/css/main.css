@@ -31,3 +31,75 @@ main {
     margin: 10px 0 5px 0;
     text-align: center;
 }
+
+.boxgrid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 18px;
+}
+
+
+.boxcard {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid #000000; /* černá čára */
+  border-radius: 0;          /* ostré rohy */
+  box-shadow: none;          /* bez stínu */
+  overflow: hidden;
+}
+
+
+.card-inner {
+position: absolute;
+inset: 0;
+display: grid;
+grid-template-rows: auto 1fr;
+}
+
+
+.card-header {
+padding: 14px 14px 0;
+}
+
+
+.card-title {
+margin: 0;
+font-weight: 700;
+font-size: 15px;
+letter-spacing: 0.02em;
+color: #111827;
+}
+
+
+.card-body {
+padding: 0 14px 14px;
+overflow: auto;
+}
+
+
+.muted { color: #6b7280; }
+
+
+.card-body ul {
+  margin: 0;
+  padding-left: 0;        /* zruší odsazení */
+  list-style-type: none;  /* zruší puntíky */
+}
+
+.card-body li {
+  margin: 2px 0;
+}
+
+p { margin: 8px 0 0; }
+
+.boxgrid .boxcard:nth-child(even) {
+  background: #f3f4f6; /* světle šedá */
+}
+
+@media (max-width: 1100px) {
+.boxgrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+.boxgrid { grid-template-columns: 1fr; }
+}

@@ -398,7 +398,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "sdg",
                     "interconnection",
                     "conflict",
-                    "other_conflict",
+                    "other_conflict_cs",
                     "references",
                     "contact_persons",
                     "dzes",

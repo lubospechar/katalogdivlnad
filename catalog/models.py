@@ -500,7 +500,7 @@ class Measure(models.Model, TranslateMixin):
         blank=True,
     )
 
-    other_conflict = models.CharField(
+    other_conflict_cs = models.CharField(
         max_length=255, verbose_name=_("Other conflicts"), blank=True, null=True
     )
 
@@ -661,13 +661,13 @@ class Measure(models.Model, TranslateMixin):
     )
 
     invasion_cs = MarkdownxField(
-        verbose_name=_("invasive species issue (cs)"),
+        verbose_name=_("Invasive species issue (cs)"),
         blank=True,
         null=True,
     )
 
     invasion_en = MarkdownxField(
-        verbose_name=_("invasive species issue (en)"),
+        verbose_name=_("Invasive species issue (en)"),
         blank=True,
         null=True,
     )
@@ -681,10 +681,7 @@ class Measure(models.Model, TranslateMixin):
             )
 
     def __str__(self):
-        lang = get_language()
-        if lang == "cs":
-            return f"{self.measure_name_cs} ({self.group.group_name_cs})"
-        return f"{self.measure_name_en} ({self.group.group_name_en})"
+        return self.measure_name
 
     @property
     def measure_name(self):
@@ -701,6 +698,10 @@ class Measure(models.Model, TranslateMixin):
     @property
     def conditions_for_implementation(self):
         return mark_safe(markdownify(self.translate("conditions_for_implementation")))
+
+    @property
+    def invasion(self):
+        return mark_safe(markdownify(self.translate("invasion")))
 
     class Meta:
         verbose_name = _("Measure")

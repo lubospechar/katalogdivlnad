@@ -29,7 +29,127 @@
         <p><strong>{% translate "Scale / extent" %}: </strong>{{ measure.size }}</p>
         <p><strong>{% translate "Implementation complexity" %}: </strong>{{ measure.difficulty_of_implementation }}</p>
         <p><strong>{% translate "Impact quantification" %}: </strong>{{ measure.quantification }}</p>
-        <p><strong>{% translate "Impact time horizon" %}: </strong> {{ measure.time_horizon }}</p>
+        <p><strong>{% translate "Impact time horizon" %}: </strong>{{ measure.time_horizon }}</p>
         <hr />
+        <p><strong>{% translate "Invasive species issue" %}: </strong>{{ measure.invasion }}</p>
+        <hr />
+
+
+        <section class="boxgrid">
+            <article class="boxcard">
+                <div class="card-inner">
+                    <header class="card-header"><h2 class="card-title">{% translate "Interconnection" %}:</h2></header>
+                    <div class="card-body">
+                        <ul>
+                            <li>{{ measure.interconnection.all|join:"</li><li>" }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "Conflicts" %}: </h2></header>
+            <div class="card-body">
+                <ul>
+                    <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">Dopad</h2></header>
+            <div class="card-body">
+                <ul>
+                    <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+
+<!-- 4. Další dopady -->
+<article class="boxcard">
+<div class="card-inner">
+<header class="card-header"><h2 class="card-title">Další dopady</h2></header>
+<div class="card-body">
+<ul>
+<li>Retence vody</li>
+<li>Opětovné využití vody</li>
+<li>Evapotranspirace</li>
+<li>Snížení teploty</li>
+<li>Vznik nových stanovišť</li>
+<li>Zlepšení stavu stávajících stanovišť</li>
+<li>Konektivita</li>
+<li>Kontaminace anorganickými polutanty</li>
+<li>Kontaminace emergentními polutanty</li>
+</ul>
+<p class="muted" style="margin-top:10px; font-size: 13px;">Poznámka dopady (Český): Umělé mokřady poskytují celou škálu efektů...</p>
+</div>
+</div>
+</article>
+
+
+<!-- 5. Cíle udržitelného rozvoje (SDG) -->
+<article class="boxcard">
+<div class="card-inner">
+<header class="card-header"><h2 class="card-title">Cíle udržitelného rozvoje (SDG)</h2></header>
+<div class="card-body">
+<ul>
+<li>14. Život ve vodě</li>
+</ul>
+<p class="muted">(Případné ikonky/odkazy lze vložit sem.)</p>
+</div>
+</div>
+</article>
+
+
+<!-- 6. DZES -->
+<article class="boxcard">
+<div class="card-inner">
+<header class="card-header"><h2 class="card-title">DZES</h2></header>
+<div class="card-body">
+<ul>
+<li>2. Ochrana půd bohatých na uhlík</li>
+<li>8B. Zachování krajinných prvků</li>
+</ul>
+</div>
+</div>
+</article>
+
+
+<!-- 7. PPH -->
+<article class="boxcard">
+<div class="card-inner">
+<header class="card-header"><h2 class="card-title">PPH</h2></header>
+<div class="card-body">
+<ul>
+<li>3. Ochrana volně žijících ptáků</li>
+</ul>
+</div>
+</div>
+</article>
+
+
+<!-- 8. Typologie NPOP -->
+<article class="boxcard">
+<div class="card-inner">
+<header class="card-header"><h2 class="card-title">Typologie NPOP</h2></header>
+<div class="card-body">
+<ul>
+<li>3. Ochrana volně žijících ptáků</li>
+</ul>
+</div>
+</div>
+</article>
+</section>
+
+
+
+
+
+
     </main>
 {% endblock %}
