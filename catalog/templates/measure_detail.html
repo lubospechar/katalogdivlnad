@@ -54,86 +54,78 @@
                 <ul>
                     <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
                 </ul>
+                <p class="muted" style="margin-top:10px; font-size: 13px;">{% translate "Other conflicts" %}: {{ measure.other_conflict }}</p>
             </div>
         </div>
     </article>
 
     <article class="boxcard">
         <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">Dopad</h2></header>
+            <header class="card-header"><h2 class="card-title">{% translate "Impact categories of climate change" %}:</h2></header>
             <div class="card-body">
                 <ul>
-                    <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
+                    <li>{{ measure.impact_details }}</li>
+                </ul>
+
+            </div>
+        </div>
+    </article>
+
+
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "Secondary impact categories of climate chang" %}</h2></header>
+            <div class="card-body">
+                <ul>
+                    <li>{{ measure.other_impacts_details.all|join:"</li><li>" }}</li>
+                </ul>
+                <p class="muted" style="margin-top:10px; font-size: 13px;">{{ measure.impact_desc }}</p>
+            </div>
+        </div>
+    </article>
+
+
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "Sustainable Development Goals (SDG)" %}</h2></header>
+            <div class="card-body">
+                <ul>
+                    <li>{{ measure.sdg.all|join:"</li><li>" }}</li>
                 </ul>
             </div>
         </div>
     </article>
 
 
-<!-- 4. Další dopady -->
-<article class="boxcard">
-<div class="card-inner">
-<header class="card-header"><h2 class="card-title">Další dopady</h2></header>
-<div class="card-body">
-<ul>
-<li>Retence vody</li>
-<li>Opětovné využití vody</li>
-<li>Evapotranspirace</li>
-<li>Snížení teploty</li>
-<li>Vznik nových stanovišť</li>
-<li>Zlepšení stavu stávajících stanovišť</li>
-<li>Konektivita</li>
-<li>Kontaminace anorganickými polutanty</li>
-<li>Kontaminace emergentními polutanty</li>
-</ul>
-<p class="muted" style="margin-top:10px; font-size: 13px;">Poznámka dopady (Český): Umělé mokřady poskytují celou škálu efektů...</p>
-</div>
-</div>
-</article>
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "DZES" %}</h2></header>
+            <div class="card-body">
+                <ul>
+                    {% for dzes in measure.dzes.all %}
+                        <li><a href="{{ dzes.url }}">{{ dzes }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </article>
 
 
-<!-- 5. Cíle udržitelného rozvoje (SDG) -->
-<article class="boxcard">
-<div class="card-inner">
-<header class="card-header"><h2 class="card-title">Cíle udržitelného rozvoje (SDG)</h2></header>
-<div class="card-body">
-<ul>
-<li>14. Život ve vodě</li>
-</ul>
-<p class="muted">(Případné ikonky/odkazy lze vložit sem.)</p>
-</div>
-</div>
-</article>
+    <article class="boxcard">
+        <div class="card-inner">
+            <header class="card-header"><h2 class="card-title">{% translate "PPH" %}</h2></header>
+            <div class="card-body">
+                <ul>
+                    {% for pph in measure.pph.all %}
+                        <li><a href="{{ pph.url }}">{{ pph }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </article>
 
 
-<!-- 6. DZES -->
-<article class="boxcard">
-<div class="card-inner">
-<header class="card-header"><h2 class="card-title">DZES</h2></header>
-<div class="card-body">
-<ul>
-<li>2. Ochrana půd bohatých na uhlík</li>
-<li>8B. Zachování krajinných prvků</li>
-</ul>
-</div>
-</div>
-</article>
-
-
-<!-- 7. PPH -->
-<article class="boxcard">
-<div class="card-inner">
-<header class="card-header"><h2 class="card-title">PPH</h2></header>
-<div class="card-body">
-<ul>
-<li>3. Ochrana volně žijících ptáků</li>
-</ul>
-</div>
-</div>
-</article>
-
-
-<!-- 8. Typologie NPOP -->
+=
 <article class="boxcard">
 <div class="card-inner">
 <header class="card-header"><h2 class="card-title">Typologie NPOP</h2></header>

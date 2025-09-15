@@ -707,6 +707,14 @@ class Measure(models.Model, TranslateMixin):
     def invasion(self):
         return mark_safe(markdownify(self.translate("invasion")))
 
+    @property
+    def other_conflict(self):
+        return self.translate("other_conflict")
+
+    @property
+    def impact_desc(self):
+        return self.translate("impact_desc")
+
     class Meta:
         verbose_name = _("Measure")
         verbose_name_plural = _("Measures")
@@ -808,7 +816,7 @@ class Example(models.Model):
         return f"{self.measure} - {self.example_name}"
 
 
-class Dzes(models.Model):
+class Dzes(models.Model, TranslateMixin):
     code = models.CharField(max_length=10, verbose_name=_("Code DZES"))
     name_cs = models.CharField(verbose_name=_("Name (Czech)"), max_length=100)
     name_en = models.CharField(verbose_name=_("Name (English)"), max_length=100)
@@ -816,14 +824,18 @@ class Dzes(models.Model):
     url_en = models.URLField(verbose_name=_("URL (English)"), blank=True, null=True)
 
     def __str__(self):
-        return self.code
+        name = self.translate("name")
+        return f'{self.code} - {name}'
+
+    def url(self):
+        return self.translate('url')
 
     class Meta:
         verbose_name = "Dzes"  # Singular form in the admin
         verbose_name_plural = "Dzes"  # Plural form in the admin
 
 
-class Pph(models.Model):
+class Pph(models.Model, TranslateMixin):
     code = models.CharField(max_length=10, verbose_name=_("Code PPH"))
     name_cs = models.CharField(verbose_name=_("Name (Czech)"), max_length=100)
     name_en = models.CharField(verbose_name=_("Name (English)"), max_length=100)
@@ -831,11 +843,15 @@ class Pph(models.Model):
     url_en = models.URLField(verbose_name=_("URL (English)"), blank=True, null=True)
 
     def __str__(self):
-        return self.code
+        name = self.translate("name")
+        return f'{self.code} - {name}'
+
+    def url(self):
+        return self.translate('url')
 
     class Meta:
-        verbose_name = "PPH"  # Singular form in the admin
-        verbose_name_plural = "PPH"  # Plural form in the admin
+        verbose_name = "PPH"
+        verbose_name_plural = "PPH"
 
 
 class NatureRestorationLaw(models.Model):
@@ -849,5 +865,5 @@ class NatureRestorationLaw(models.Model):
         return self.code
 
     class Meta:
-        verbose_name = "NatureRestorationLaw"  # Singular form in the admin
-        verbose_name_plural = "NatureRestorationLaw"  # Plural form in the admin
+        verbose_name = _("Nature Restoration Law")
+        verbose_name_plural = _("Nature Restoration Laws")
