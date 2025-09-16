@@ -14,155 +14,171 @@
 {% endblock %}
 
 {% block content %}
-    <main class="measure-list">
-        <h1>{{ measure.measure_name }}</h1>
-        <h2>{% trans "Group" %}: <span>{{ measure.group.group_name }}</span></h2>
-        <h3>{{ measure.abstract }}</h3>
-        <hr />
-        <p>{{ measure.description }}</p>
-        <p><strong>{% translate "Advantages" %}: </strong>{{ measure.advantages.all|join:", " }}</p>
-        <p><strong>{% translate "Disadvantages" %}: </strong>{{ measure.disadvantages.all|join:", " }}</p>
-        <p><strong>{% translate "Conditions of implementation" %}: </strong>{{ measure.conditions_for_implementation }}</p>
-        <p><strong>{% translate "Environmental compartment" %}: </strong>{{ measure.env }}</p>
-        <p><strong>{% translate "Environmental compartment (overlap)" %}: </strong>{{ measure.env_secondary.all|join:", " }}</p>
+    <main class="measure-detail">
 
-        <hr />
-        <p><strong>{% translate "Application potential" %}: </strong>{% size_image measure.potential_scale measure.potential %}</p>
-        <p><strong>{% translate "Scale / extent" %}: </strong>{% size_image measure.size_scale measure.size %}
-        <p><strong>{% translate "Implementation complexity" %}: </strong>{% size_image measure.difficulty_of_implementation_scale measure.difficulty_of_implementation %}</p>
-        <p><strong>{% translate "Impact quantification" %}: </strong>{% size_image measure.quantification_scale measure.quantification %}</p>
-        <p><strong>{% translate "Impact time horizon" %}: </strong>{% size_image measure.time_horizon_scale measure.time_horizon %}</p>
-        <hr />
-        <p><strong>{% translate "Invasive species issue" %}: </strong>{{ measure.invasion }}</p>
-        <hr />
-        <p><strong>{% translate "Cost" %}: </strong>{{ measure.cost }}</p>
-        <hr />
+        <section class="segment">
+            <h1>{{ measure.measure_name }}</h1>
+            <h2>{% trans "Group" %}: <span>{{ measure.group.group_name }}</span></h2>
+            <h3>{{ measure.abstract }}</h3>
+        </section>
 
+        <section class="segment">
+            <p>{{ measure.description }}</p>
+            <p><strong>{% translate "Advantages" %}: </strong>{{ measure.advantages.all|join:", " }}</p>
+            <p><strong>{% translate "Disadvantages" %}: </strong>{{ measure.disadvantages.all|join:", " }}</p>
+            <p><strong>{% translate "Conditions of implementation" %}: </strong>{{ measure.conditions_for_implementation }}</p>
+            <p><strong>{% translate "Environmental compartment" %}: </strong>{{ measure.env }}</p>
+            <p><strong>{% translate "Environmental compartment (overlap)" %}: </strong>{{ measure.env_secondary.all|join:", " }}</p>
+        </section>
 
-        <section class="boxgrid">
-            <article class="boxcard">
-                <div class="card-inner">
-                    <header class="card-header"><h2 class="card-title">{% translate "Interconnection" %}:</h2></header>
-                    <div class="card-body">
-                        <ul>
-                            <li>{{ measure.interconnection.all|join:"</li><li>" }}</li>
-                        </ul>
+        <section class="measure-meta">
+            <p><strong>{% translate "Application potential" %}: </strong>{% size_image measure.potential_scale measure.potential %}</p>
+            <p><strong>{% translate "Scale / extent" %}: </strong>{% size_image measure.size_scale measure.size %}
+            <p><strong>{% translate "Implementation complexity" %}: </strong>{% size_image measure.difficulty_of_implementation_scale measure.difficulty_of_implementation %}</p>
+            <p><strong>{% translate "Impact quantification" %}: </strong>{% size_image measure.quantification_scale measure.quantification %}</p>
+            <p><strong>{% translate "Impact time horizon" %}: </strong>{% size_image measure.time_horizon_scale measure.time_horizon %}</p>
+        </section>
+
+        <section class="segment">
+            <p><strong>{% translate "Invasive species issue" %}: </strong>{{ measure.invasion }}</p>
+        </section>
+
+        <section class="segment">
+            <p><strong>{% translate "Cost" %}: </strong>{{ measure.cost }}</p>
+        </section>
+
+        <section class="segment">
+            <section class="boxgrid">
+                <article class="boxcard">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Interconnection" %}:</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                <li>{{ measure.interconnection.all|join:"</li><li>" }}</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </article>
+                </article>
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "Conflicts" %}: </h2></header>
-            <div class="card-body">
-                <ul>
-                    <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
-                </ul>
-                <p class="muted" style="margin-top:10px; font-size: 13px;">{% translate "Other conflicts" %}: {{ measure.other_conflict }}</p>
-            </div>
-        </div>
-    </article>
+                <article class="boxcard white">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Conflicts" %}: </h2></header>
+                        <div class="card-body">
+                            <ul>
+                                <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
+                            </ul>
+                            <p class="muted" style="margin-top:10px; font-size: 13px;">{% translate "Other conflicts" %}: {{ measure.other_conflict }}</p>
+                        </div>
+                    </div>
+                </article>
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "Impact categories of climate change" %}:</h2></header>
-            <div class="card-body">
-                <ul>
-                    <li>{{ measure.impact_details }}</li>
-                </ul>
+                <article class="boxcard">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Impact categories of climate change" %}:</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                <li>{{ measure.impact_details }}</li>
+                            </ul>
 
-            </div>
-        </div>
-    </article>
-
-
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "Secondary impact categories of climate chang" %}</h2></header>
-            <div class="card-body">
-                <ul>
-                    <li>{{ measure.other_impacts_details.all|join:"</li><li>" }}</li>
-                </ul>
-                <p class="muted" style="margin-top:10px; font-size: 13px;">{{ measure.impact_desc }}</p>
-            </div>
-        </div>
-    </article>
+                        </div>
+                    </div>
+                </article>
 
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "Sustainable Development Goals (SDG)" %}</h2></header>
-            <div class="card-body">
-                <ul>
-                    <li>{{ measure.sdg.all|join:"</li><li>" }}</li>
-                </ul>
-            </div>
-        </div>
-    </article>
+                <article class="boxcard white">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Secondary impact categories of climate chang" %}</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                <li>{{ measure.other_impacts_details.all|join:"</li><li>" }}</li>
+                            </ul>
+                            <p class="muted" style="margin-top:10px; font-size: 13px;">{{ measure.impact_desc }}</p>
+                        </div>
+                    </div>
+                </article>
 
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "DZES" %}</h2></header>
-            <div class="card-body">
-                <ul>
-                    {% for dzes in measure.dzes.all %}
-                        <li><a href="{{ dzes.url }}">{{ dzes }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </article>
+                <article class="boxcard white">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Sustainable Development Goals (SDG)" %}</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                <li>{{ measure.sdg.all|join:"</li><li>" }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
 
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "PPH" %}</h2></header>
-            <div class="card-body">
-                <ul>
-                    {% for pph in measure.pph.all %}
-                        <li><a href="{{ pph.url }}">{{ pph }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </article>
+                <article class="boxcard">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "DZES" %}</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                {% for dzes in measure.dzes.all %}
+                                    <li><a href="{{ dzes.url }}">{{ dzes }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="boxcard white">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "PPH" %}</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                {% for pph in measure.pph.all %}
+                                    <li><a href="{{ pph.url }}">{{ pph }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </article>
 
 
 
-    <article class="boxcard">
-        <div class="card-inner">
-            <header class="card-header"><h2 class="card-title">{% translate "Nature Restoration Law" %}</h2></header>
-            <div class="card-body">
-                <ul>
-                    {% for nrl in measure.nature_restoration_law.all %}
-                        <li><a href="{{ nrl.url }}">{{ nrl }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </article>
+                <article class="boxcard">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 class="card-title">{% translate "Nature Restoration Law" %}</h2></header>
+                        <div class="card-body">
+                            <ul>
+                                {% for nrl in measure.nature_restoration_law.all %}
+                                    <li><a href="{{ nrl.url }}">{{ nrl }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </article>
 
 
-</section>
+            </section>
+        </section>
 
+        <section class="segment">
+            <p><strong>{% translate "History" %}: </strong>{{ measure.history }}</p>
+             <p><strong>{% translate "Reference" %}: </strong>
+                {% for reference in measure.references.all %}
+                    <br /><a href="{{ reference.url }}">{{ reference }}</a>
+                {%  endfor %}
+            </p>
+             <p><strong>{% translate 'Contact person' %}: </strong>{{ measure.contact_person }}</p>
+        </section>
 
-     <p><strong>{% translate "History" %}: </strong>{{ measure.history }}</p>
-     <p><strong>{% translate "Reference" %}: </strong>
-        {% for reference in measure.references.all %}
-            <br /><a href="{{ reference.url }}">{{ reference }}</a>
-        {%  endfor %}
-     </p>
-    <p><strong>{% translate 'Contact person' %}: </strong>{{ measure.contact_person }}</p>
-
-
-    <h2>Příklady realizace</h2>
-    {% for example in measure.examples.all %}
-        <h3>{% translate "Example name" %}: {{ example.example_name }} </h3>
-        <p><strong>{% translate "Description" %}: </strong>{{ example.description }}</p>
-        <p><strong>{% translate "Web page" %}: </strong><a href="{{ example.web }}">{{ example.web }}</a></p>
-        <p><strong>{% translate "Location" %}: </strong>{{ example.get_location_display }}</p>
-    {% endfor %}
+        {% if measure.examples.all %}
+            <section class="segment">
+                <h2>Příklady realizace</h2>
+                {% for example in measure.examples.all %}
+                    <div class="example">
+                        <h3>{% translate "Example name" %}: {{ example.example_name }} </h3>
+                        <p><strong>{% translate "Description" %}: </strong>{{ example.description }}</p>
+                        <p><strong>{% translate "Web page" %}: </strong><a href="{{ example.web }}">{{ example.web }}</a></p>
+                        <p><strong>{% translate "Location" %}: </strong>{{ example.get_location_display }}</p>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
 
     </main>
 {% endblock %}
