@@ -461,8 +461,6 @@ class Measure(models.Model, TranslateMixin):
         verbose_name=_("Application potential scale"),
     )
 
-
-
     size = models.ForeignKey(
         "Option",
         verbose_name=_("Scale / extent"),
@@ -478,9 +476,6 @@ class Measure(models.Model, TranslateMixin):
         default=Size.MEDIUM,
         verbose_name=_("Scale / extent - scale"),
     )
-
-
-
 
     difficulty_of_implementation = models.ForeignKey(
         "Option",
@@ -520,7 +515,6 @@ class Measure(models.Model, TranslateMixin):
         default=Size.MEDIUM,
         verbose_name=_("Impact quantification - scale"),
     )
-
 
     time_horizon = models.ForeignKey(
         "Option",
@@ -612,7 +606,7 @@ class Measure(models.Model, TranslateMixin):
         verbose_name=_("Price (Euro) - To"), default=0
     )
 
-    unit_czk = models.ForeignKey(
+    unit = models.ForeignKey(
         "Option",
         verbose_name=_("Unit"),
         limit_choices_to={"option_name__id": 11},
@@ -768,6 +762,13 @@ class Measure(models.Model, TranslateMixin):
     @property
     def history(self):
         return mark_safe(markdownify(self.translate("history")))
+
+    @property
+    def cost(self):
+        lang: str = get_language()
+        if lang == "cs":
+            return f'{ self.price_czk_min } - {self.price_czk_max} {self.unit.option_cs}'
+        return f'{ self.price_eu_min } - {self.price_eu_max} {self.unit.option_en}'
 
     class Meta:
         verbose_name = _("Measure")

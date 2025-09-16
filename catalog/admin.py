@@ -313,7 +313,7 @@ class MeasureAdmin(admin.ModelAdmin):
         "impact_details",
         "other_impacts_details",
         "sdg",
-        "unit_czk",
+        "unit",
         "contact_person",
     )
 
