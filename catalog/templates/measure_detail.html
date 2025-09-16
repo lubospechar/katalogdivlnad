@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n static %}
+{% load measure_tags %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% url 'hero_css' pk=measure.pk %}">
@@ -26,19 +27,11 @@
         <p><strong>{% translate "Environmental compartment (overlap)" %}: </strong>{{ measure.env_secondary.all|join:", " }}</p>
 
         <hr />
-        <p><strong>{% translate "Application potential" %}: </strong>
-{% if measure.potencial_size == "S" %}
-    <img src="{% static 'catalog/img/sml/small.png' %}" alt="{{ measure.potential }}">
-{% elif measure.potencial_size == "M" %}
-    <img src="{% static 'catalog/img/sml/medium.png' %}" alt="{{ measure.potential }}">
-{% else %}
-    <img src="{% static 'catalog/img/sml/large.png' %}" alt="{{ measure.potential }}">
-{% endif %}
-        </p>
-        <p><strong>{% translate "Scale / extent" %}: </strong>{{ measure.size }}</p>
-        <p><strong>{% translate "Implementation complexity" %}: </strong>{{ measure.difficulty_of_implementation }}</p>
-        <p><strong>{% translate "Impact quantification" %}: </strong>{{ measure.quantification }}</p>
-        <p><strong>{% translate "Impact time horizon" %}: </strong>{{ measure.time_horizon }}</p>
+        <p><strong>{% translate "Application potential" %}: </strong>{% size_image measure.potential_scale measure.potential %}</p>
+        <p><strong>{% translate "Scale / extent" %}: </strong>{% size_image measure.size_scale measure.size %}
+        <p><strong>{% translate "Implementation complexity" %}: </strong>{% size_image measure.difficulty_of_implementation_scale measure.difficulty_of_implementation %}</p>
+        <p><strong>{% translate "Impact quantification" %}: </strong>{% size_image measure.quantification_scale measure.quantification %}</p>
+        <p><strong>{% translate "Impact time horizon" %}: </strong>{% size_image measure.time_horizon_scale measure.time_horizon %}</p>
         <hr />
         <p><strong>{% translate "Invasive species issue" %}: </strong>{{ measure.invasion }}</p>
         <hr />
