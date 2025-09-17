@@ -340,7 +340,7 @@ class MeasureAdmin(admin.ModelAdmin):
                     "price_czk_max",
                     "price_eu_min",
                     "price_eu_max",
-                    "unit_czk",
+                    "unit",
                 ],
             },
         ),
