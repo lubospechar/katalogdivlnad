@@ -657,8 +657,3 @@ msgstr "Katalog"
 #: catalog/templates/partials/header.html:24
 msgid "Gallery"
 msgstr "Galerie"
-
-#, fuzzy
-#~| msgid "Secondary impact categories of climate change"
-#~ msgid "Secondary impact categories of climate chang"
-#~ msgstr "Vedlejší kategorie dopadu změny klimatu"
