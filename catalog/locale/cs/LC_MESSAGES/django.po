@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 15:03+0200\n"
+"POT-Creation-Date: 2025-11-18 14:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -367,7 +367,7 @@ msgstr "Jiné střety"
 msgid "Impact categories of climate change"
 msgstr "Kategorie dopadu změny klimatu"
 
-#: catalog/models.py:565
+#: catalog/models.py:565 catalog/templates/measure_detail.html:90
 msgid "Secondary impact categories of climate change"
 msgstr "Vedlejší kategorie dopadu změny klimatu"
 
@@ -607,7 +607,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Conditions of implementation (Czech)"
 msgid "Conditions of implementation"
-msgstr "Podmínky implementace (Česky)"
+msgstr "Podmínky implementace"
 
 #: catalog/templates/measure_detail.html:43
 msgid "Invasive species issue"
@@ -620,12 +620,6 @@ msgstr "Cena"
 #: catalog/templates/measure_detail.html:70
 msgid "Other conflicts"
 msgstr "Jiné střety"
-
-#: catalog/templates/measure_detail.html:90
-#, fuzzy
-#| msgid "Secondary impact categories of climate change"
-msgid "Secondary impact categories of climate chang"
-msgstr "Vedlejší kategorie dopadu změny klimatu"
 
 #: catalog/templates/measure_detail.html:115
 #, fuzzy
@@ -667,3 +661,8 @@ msgstr "Katalog"
 #: catalog/templates/partials/header.html:24
 msgid "Gallery"
 msgstr "Galerie"
+
+#, fuzzy
+#~| msgid "Secondary impact categories of climate change"
+#~ msgid "Secondary impact categories of climate chang"
+#~ msgstr "Vedlejší kategorie dopadu změny klimatu"
