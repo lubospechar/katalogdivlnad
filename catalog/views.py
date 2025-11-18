@@ -40,11 +40,11 @@ class MeasuresListByGroupView(ListView):
 
     def get_queryset(self):
         lang = translation.get_language()
-        qs = super().get_queryset().select_related("group")
+        qs = super().get_queryset().prefetch_related("groups")
         group_id = self.kwargs.get("pk")
         if group_id:
-            qs = qs.filter(group_id=group_id)
-        return qs.order_by(f"measure_name_{ lang }")
+            qs = qs.filter(groups__id=group_id)
+        return qs.order_by(f"measure_name_{lang}")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

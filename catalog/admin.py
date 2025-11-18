@@ -269,7 +269,6 @@ class MeasureAdmin(admin.ModelAdmin):
     list_display = (
         "measure_name_cs",
         "measure_name_en",
-        "group",
         "code",
         "price_czk_min",
         "price_czk_max",
@@ -279,7 +278,6 @@ class MeasureAdmin(admin.ModelAdmin):
 
     # Filters available in the sidebar
     list_filter = (
-        "group",
         "advantages",
         "disadvantages",
         "env",
@@ -299,7 +297,6 @@ class MeasureAdmin(admin.ModelAdmin):
 
     # Fields with autocomplete enabled for related models
     autocomplete_fields = (
-        "group",
         "advantages",
         "disadvantages",
         "env",
@@ -323,7 +320,7 @@ class MeasureAdmin(admin.ModelAdmin):
             "Basic Information",
             {
                 "fields": [
-                    "group",
+                    "groups",
                     "measure_name_cs",
                     "measure_name_en",
                     "code",
