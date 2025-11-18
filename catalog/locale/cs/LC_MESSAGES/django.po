@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -290,7 +289,6 @@ msgid "Application potential"
 msgstr "Aplikační potenciál"
 
 #: catalog/models.py:461
-#, fuzzy
 #| msgid "Application potential"
 msgid "Application potential scale"
 msgstr "Aplikační potenciál"
@@ -604,8 +602,6 @@ msgstr ""
 "Katalog opatření na posílení stability a resilientní schopnosti krajiny"
 
 #: catalog/templates/measure_detail.html:29
-#, fuzzy
-#| msgid "Conditions of implementation (Czech)"
 msgid "Conditions of implementation"
 msgstr "Podmínky implementace"
 
