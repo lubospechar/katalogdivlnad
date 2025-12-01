@@ -6,6 +6,7 @@ from .models import Group, Measure, Page, ContactPerson
 from django.utils import translation
 from markdownx.utils import markdownify
 from django.utils.safestring import mark_safe
+from .forms import FilterForm
 
 class Home(ListView):
     model = Group
@@ -30,6 +31,7 @@ class Home(ListView):
         context["title"] = title
         context["content"]= mark_safe(markdownify(content))
         context["language"] = lang
+        context["filter_form"] = FilterForm()
 
         return context
 
