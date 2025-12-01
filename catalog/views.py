@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.http import http_date
 from django.utils.timezone import now
 from django.views.generic import ListView, DetailView
-from .models import Group, Measure, Page
+from .models import Group, Measure, Page, ContactPerson
 from django.utils import translation
 from markdownx.utils import markdownify
 from django.utils.safestring import mark_safe
@@ -59,6 +59,11 @@ class MeasureDetailView(DetailView):
     template_name = "measure_detail.html"
     context_object_name = "measure"
 
+
+class ContactPersonDetailView(DetailView):
+    model = ContactPerson
+    template_name = "contact_person_detail.html"
+    context_object_name = "contact_person"
 
 class HeroCssView(DetailView):
     model = Measure

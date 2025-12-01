@@ -390,6 +390,16 @@ class ContactPerson(models.Model):
         # Returns a combination of first name, last name, and expertise
         return f"{self.first_name} {self.last_name} ({self.expertise})"
 
+    def full_name_with_titles(self):
+        name = f"{self.first_name} {self.last_name}"
+        if self.title_before:
+            name = f"{self.title_before} {name}"
+        if self.title_after:
+            name = f"{name}, {self.title_after}"
+        return name
+
+
+
     class Meta:
         # Human-readable names for the Django admin interface
         verbose_name = _("Contact Person")
