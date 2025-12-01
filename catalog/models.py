@@ -359,11 +359,25 @@ class Reference(models.Model):
 
 
 class ContactPerson(models.Model):
+    # Title before name (optional)
+    title_before = models.CharField(
+        max_length=50,
+        verbose_name=_("Title Before Name"),
+        blank=True,
+        null=True
+    )
+
     # First name of the contact person
     first_name = models.CharField(max_length=100, verbose_name=_("First Name"))
     # Last name of the contact person
     last_name = models.CharField(max_length=100, verbose_name=_("Last Name"))
     # Expertise of the contact person
+    title_after = models.CharField(
+        max_length=50,
+        verbose_name=_("Title After Name"),
+        blank=True,
+        null=True
+    )
     expertise = models.CharField(max_length=255, verbose_name=_("Expertise"))
     # Email of the contact person (optional)
     email = models.EmailField(verbose_name=_("Email"), blank=True, null=True)

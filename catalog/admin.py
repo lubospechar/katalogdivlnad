@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
 from .models import (
     Page,
     Group,
@@ -202,62 +204,48 @@ class ImpactDetailAdmin(BaseAdmin):
 
 @admin.register(ContactPerson)
 class ContactPersonAdmin(admin.ModelAdmin):
-    """
-    Admin configuration for the ContactPerson model.
-    """
+    # Co se zobrazuje v seznamu
+    list_display = ("last_name", "first_name", "expertise", "email", "phone")
+    list_display_links = ("last_name",)
 
-    # Fields displayed in the list view
-    list_display = (
-        "first_name",
-        "last_name",
-        "expertise",
-        "email",
-        "phone",
-    )
-
-    # Fields to include in the search functionality
+    # Vyhledávání
     search_fields = (
         "first_name",
         "last_name",
+        "title_before",
+        "title_after",
         "expertise",
         "email",
         "phone",
     )
 
-    # Organize fields into sections for better usability
-    fieldsets = [
-        (
-            "Personal Information",
-            {
-                "fields": [
-                    "first_name",
-                    "last_name",
-                ]
-            },
-        ),
-        (
-            "Contact Details",
-            {
-                "fields": [
-                    "email",
-                    "phone",
-                ],
-                "classes": ["collapse"],
-            },
-        ),
-        (
-            "Professional Information",
-            {
-                "fields": [
-                    "expertise",
-                ],
-                "classes": ["collapse"],
-            },
-        ),
-    ]
+    # Filtry vpravo
+    list_filter = ("expertise",)
 
-    # Default ordering of records in the admin
+    # Defaultní řazení
     ordering = ("last_name", "first_name")
+
+    # Hezčí rozložení polí v detailu
+    fieldsets = (
+        (_("Name"), {
+            "fields": (
+                ("title_before", "title_after"),
+                ("first_name", "last_name"),
+            )
+        }),
+        (_("Contact"), {
+            "fields": (
+                "email",
+                "phone",
+            )
+        }),
+        (_("Other"), {
+            "fields": (
+                "expertise",
+            )
+        }),
+    )
+
 
 @admin.register(Measure)
 class MeasureAdmin(admin.ModelAdmin):
