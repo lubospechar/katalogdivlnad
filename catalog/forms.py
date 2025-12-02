@@ -11,7 +11,7 @@ class FilterForm(forms.Form):
     )
 
     potential_scale = forms.ChoiceField(
-        label=_(""),
+        label=_("Potential"),
         choices=Measure.Size.choices,
         widget=forms.RadioSelect,
         required=False,
