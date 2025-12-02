@@ -15,6 +15,7 @@ class FilterForm(forms.Form):
         choices=Measure.Size.choices,
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        initial=[choice[0] for choice in Measure.Size.choices],
     )
 
     size_scale = forms.ChoiceField(
@@ -22,6 +23,7 @@ class FilterForm(forms.Form):
         choices=Measure.Size.choices,
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        initial=[choice[0] for choice in Measure.Size.choices],
     )
 
     difficulty_of_implementation = forms.ChoiceField(
@@ -29,6 +31,7 @@ class FilterForm(forms.Form):
         choices=Measure.Size.choices,
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        initial=[choice[0] for choice in Measure.Size.choices],
     )
 
     quantification_scale = forms.ChoiceField(
@@ -36,6 +39,7 @@ class FilterForm(forms.Form):
         choices=Measure.Size.choices,
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        initial=[choice[0] for choice in Measure.Size.choices],
     )
 
     time_horizon = forms.ChoiceField(
@@ -43,5 +47,6 @@ class FilterForm(forms.Form):
         choices=Measure.Size.choices,
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        initial=[choice[0] for choice in Measure.Size.choices],
     )
 
