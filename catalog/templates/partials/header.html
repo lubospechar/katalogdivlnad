@@ -10,9 +10,9 @@
 
     <nav class="header-nav">
         <ul>
-            <li><a href="{% url 'home' %}">{% trans "Catalogue" %}</a></li>
+            <li><a href="{% url 'home' %}">{% trans "About" %}</a></li>
             <li class="dropdown">
-                <a href="{% url 'groups-all' %}">{% trans "Groups" %}</a>
+                <a href="{% url 'groups-all' %}">{% trans "Catalogue" %}</a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'groups-all' %}">{% trans "All" %}</a></li>
                     {% for group in groups %}
@@ -22,6 +22,7 @@
                 </ul>
             </li>
             <li><a href="#">{% trans "Gallery" %}</a></li>
+            <li><a href="#">{% trans "Contacts" %}</a></li>
         </ul>
     </nav>
 
