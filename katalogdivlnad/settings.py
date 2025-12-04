@@ -57,6 +57,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "catalog.context_processors.groups_nav",
+                "catalog.context_processors.contacts_nav",
             ],
         },
     },

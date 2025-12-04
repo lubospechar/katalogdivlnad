@@ -15,14 +15,21 @@
                 <a href="{% url 'groups-all' %}">{% trans "Catalogue" %}</a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'groups-all' %}">{% trans "All" %}</a></li>
-                    {% for group in groups %}
+                    {% for group in groups_nav %}
                         <li><a href="{% url 'group-filter' group.id %}">{{ group }}</a></li>
                     {% endfor %}
 
                 </ul>
             </li>
             <li><a href="#">{% trans "Gallery" %}</a></li>
-            <li><a href="#">{% trans "Contacts" %}</a></li>
+            <li class="dropdown">
+                <a href="#">{% trans "Contacts" %}</a>
+                <ul class="dropdown-menu">
+                    {% for contact in contacts_nav %}
+                        <li><a href="{% url 'contact-detail' contact.id %}">{{ contact.first_name }} {{ contact.last_name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
         </ul>
     </nav>
 
