@@ -14,13 +14,6 @@ class SizeMultiChoiceField(forms.MultipleChoiceField):
         super().__init__(*args, **defaults)
 
 class FilterForm(forms.Form):
-    group = forms.ModelChoiceField(
-        label=_("Group"),
-        queryset=Group.objects.all(),
-        required=False,
-        empty_label=_("All"),
-    )
-
     potential_scale = SizeMultiChoiceField(label=_("Application potential"))
     size_scale = SizeMultiChoiceField(label=_("Scale / extent"))
     difficulty_of_implementation = SizeMultiChoiceField(label=_("Implementation complexity"))

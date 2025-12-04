@@ -6,16 +6,73 @@
 {%  endblock %}
 
 {% block content %}
-<main class="measure-list">
-    <h1>{% if selected_group %}{{ selected_group }}{% else %}{% trans 'All' %}{% endif %}</h1>
-    <div class="grid">
-        {% for measure in measures %}
-            <a href="{%  url 'measure-detail' measure.pk %}" class="card">
-                <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name }}">
-                <p>{{ measure.measure_name }}</p>
-            </a>
-        {% endfor %}
-    </div>
+<main class="measure-filter">
+
+<form id="filter-form"
+      method="get"
+      data-ajax-url="{% url 'measures_by_group_ajax' pk=selected_group.pk %}">
+    {{ filter_form }}
+</form>
 
 </main>
+
+<main class="measure-list">
+    <h1>
+        {% if selected_group %}
+            {{ selected_group }}
+        {% else %}
+            {% trans 'All' %}
+        {% endif %}
+    </h1>
+
+    <div id="measure-results">
+        <div class="grid">
+            {% for measure in measures %}
+                <a href="{%  url 'measure-detail' measure.pk %}" class="card">
+                    <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name }}">
+                    <p>{{ measure.measure_name }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('filter-form');
+    const results = document.getElementById('measure-results');
+
+    if (!form || !results) {
+        console.warn("Form nebo measure-results nenalezeny.");
+        return;
+    }
+
+    const ajaxUrl = form.dataset.ajaxUrl || form.getAttribute("data-ajax-url");
+
+    form.addEventListener('change', function () {
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+            params.append(key, value);
+        }
+
+        fetch(ajaxUrl + "?" + params.toString(), {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(r => r.text())
+        .then(html => {
+            results.innerHTML = html;
+        })
+        .catch(err => console.error(err));
+    });
+
+});
+</script>
 {% endblock %}

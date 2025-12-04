@@ -1,0 +1,12 @@
+{% load i18n static %}
+{# measure_list_partial.html #}
+<div class="grid">
+    {% for measure in measures %}
+        <a href="{%  url 'measure-detail' measure.pk %}" class="card">
+            <img src="{{ measure.processed_title_image.url }}" alt="{{ measure.measure_name }}">
+            <p>{{ measure.measure_name }}</p>
+        </a>
+    {% empty %}
+        <p>{% trans "No measures match this filter." %}</p>
+    {% endfor %}
+</div>

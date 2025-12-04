@@ -31,7 +31,6 @@ class Home(ListView):
         context["title"] = title
         context["content"]= mark_safe(markdownify(content))
         context["language"] = lang
-        context["filter_form"] = FilterForm()
 
         return context
 
@@ -52,10 +51,48 @@ class MeasuresListByGroupView(ListView):
         context = super().get_context_data(**kwargs)
         group_id = self.kwargs.get("pk")
         context["selected_group"] = None
+        context["filter_form"] = FilterForm(self.request.GET or None)
+
         if group_id:
             context["selected_group"] = get_object_or_404(Group, pk=group_id)
         return context
 
+
+class MeasuresListByGroupAjaxView(MeasuresListByGroupView):
+    template_name = "measure_list_partial.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        form = FilterForm(self.request.GET or None)
+
+        if not form.is_valid():
+            return qs
+
+        data = form.cleaned_data
+
+        potential = data.get("potential_scale") or []
+        size = data.get("size_scale") or []
+        diff = data.get("difficulty_of_implementation") or []
+        quant = data.get("quantification_scale") or []
+        time = data.get("time_horizon") or []
+
+
+        if potential:
+            qs = qs.filter(potential_scale__in=potential)
+
+        if size:
+            qs = qs.filter(size_scale__in=size)
+
+        if diff:
+            qs = qs.filter(difficulty_of_implementation_scale__in=diff)
+
+        if quant:
+            qs = qs.filter(quantification_scale__in=quant)
+
+        if time:
+            qs = qs.filter(time_horizon_scale__in=time)
+
+        return qs
 class MeasureDetailView(DetailView):
     model = Measure
     template_name = "measure_detail.html"
