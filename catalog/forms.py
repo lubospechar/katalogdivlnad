@@ -2,6 +2,17 @@ from django import forms
 from .models import Group, Measure
 from django.utils.translation import gettext_lazy as _
 
+class SizeMultiChoiceField(forms.MultipleChoiceField):
+    def __init__(self, *args, **kwargs):
+        defaults = {
+            "choices": Measure.Size.choices,
+            "widget": forms.CheckboxSelectMultiple,
+            "required": False,
+            "initial": [choice[0] for choice in Measure.Size.choices],
+        }
+        defaults.update(kwargs)
+        super().__init__(*args, **defaults)
+
 class FilterForm(forms.Form):
     group = forms.ModelChoiceField(
         label=_("Group"),
@@ -10,43 +21,9 @@ class FilterForm(forms.Form):
         empty_label=_("All"),
     )
 
-    potential_scale = forms.ChoiceField(
-        label=_("Application potential"),
-        choices=Measure.Size.choices,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        initial=[choice[0] for choice in Measure.Size.choices],
-    )
-
-    size_scale = forms.ChoiceField(
-        label=_("Scale / extent"),
-        choices=Measure.Size.choices,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        initial=[choice[0] for choice in Measure.Size.choices],
-    )
-
-    difficulty_of_implementation = forms.ChoiceField(
-        label=_("Implementation complexity"),
-        choices=Measure.Size.choices,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        initial=[choice[0] for choice in Measure.Size.choices],
-    )
-
-    quantification_scale = forms.ChoiceField(
-        label=_("Impact quantification"),
-        choices=Measure.Size.choices,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        initial=[choice[0] for choice in Measure.Size.choices],
-    )
-
-    time_horizon = forms.ChoiceField(
-        label=_("Impact time horizon"),
-        choices=Measure.Size.choices,
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        initial=[choice[0] for choice in Measure.Size.choices],
-    )
+    potential_scale = SizeMultiChoiceField(label=_("Application potential"))
+    size_scale = SizeMultiChoiceField(label=_("Scale / extent"))
+    difficulty_of_implementation = SizeMultiChoiceField(label=_("Implementation complexity"))
+    quantification_scale = SizeMultiChoiceField(label=_("Impact quantification"))
+    time_horizon = SizeMultiChoiceField(label=_("Impact time horizon"))
 
