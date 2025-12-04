@@ -9,9 +9,9 @@
 <main class="measure-filter">
 
 <h2>{% trans 'Filtr' %}</h2>
+<p>{% trans 'Vyfiltrujte si opatření na základě parametrů' %}: </p>
 
-
-<form id="filter-form" method="get" data-ajax-url="{% if selected_group %}{% url 'groups-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
+<form id="filter-form" method="get" data-ajax-url="{% if selected_group %}{% url 'measures-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
 
     <div class="filter-row">
         <div class="filter-label">

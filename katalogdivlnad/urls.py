@@ -21,7 +21,7 @@ urlpatterns = [
     path(
         "measures/group/<int:pk>/ajax/",
         MeasuresListByGroupAjaxView.as_view(),
-        name="measures_by_group_ajax",
+        name="measures-by-group-ajax",
     ),
 ]
 
