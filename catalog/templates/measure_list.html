@@ -10,7 +10,11 @@
 
 <form id="filter-form"
       method="get"
-      data-ajax-url="{% url 'measures_by_group_ajax' pk=selected_group.pk %}">
+      data-ajax-url="{% if selected_group %}
+                         {% url 'groups-by-group-ajax' pk=selected_group.pk %}
+                     {% else %}
+                         {% url 'groups-all-ajax' %}
+                     {% endif %}">
     {{ filter_form }}
 </form>
 

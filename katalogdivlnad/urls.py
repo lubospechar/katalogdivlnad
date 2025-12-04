@@ -17,6 +17,7 @@ urlpatterns = [
     #path("<slug:slug>/", views.page_detail, name="page_detail"),
     path("css/hero/images-<int:pk>.css", HeroCssView.as_view(), name="hero_css"),
 
+    path("groups/ajax/", MeasuresListByGroupAjaxView.as_view(), name="groups-all-ajax"),
     path(
         "measures/group/<int:pk>/ajax/",
         MeasuresListByGroupAjaxView.as_view(),
