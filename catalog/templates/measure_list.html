@@ -10,13 +10,10 @@
 
 <form id="filter-form"
       method="get"
-      data-ajax-url="{% if selected_group %}
-                         {% url 'groups-by-group-ajax' pk=selected_group.pk %}
-                     {% else %}
-                         {% url 'groups-all-ajax' %}
-                     {% endif %}">
+      data-ajax-url="{% if selected_group %}{% url 'groups-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
     {{ filter_form }}
 </form>
+
 
 </main>
 
@@ -46,16 +43,16 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
     const form = document.getElementById('filter-form');
     const results = document.getElementById('measure-results');
 
-    if (!form || !results) {
-        console.warn("Form nebo measure-results nenalezeny.");
+    if (!form || !results) return;
+
+    const ajaxUrl = form.dataset.ajaxUrl;
+    if (!ajaxUrl) {
+        console.warn("Chybí data-ajax-url na formuláři");
         return;
     }
-
-    const ajaxUrl = form.dataset.ajaxUrl || form.getAttribute("data-ajax-url");
 
     form.addEventListener('change', function () {
         const formData = new FormData(form);
@@ -66,9 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         fetch(ajaxUrl + "?" + params.toString(), {
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            }
+            headers: { "X-Requested-With": "XMLHttpRequest" }
         })
         .then(r => r.text())
         .then(html => {
@@ -76,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(err => console.error(err));
     });
-
 });
+
 </script>
 {% endblock %}
