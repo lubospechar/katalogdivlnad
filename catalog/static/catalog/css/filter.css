@@ -1,55 +1,57 @@
-/* ===== FIELDSET JAKO FLEX ŘÁDEK ===== */
+/* ===== ŘÁDKY FILTRŮ (label + ikony) ===== */
 
-#filter-form fieldset {
-    border: none;
-    margin: 0 0 1rem 0;
-    padding: 0.25rem 0;
-
-    display: flex;
-    align-items: center;      /* vertikální zarovnání legendy a ikon */
-    gap: 1rem;
-}
-
-/* legenda vlevo */
-#filter-form legend {
+#filter-form {
     margin: 0;
     padding: 0;
+}
+
+#filter-form .filter-row {
+    display: flex;
+    align-items: center;          /* label a ikony vertikálně na střed */
+    gap: 1.5rem;
+    margin-bottom: 0;
+}
+
+/* levý sloupec – text popisku */
+#filter-form .filter-label {
+    min-width: 220px;             /* zarovnání všech popisků pod sebe */
     font-weight: 600;
-    min-width: 200px;         /* pevná šířka sloupce s popiskem – uprav dle potřeby */
-    display: flex;
-    align-items: center;      /* zarovnat text vertikálně na střed */
 }
 
-/* kontejner se S / M / L */
-#filter-form [id^="id_"] {
+/* pravý sloupec – generovaný blok s id_potential_scale, id_size_scale… */
+#filter-form .filter-scale > [id^="id_"] {
     display: flex;
-    gap: 0;                   /* žádné mezery mezi ikonami */
-    align-items: center;      /* srovnat ikony na střed */
+    align-items: center;
+    gap: 0;                       /* žádné mezery mezi ikonami */
 }
 
-/* jedna položka */
-#filter-form [id^="id_"] > div {
+/* jednotlivé „buňky“ S/M/L */
+#filter-form .filter-scale > [id^="id_"] > div {
     display: flex;
     align-items: center;
     margin: 0;
     padding: 0;
 }
 
-/* ===== SCHOVÁNÍ TEXTU ===== */
-#filter-form [id^="id_"] label {
-    font-size: 0;
+/* ===== SCHOVÁNÍ TEXTU „Malý / Střední / Velký“ ===== */
+
+#filter-form .filter-scale [id^="id_"] label {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
     cursor: pointer;
 
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+    font-size: 0;                 /* skryje text uvnitř labelu */
 }
 
 /* ===== OBRÁZKOVÉ CHECKBOXY (48×48) ===== */
 
-#filter-form [id^="id_"] input[type="checkbox"] {
+#filter-form .filter-scale [id^="id_"] input[type="checkbox"] {
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
     width: 48px;
     height: 48px;
     padding: 0;
@@ -59,30 +61,35 @@
     background-repeat: no-repeat;
     background-position: center;
 
-    cursor: pointer;
     border: none;
+    cursor: pointer;
 }
 
-/* S */
-#filter-form input[type="checkbox"][value="S"] {
+/* S (Small) */
+#filter-form .filter-scale input[type="checkbox"][value="S"] {
     background-image: url("../img/form/s_off.png");
 }
-#filter-form input[type="checkbox"][value="S"]:checked {
+#filter-form .filter-scale input[type="checkbox"][value="S"]:checked {
     background-image: url("../img/form/s_on.png");
 }
 
-/* M */
-#filter-form input[type="checkbox"][value="M"] {
+/* M (Medium) */
+#filter-form .filter-scale input[type="checkbox"][value="M"] {
     background-image: url("../img/form/m_off.png");
 }
-#filter-form input[type="checkbox"][value="M"]:checked {
+#filter-form .filter-scale input[type="checkbox"][value="M"]:checked {
     background-image: url("../img/form/m_on.png");
 }
 
-/* L */
-#filter-form input[type="checkbox"][value="L"] {
+/* L (Large) */
+#filter-form .filter-scale input[type="checkbox"][value="L"] {
     background-image: url("../img/form/l_off.png");
 }
-#filter-form input[type="checkbox"][value="L"]:checked {
+#filter-form .filter-scale input[type="checkbox"][value="L"]:checked {
     background-image: url("../img/form/l_on.png");
+}
+
+/* žádná mezera navíc kolem ikon */
+#filter-form .filter-scale [id^="id_"] label > input {
+    margin: 0;
 }

@@ -10,11 +10,56 @@
 
 <h2>{% trans 'Filtr' %}</h2>
 
-<form id="filter-form"
-      method="get"
-      data-ajax-url="{% if selected_group %}{% url 'groups-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
-    {{ filter_form }}
+
+<form id="filter-form" method="get" data-ajax-url="{% if selected_group %}{% url 'groups-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
+
+    <div class="filter-row">
+        <div class="filter-label">
+            {{ filter_form.potential_scale.label }}:
+        </div>
+        <div class="filter-scale">
+            {{ filter_form.potential_scale }}
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-label">
+            {{ filter_form.size_scale.label }}:
+        </div>
+        <div class="filter-scale">
+            {{ filter_form.size_scale }}
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-label">
+            {{ filter_form.difficulty_of_implementation.label }}:
+        </div>
+        <div class="filter-scale">
+            {{ filter_form.difficulty_of_implementation }}
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-label">
+            {{ filter_form.quantification_scale.label }}:
+        </div>
+        <div class="filter-scale">
+            {{ filter_form.quantification_scale }}
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-label">
+            {{ filter_form.time_horizon.label }}:
+        </div>
+        <div class="filter-scale">
+            {{ filter_form.time_horizon }}
+        </div>
+    </div>
+
 </form>
+
 
 <hr>
 
