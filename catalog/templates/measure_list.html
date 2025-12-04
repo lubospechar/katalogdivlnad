@@ -8,12 +8,15 @@
 {% block content %}
 <main class="measure-filter">
 
+<h2>{% trans 'Filtr' %}</h2>
+
 <form id="filter-form"
       method="get"
       data-ajax-url="{% if selected_group %}{% url 'groups-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
     {{ filter_form }}
 </form>
 
+<hr>
 
 </main>
 

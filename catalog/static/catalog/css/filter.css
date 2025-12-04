@@ -1,0 +1,88 @@
+/* ===== FIELDSET JAKO FLEX ŘÁDEK ===== */
+
+#filter-form fieldset {
+    border: none;
+    margin: 0 0 1rem 0;
+    padding: 0.25rem 0;
+
+    display: flex;
+    align-items: center;      /* vertikální zarovnání legendy a ikon */
+    gap: 1rem;
+}
+
+/* legenda vlevo */
+#filter-form legend {
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    min-width: 200px;         /* pevná šířka sloupce s popiskem – uprav dle potřeby */
+    display: flex;
+    align-items: center;      /* zarovnat text vertikálně na střed */
+}
+
+/* kontejner se S / M / L */
+#filter-form [id^="id_"] {
+    display: flex;
+    gap: 0;                   /* žádné mezery mezi ikonami */
+    align-items: center;      /* srovnat ikony na střed */
+}
+
+/* jedna položka */
+#filter-form [id^="id_"] > div {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== SCHOVÁNÍ TEXTU ===== */
+#filter-form [id^="id_"] label {
+    font-size: 0;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== OBRÁZKOVÉ CHECKBOXY (48×48) ===== */
+
+#filter-form [id^="id_"] input[type="checkbox"] {
+    appearance: none;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    cursor: pointer;
+    border: none;
+}
+
+/* S */
+#filter-form input[type="checkbox"][value="S"] {
+    background-image: url("../img/form/s_off.png");
+}
+#filter-form input[type="checkbox"][value="S"]:checked {
+    background-image: url("../img/form/s_on.png");
+}
+
+/* M */
+#filter-form input[type="checkbox"][value="M"] {
+    background-image: url("../img/form/m_off.png");
+}
+#filter-form input[type="checkbox"][value="M"]:checked {
+    background-image: url("../img/form/m_on.png");
+}
+
+/* L */
+#filter-form input[type="checkbox"][value="L"] {
+    background-image: url("../img/form/l_off.png");
+}
+#filter-form input[type="checkbox"][value="L"]:checked {
+    background-image: url("../img/form/l_on.png");
+}
