@@ -412,12 +412,6 @@ class Measure(models.Model, TranslateMixin):
         MEDIUM = "M", _("Medium")
         LARGE = "L", _("Large")
 
-    # group = models.ForeignKey(
-    #     "Group",
-    #     on_delete=models.CASCADE,
-    #     verbose_name=_("Group"),
-    # )
-
     groups = models.ManyToManyField(
         "Group",
         verbose_name=_("Group"),
