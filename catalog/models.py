@@ -962,3 +962,23 @@ class NatureRestorationLaw(models.Model, TranslateMixin):
     class Meta:
         verbose_name = _("Nature Restoration Law")
         verbose_name_plural = _("Nature Restoration Laws")
+
+
+class BoxName(models.Model, TranslateMixin):
+    box_number = models.IntegerField(verbose_name=_("Box number"))
+    name_cs = models.CharField(verbose_name=_("Name (Czech)"), max_length=100)
+    name_en = models.CharField(verbose_name=_("Name (English)"), max_length=100)
+    description_cs = models.CharField(verbose_name=_("Description (Czech)"), max_length=255)
+    description_en = models.CharField(verbose_name=_("Description (English)"), max_length=255)
+
+    class Meta:
+        verbose_name = _("Box name")
+        verbose_name_plural = _("Box names")
+
+    @property
+    def name(self):
+        return self.translate("name")
+
+    @property
+    def description(self):
+        return self.translate("description")

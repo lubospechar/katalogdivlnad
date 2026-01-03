@@ -17,7 +17,7 @@ from .models import (
     Reference,
     Dzes,
     Pph,
-    NatureRestorationLaw,
+    NatureRestorationLaw, BoxName,
 )
 
 @admin.register(Page)
@@ -608,3 +608,9 @@ class NatureRestorationLaw(admin.ModelAdmin):
     list_filter = ('code',)
     # Define the fields visible and editable in the form when creating or editing a record
     fields = ('code', 'name_cs', 'name_en', 'url_cs', 'url_en')
+
+
+@admin.register(BoxName)
+class BoxNameAdmin(admin.ModelAdmin):
+    list_display = ('box_number', 'name_cs', 'name_en', 'description_cs', 'description_en')
+    list_editable = ('name_cs', 'name_en', 'description_cs', 'description_en')
