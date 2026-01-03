@@ -807,7 +807,7 @@ class Measure(models.Model, TranslateMixin):
         ]
 
 
-class MeasureImage(models.Model):
+class MeasureImage(models.Model, TranslateMixin):
     """
     Gallery images connected to a specific Measure.
     """
@@ -858,6 +858,14 @@ class MeasureImage(models.Model):
         blank=True,
         null=True,
     )
+
+    @property
+    def caption(self):
+        return self.translate("caption")
+
+    @property
+    def author_licence(self):
+        return f"{self.author } ({self.license})"
 
     def __str__(self):
         return f"Image for {self.measure} - {self.caption_cs}"
