@@ -16,3 +16,4 @@ six==1.17.0
 sqlparse==0.5.3
 tzdata==2025.2
 django-markdownx==4.0.9
+django-peekaboo @ git+https://github.com/lubospechar/django-peekaboo.git@v0.1.0

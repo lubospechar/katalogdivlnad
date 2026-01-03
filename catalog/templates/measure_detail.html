@@ -1,9 +1,12 @@
 {% extends "base.html" %}
+{% load peekaboo %}
 {% load i18n static %}
 {% load measure_tags %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% url 'hero_css' pk=measure.pk %}">
+    <link rel="stylesheet" href="{% static 'peekaboo/peekaboo.css' %}">
+    <script defer src="{% static 'peekaboo/peekaboo.js' %}"></script>
 {% endblock %}
 
 {% block title_image %}
@@ -65,7 +68,7 @@
                         <header class="card-header"><h2 class="card-title">{% translate "Conflicts" %}: </h2></header>
                         <div class="card-body">
                             <ul>
-                                <li>{{ measure.conflict.all|join:"</li><li>" }}</li>
+                                <li>{{ measure.conflict.all|join:"</li><li>"}}</li>
                             </ul>
                             <p class="muted" style="margin-top:10px; font-size: 13px;">{% translate "Other conflicts" %}: {{ measure.other_conflict }}</p>
                         </div>
@@ -156,6 +159,8 @@
             </section>
         </section>
 
+
+
         <section class="segment">
             <p><strong>{% translate "History" %}: </strong>{{ measure.history }}</p>
              <p><strong>{% translate "Reference" %}: </strong>
@@ -165,6 +170,15 @@
             </p>
             <p><strong>{% translate 'Contact person' %}: </strong><a href="{% url 'contact-detail' measure.contact_person.pk %}">{{ measure.contact_person }}</a></p>
         </section>
+
+
+        {% if measure.gallery.all %}
+            <section class="segment">
+            <h2>Fotogalerie</h2>
+            {% preview_gallery measure.gallery.all "processed_image" "caption" "author_licence" %}
+
+            </section>
+        {% endif %}
 
         {% if measure.examples.all %}
             <section class="segment">
