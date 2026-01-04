@@ -65,7 +65,7 @@
 
                 <article class="boxcard white">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Conflicts" %}: </h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.1.description }}" class="card-title">{{ box_names.1.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 <li>{{ measure.conflict.all|join:"</li><li>"}}</li>
@@ -77,7 +77,7 @@
 
                 <article class="boxcard">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Impact categories of climate change" %}:</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.2.description }}" class="card-title">{{ box_names.2.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 <li>{{ measure.impact_details }}</li>
@@ -90,7 +90,7 @@
 
                 <article class="boxcard white">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Secondary impact categories of climate change" %}</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.3.description }}" class="card-title">{{ box_names.3.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 <li>{{ measure.other_impacts_details.all|join:"</li><li>" }}</li>
@@ -103,7 +103,7 @@
 
                 <article class="boxcard white">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Sustainable Development Goals (SDG)" %}</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.4.description }}" class="card-title">{{ box_names.4.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 <li>{{ measure.sdg.all|join:"</li><li>" }}</li>
@@ -115,22 +115,15 @@
 
                 <article class="boxcard">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "DZES" %}</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.5.description }}" class="card-title">{{ box_names.5.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
+                        <h3>DZES</h3>
                             <ul>
                                 {% for dzes in measure.dzes.all %}
                                     <li><a href="{{ dzes.url }}">{{ dzes }}</a></li>
                                 {% endfor %}
                             </ul>
-                        </div>
-                    </div>
-                </article>
-
-
-                <article class="boxcard white">
-                    <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "PPH" %}</h2></header>
-                        <div class="card-body">
+                        <h3>PPH</h3>
                             <ul>
                                 {% for pph in measure.pph.all %}
                                     <li><a href="{{ pph.url }}">{{ pph }}</a></li>
@@ -141,14 +134,29 @@
                 </article>
 
 
-
-                <article class="boxcard">
+                <article class="boxcard white">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Nature Restoration Law" %}</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.6.description }}" class="card-title">{{ box_names.6.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 {% for nrl in measure.nature_restoration_law.all %}
                                     <li><a href="{{ nrl.url }}">{{ nrl }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+
+
+                <article class="boxcard">
+                    <div class="card-inner">
+                        <header class="card-header"><h2 title="{{ box_names.7.description }}" class="card-title">{{ box_names.7.name }}<sup>&#9432;</sup>:</h2></header>
+                        <div class="card-body">
+
+                                                        <ul>
+                                {% for ppp in measure.pre_project_preparation.all %}
+                                    <li>{{ ppp }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
