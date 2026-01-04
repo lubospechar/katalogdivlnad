@@ -54,7 +54,7 @@
             <section class="boxgrid">
                 <article class="boxcard">
                     <div class="card-inner">
-                        <header class="card-header"><h2 class="card-title">{% translate "Interconnection" %}:</h2></header>
+                        <header class="card-header"><h2 title="{{ box_names.0.description }}" class="card-title">{{ box_names.0.name }}<sup>&#9432;</sup>:</h2></header>
                         <div class="card-body">
                             <ul>
                                 <li>{{ measure.interconnection.all|join:"</li><li>" }}</li>
