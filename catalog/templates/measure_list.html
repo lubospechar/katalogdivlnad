@@ -14,8 +14,8 @@
 <form id="filter-form" method="get" data-ajax-url="{% if selected_group %}{% url 'measures-by-group-ajax' pk=selected_group.pk %}{% else %}{% url 'groups-all-ajax' %}{% endif %}">
 
     <div class="filter-row">
-        <div class="filter-label">
-            {{ filter_form.potential_scale.label }}:
+        <div class="filter-label" title="{{ filter_form.potential_scale.field.label_title|safe }}">
+            {{ filter_form.potential_scale.label }}<sup>&#9432;</sup>:
         </div>
         <div class="filter-scale">
             {{ filter_form.potential_scale }}
@@ -23,8 +23,8 @@
     </div>
 
     <div class="filter-row">
-        <div class="filter-label">
-            {{ filter_form.size_scale.label }}:
+        <div class="filter-label" title="{{ filter_form.size_scale.field.label_title|safe }}">
+            {{ filter_form.size_scale.label }}<sup>&#9432;</sup>:
         </div>
         <div class="filter-scale">
             {{ filter_form.size_scale }}
@@ -32,8 +32,8 @@
     </div>
 
     <div class="filter-row">
-        <div class="filter-label">
-            {{ filter_form.difficulty_of_implementation.label }}:
+        <div class="filter-label" title="{{ filter_form.difficulty_of_implementation.field.label_title|safe }}">
+            {{ filter_form.difficulty_of_implementation.label }}<sup>&#9432;</sup>:
         </div>
         <div class="filter-scale">
             {{ filter_form.difficulty_of_implementation }}
@@ -41,8 +41,8 @@
     </div>
 
     <div class="filter-row">
-        <div class="filter-label">
-            {{ filter_form.quantification_scale.label }}:
+        <div class="filter-label" title="{{ filter_form.quantification_scale.field.label_title|safe }}">
+            {{ filter_form.quantification_scale.label }}<sup>&#9432;</sup>:
         </div>
         <div class="filter-scale">
             {{ filter_form.quantification_scale }}
@@ -50,8 +50,8 @@
     </div>
 
     <div class="filter-row">
-        <div class="filter-label">
-            {{ filter_form.time_horizon.label }}:
+        <div class="filter-label" title="{{ filter_form.time_horizon.field.label_title|safe }}">
+            {{ filter_form.time_horizon.label }}<sup>&#9432;</sup>:
         </div>
         <div class="filter-scale">
             {{ filter_form.time_horizon }}
