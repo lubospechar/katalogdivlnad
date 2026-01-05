@@ -21,7 +21,7 @@
 
         <section class="segment">
             <h1>{{ measure.measure_name }}</h1>
-            <h2>{% trans "Group" %}: <span>{{ measure.group.group_name }}</span></h2>
+            <h2>{% trans "Group" %}: <span>{% for group in measure.groups.all %}<a href="{% url "group-filter" group.id %}">{{ group }}</a>{% if not forloop.last %}, {% endif %} {% endfor %}</span></h2>
             <h3>{{ measure.abstract }}</h3>
         </section>
 
