@@ -1,7 +1,10 @@
+from django.http.response import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.http import http_date
 from django.utils.timezone import now
 from django.views.generic import ListView, DetailView
+from django.views.generic.base import View
+
 from .models import Group, Measure, Page, ContactPerson, BoxName
 from django.utils import translation
 from markdownx.utils import markdownify
@@ -104,10 +107,11 @@ class MeasureDetailView(DetailView):
 
         return context
 
-class ContactPersonDetailView(DetailView):
+class ContactPersonListView(ListView):
     model = ContactPerson
-    template_name = "contact_person_detail.html"
-    context_object_name = "contact_person"
+    template_name = "contacts.html"
+    context_object_name = "peoples"
+    ordering = ("last_name", "first_name")
 
 class HeroCssView(DetailView):
     model = Measure
@@ -121,3 +125,28 @@ class HeroCssView(DetailView):
         response["Cache-Control"] = "public, max-age=86400"
         response["Last-Modified"] = http_date(now().timestamp())
         return response
+
+
+
+
+class ContactPersonRevealEmailView(View):
+    def get(self, request, pk: int):
+        try:
+            p = ContactPerson.objects.only("id", "email", "phone").get(pk=pk)
+        except ContactPerson.DoesNotExist:
+            raise Http404
+
+        return JsonResponse({
+            "email": p.email,
+        })
+
+class ContactPersonRevealPhoneView(View):
+    def get(self, request, pk: int):
+        try:
+            p = ContactPerson.objects.only("id", "email", "phone").get(pk=pk)
+        except ContactPerson.DoesNotExist:
+            raise Http404
+
+        return JsonResponse({
+            "email": p.phone,
+        })

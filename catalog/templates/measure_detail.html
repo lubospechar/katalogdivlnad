@@ -176,7 +176,7 @@
                     <br /><a href="{{ reference.url }}">{{ reference }}</a>
                 {%  endfor %}
             </p>
-            <p><strong>{% translate 'Contact person' %}: </strong><a href="{% url 'contact-detail' measure.contact_person.pk %}">{{ measure.contact_person }}</a></p>
+            <p><strong>{% translate 'Contact person' %}: </strong>{{ measure.contact_person }}</p>
         </section>
 
 

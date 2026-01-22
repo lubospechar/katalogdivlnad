@@ -22,14 +22,8 @@
                 </ul>
             </li>
 
-            <li class="dropdown">
-                <a href="#">{% trans "Contacts" %}</a>
-                <ul class="dropdown-menu">
-                    {% for contact in contacts_nav %}
-                        <li><a href="{% url 'contact-detail' contact.id %}">{{ contact.first_name }} {{ contact.last_name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
+            <li><a href="{% url 'contacts' %}">{% translate 'Kontakty' %}</a></li>
+
         </ul>
     </nav>
 

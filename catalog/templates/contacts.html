@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% load measure_tags %}
+
+
+{% block title_image %}
+    {% include 'partials/title_image.html' %}
+{%  endblock %}
+
+{% block content %}
+    <main class="home-content">
+        <h1>{% translate "Autorský tým katalogu" %}:</h1>
+        <p>{% translate "Autorem kataloguj je Fakulta životního prostředí České Zemědělské university v Praze" %}</p>
+
+        <h2>{% translate "Specialsité"%}</h2>
+        {% for p in peoples %}
+            <div class="contact-person">
+                <h3>{{ p.full_name_with_titles }}</h3>
+                <p>{{ p.expertise }}</p>
+                <p>
+                    <button type="button" class="email-reveal"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">Zobrazit email</button>
+                    <span class="revealed"></span>
+                </p>
+
+                <p>
+                    <button type="button" class="phone-reveal"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">Zobrazit telefon</button>
+                    <span class="revealed"></span>
+                </p>
+
+
+                <p><strong>Opatření</strong>:
+                {% for m in p.contact_persons.all %}
+                    <a href="{% url 'measure-detail' m.pk %}">{{ m }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                </p>
+
+            </div>
+            {% if not forloop.last %}<hr />{% endif %}
+        {% endfor %}
+
+
+
+
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+async function reveal(btn) {
+    const url = btn.dataset.url;
+    const expectedField = btn.dataset.field; // "email" nebo "phone"
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "Načítám…";
+
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        credentials: "same-origin",
+      });
+
+      if (res.status === 403) {
+        btn.textContent = "Nemáš přístup";
+        return;
+      }
+      if (!res.ok) {
+        btn.textContent = "Chyba";
+        return;
+      }
+
+      const data = await res.json();
+
+      // Endpoint vrací jen 1 položku: buď {email: "..."} nebo {phone: "..."}
+      let value = "";
+      if (expectedField && data[expectedField] !== undefined) {
+        value = data[expectedField] ?? "";
+      } else {
+        const firstKey = Object.keys(data)[0];
+        value = firstKey ? (data[firstKey] ?? "") : "";
+      }
+
+      const span = btn.nextElementSibling;
+      span.textContent = value;
+
+      btn.remove();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+      console.error(err);
+      alert("Nepodařilo se načíst údaj.");
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".email-reveal, .phone-reveal");
+    if (!btn) return;
+    reveal(btn);
+  });
+</script>
+
+{% endblock %}

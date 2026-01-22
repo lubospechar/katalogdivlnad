@@ -1,8 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
-from catalog.views import Home, MeasuresListByGroupView, MeasureDetailView, HeroCssView, ContactPersonDetailView, \
-    MeasuresListByGroupAjaxView
+
+from catalog.views import (
+    Home, MeasuresListByGroupView,
+    MeasureDetailView,
+    HeroCssView,
+    ContactPersonListView,
+    MeasuresListByGroupAjaxView,
+    ContactPersonRevealEmailView,
+    ContactPersonRevealPhoneView,
+)
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -12,7 +21,7 @@ urlpatterns = [
     path('groups/', MeasuresListByGroupView.as_view(), name='groups-all'),
     path('groups/group-<int:pk>/', MeasuresListByGroupView.as_view(), name='group-filter'),
     path('measure/<int:pk>/', MeasureDetailView.as_view(), name='measure-detail'),
-    path('contact/<int:pk>/', ContactPersonDetailView.as_view(), name='contact-detail'),
+    path('contacts/', ContactPersonListView.as_view(), name='contacts'),
     path("markdownx/", include("markdownx.urls")),
     #path("<slug:slug>/", views.page_detail, name="page_detail"),
     path("css/hero/images-<int:pk>.css", HeroCssView.as_view(), name="hero_css"),
@@ -23,6 +32,9 @@ urlpatterns = [
         MeasuresListByGroupAjaxView.as_view(),
         name="measures-by-group-ajax",
     ),
+
+    path("contacts/email/<int:pk>/reveal/", ContactPersonRevealEmailView.as_view(), name="email-reveal"),
+    path("contacts/phone/<int:pk>/reveal/", ContactPersonRevealPhoneView.as_view(), name="phone-reveal"),
 ]
 
 urlpatterns += [
