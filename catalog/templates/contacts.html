@@ -18,14 +18,16 @@
                 <h3>{{ p.full_name_with_titles }}</h3>
                 <p>{{ p.expertise }}</p>
                 <p>
-                    <button type="button" class="email-reveal"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">Zobrazit email</button>
+                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">Zobrazit email</button>
                     <span class="revealed"></span>
                 </p>
 
-                <p>
-                    <button type="button" class="phone-reveal"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">Zobrazit telefon</button>
-                    <span class="revealed"></span>
-                </p>
+                {% if p.phone %}
+                    <p>
+                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">Zobrazit telefon</button>
+                        <span class="revealed"></span>
+                    </p>
+                {% endif %}
 
 
                 <p><strong>Opatření</strong>:
@@ -46,58 +48,56 @@
 
 {% block scripts %}
     <script>
-async function reveal(btn) {
-    const url = btn.dataset.url;
-    const expectedField = btn.dataset.field; // "email" nebo "phone"
 
-    btn.disabled = true;
-    const originalText = btn.textContent;
-    btn.textContent = "Načítám…";
+async function fetchReveal(url) {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    cache: "no-store",
+  });
 
-    try {
-      const res = await fetch(url, {
-        method: "GET",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        credentials: "same-origin",
-      });
-
-      if (res.status === 403) {
-        btn.textContent = "Nemáš přístup";
-        return;
-      }
-      if (!res.ok) {
-        btn.textContent = "Chyba";
-        return;
-      }
-
-      const data = await res.json();
-
-      // Endpoint vrací jen 1 položku: buď {email: "..."} nebo {phone: "..."}
-      let value = "";
-      if (expectedField && data[expectedField] !== undefined) {
-        value = data[expectedField] ?? "";
-      } else {
-        const firstKey = Object.keys(data)[0];
-        value = firstKey ? (data[firstKey] ?? "") : "";
-      }
-
-      const span = btn.nextElementSibling;
-      span.textContent = value;
-
-      btn.remove();
-    } catch (err) {
-      btn.disabled = false;
-      btn.textContent = originalText;
-      console.error(err);
-      alert("Nepodařilo se načíst údaj.");
-    }
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} při volání ${url}`);
   }
 
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".email-reveal, .phone-reveal");
+  return await response.json();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("click", async (event) => {
+    const btn = event.target.closest('button[data-field="email"], button[data-field="phone"]');
     if (!btn) return;
-    reveal(btn);
+
+    event.preventDefault();
+
+    const field = btn.dataset.field;
+    const url = btn.dataset.url;
+
+    try {
+      const data = await fetchReveal(url);
+      const value = data[field];
+      const safeValue = String(value ?? "");
+
+      if (field === "email") {
+        const a = document.createElement("a");
+        a.href = `mailto:${safeValue}`;
+        a.textContent = safeValue;
+        btn.replaceWith(a);
+      } else {
+        btn.replaceWith(document.createTextNode(safeValue));
+      }
+    } catch (err) {
+      console.error("REVEAL ERROR:", err);
+    }
   });
-</script>
+});
+
+
+
+
+
+
+
+    </script>
 
 {% endblock %}
