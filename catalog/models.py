@@ -358,7 +358,7 @@ class Reference(models.Model):
         verbose_name_plural = _("References")
 
 
-class ContactPerson(models.Model):
+class ContactPerson(models.Model, TranslateMixin):
     # Title before name (optional)
     title_before = models.CharField(
         max_length=50,
@@ -378,7 +378,8 @@ class ContactPerson(models.Model):
         blank=True,
         null=True
     )
-    expertise = models.CharField(max_length=255, verbose_name=_("Expertise"))
+    expertise_cs = models.CharField(max_length=255, verbose_name=_("Expertise (Czech)"))
+    expertise_en = models.CharField(max_length=255, verbose_name=_("Expertise (English)"))
     # Email of the contact person (optional)
     email = models.EmailField(verbose_name=_("Email"), blank=True, null=True)
     # Phone number of the contact person (optional)
@@ -388,7 +389,13 @@ class ContactPerson(models.Model):
 
     def __str__(self):
         # Returns a combination of first name, last name, and expertise
-        return f"{self.first_name} {self.last_name} ({self.expertise})"
+        return f"{self.first_name} {self.last_name}"
+
+    def expertise(self):
+        lang: str = get_language()
+        if lang == "cs":
+            return self.expertise_cs
+        return self.expertise_en
 
     def full_name_with_titles(self):
         name = f"{self.first_name} {self.last_name}"
@@ -397,8 +404,6 @@ class ContactPerson(models.Model):
         if self.title_after:
             name = f"{name}, {self.title_after}"
         return name
-
-
 
     class Meta:
         # Human-readable names for the Django admin interface

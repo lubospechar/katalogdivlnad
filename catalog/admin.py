@@ -205,22 +205,18 @@ class ImpactDetailAdmin(BaseAdmin):
 @admin.register(ContactPerson)
 class ContactPersonAdmin(admin.ModelAdmin):
     # Co se zobrazuje v seznamu
-    list_display = ("last_name", "first_name", "expertise", "email", "phone")
+    list_display = ("last_name", "first_name", "expertise_cs", "email", "phone")
     list_display_links = ("last_name",)
 
     # Vyhledávání
     search_fields = (
         "first_name",
         "last_name",
-        "title_before",
-        "title_after",
-        "expertise",
         "email",
         "phone",
     )
 
-    # Filtry vpravo
-    list_filter = ("expertise",)
+
 
     # Defaultní řazení
     ordering = ("last_name", "first_name")
