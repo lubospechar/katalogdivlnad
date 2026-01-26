@@ -9,29 +9,37 @@
 
 {% block content %}
     <main class="home-content">
-        <h1>{% translate "Autorský tým katalogu" %}:</h1>
-        <p>{% translate "Autorem katalogu je Fakulta životního prostředí České Zemědělské university v Praze. V případě jakéhokoliv dotazu či připomínky nás neváhejte kontaktovat." %}</p>
+        <h1>{% translate "Catalog authors" %}:</h1>
+        <p>{% translate "The catalog was created by the Faculty of Environmental Sciences at the University of Life Sciences in Prague. If you have any questions or comments about the catalog, please contact us" %}</p>
 
-        <h2>{% translate "Specialisté opatření:"%}</h2>
-        <p>{% translate "Níže jsou uvedené kontakty na specialisty, kteří Vám pomohou s bližšími informacemi o jednotlivých opatření." %}</p>
+        <h2>{% translate "Specialists for specific measures" %}:</h2>
+        <p>{% translate "Below are the contact details for specialists who can provide you with more detailed information about individual measures." %}</p>
+
+        {% comment %}<h1>Autorský tým katalogu:</h1>
+        <p>Autorem katalogu je Fakulta životního prostředí České Zemědělské university v Praze. V případě jakéhokoliv dotazu či připomínky nás neváhejte kontaktovat.</p>
+
+        <h2>Specialisté opatření:</h2>
+        <p>Níže jsou uvedené kontakty na specialisty, kteří Vám pomohou s bližšími informacemi o jednotlivých opatření.</p>
+        {%  endcomment %}
+
         {% for p in peoples %}
             <div class="contact-person">
                 <h3>{{ p.full_name_with_titles }}</h3>
                 <p>{{ p.expertise }}</p>
                 <p>
-                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">{% translate "Zobrazit email" %}</button>
+                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">{% translate "Show email address" %}</button>
                     <span class="revealed"></span>
                 </p>
 
                 {% if p.phone %}
                     <p>
-                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">{% translate "Zobrazit telefon" %}</button>
+                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">{% translate "Show phone number" %}</button>
                         <span class="revealed"></span>
                     </p>
                 {% endif %}
 
 
-                <p><strong>Opatření</strong>:
+                <p><strong>{% translate "Measures" %}</strong>:
                 {% for m in p.contact_persons.all %}
                     <a href="{% url 'measure-detail' m.pk %}">{{ m }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
