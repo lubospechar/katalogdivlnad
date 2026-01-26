@@ -216,30 +216,38 @@ class ContactPersonAdmin(admin.ModelAdmin):
         "phone",
     )
 
-
-
     # Defaultní řazení
     ordering = ("last_name", "first_name")
 
     # Hezčí rozložení polí v detailu
     fieldsets = (
-        (_("Name"), {
-            "fields": (
-                ("title_before", "title_after"),
-                ("first_name", "last_name"),
-            )
-        }),
-        (_("Contact"), {
-            "fields": (
-                "email",
-                "phone",
-            )
-        }),
-        (_("Other"), {
-            "fields": (
-                "expertise",
-            )
-        }),
+        (
+            _("Name"),
+            {
+                "fields": (
+                    ("title_before", "title_after"),
+                    ("first_name", "last_name"),
+                )
+            },
+        ),
+        (
+            _("Contact"),
+            {
+                "fields": (
+                    "email",
+                    "phone",
+                )
+            },
+        ),
+        (
+            _("Other"),
+            {
+                "fields": (
+                    "expertise_cs",
+                    "expertise_en",
+                )
+            },
+        ),
     )
 
 
