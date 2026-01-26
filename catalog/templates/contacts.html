@@ -10,21 +10,22 @@
 {% block content %}
     <main class="home-content">
         <h1>{% translate "Autorský tým katalogu" %}:</h1>
-        <p>{% translate "Autorem kataloguj je Fakulta životního prostředí České Zemědělské university v Praze" %}</p>
+        <p>{% translate "Autorem katalogu je Fakulta životního prostředí České Zemědělské university v Praze. V případě jakéhokoliv dotazu či připomínky nás neváhejte kontaktovat." %}</p>
 
-        <h2>{% translate "Specialsité"%}</h2>
+        <h2>{% translate "Specialisté opatření:"%}</h2>
+        <p>{% translate "Níže jsou uvedené kontakty na specialisty, kteří Vám pomohou s bližšími informacemi o jednotlivých opatření." %}</p>
         {% for p in peoples %}
             <div class="contact-person">
                 <h3>{{ p.full_name_with_titles }}</h3>
                 <p>{{ p.expertise }}</p>
                 <p>
-                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">Zobrazit email</button>
+                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">{% translate "Zobrazit email" %}</button>
                     <span class="revealed"></span>
                 </p>
 
                 {% if p.phone %}
                     <p>
-                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">Zobrazit telefon</button>
+                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">{% translate "Zobrazit telefon" %}</button>
                         <span class="revealed"></span>
                     </p>
                 {% endif %}
@@ -57,7 +58,7 @@ async function fetchReveal(url) {
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status} při volání ${url}`);
+    throw new Error(`HTTP ${response.status}  ${url}`);
   }
 
   return await response.json();
