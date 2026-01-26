@@ -24,7 +24,7 @@
 
         {% for p in peoples %}
             <div class="contact-person">
-                <h3>{{ p.full_name_with_titles }}</h3>
+                <h3 id="person-{{ p.id }}">{{ p.full_name_with_titles }}</h3>
                 <p>{{ p.expertise }}</p>
                 <p>
                     <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">{% translate "Show email address" %}</button>
