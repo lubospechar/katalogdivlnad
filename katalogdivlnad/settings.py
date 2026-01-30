@@ -11,6 +11,7 @@ DEBUG = config("DEBUG", cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 
 
+CSRF_TRUSTED_ORIGINS = [s.strip() for s in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if s.strip()]
 
 # Application definition
 
