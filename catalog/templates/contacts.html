@@ -9,26 +9,37 @@
 
 {% block content %}
     <main class="home-content">
-        <h1>{% translate "Autorský tým katalogu" %}:</h1>
-        <p>{% translate "Autorem kataloguj je Fakulta životního prostředí České Zemědělské university v Praze" %}</p>
+        <h1>{% translate "Catalog authors" %}:</h1>
+        <p>{% translate "The catalog was created by the Faculty of Environmental Sciences at the University of Life Sciences in Prague. If you have any questions or comments about the catalog, please contact us" %}</p>
 
-        <h2>{% translate "Specialsité"%}</h2>
+        <h2>{% translate "Specialists for specific measures" %}:</h2>
+        <p>{% translate "Below are the contact details for specialists who can provide you with more detailed information about individual measures." %}</p>
+
+        {% comment %}<h1>Autorský tým katalogu:</h1>
+        <p>Autorem katalogu je Fakulta životního prostředí České Zemědělské university v Praze. V případě jakéhokoliv dotazu či připomínky nás neváhejte kontaktovat.</p>
+
+        <h2>Specialisté opatření:</h2>
+        <p>Níže jsou uvedené kontakty na specialisty, kteří Vám pomohou s bližšími informacemi o jednotlivých opatření.</p>
+        {%  endcomment %}
+
         {% for p in peoples %}
             <div class="contact-person">
-                <h3>{{ p.full_name_with_titles }}</h3>
+                <h3 id="person-{{ p.id }}">{{ p.full_name_with_titles }}</h3>
                 <p>{{ p.expertise }}</p>
                 <p>
-                    <button type="button" class="email-reveal"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">Zobrazit email</button>
+                    <button type="button" class="email-reveal-{{ p.pk }}"  data-url="{% url 'email-reveal' p.pk %}" data-field="email">{% translate "Show email address" %}</button>
                     <span class="revealed"></span>
                 </p>
 
-                <p>
-                    <button type="button" class="phone-reveal"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">Zobrazit telefon</button>
-                    <span class="revealed"></span>
-                </p>
+                {% if p.phone %}
+                    <p>
+                        <button type="button" class="phone-reveal-{{ p.pk }}"  data-url="{% url 'phone-reveal' p.pk %}" data-field="phone">{% translate "Show phone number" %}</button>
+                        <span class="revealed"></span>
+                    </p>
+                {% endif %}
 
 
-                <p><strong>Opatření</strong>:
+                <p><strong>{% translate "Measures" %}</strong>:
                 {% for m in p.contact_persons.all %}
                     <a href="{% url 'measure-detail' m.pk %}">{{ m }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
@@ -46,58 +57,56 @@
 
 {% block scripts %}
     <script>
-async function reveal(btn) {
-    const url = btn.dataset.url;
-    const expectedField = btn.dataset.field; // "email" nebo "phone"
 
-    btn.disabled = true;
-    const originalText = btn.textContent;
-    btn.textContent = "Načítám…";
+async function fetchReveal(url) {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    cache: "no-store",
+  });
 
-    try {
-      const res = await fetch(url, {
-        method: "GET",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        credentials: "same-origin",
-      });
-
-      if (res.status === 403) {
-        btn.textContent = "Nemáš přístup";
-        return;
-      }
-      if (!res.ok) {
-        btn.textContent = "Chyba";
-        return;
-      }
-
-      const data = await res.json();
-
-      // Endpoint vrací jen 1 položku: buď {email: "..."} nebo {phone: "..."}
-      let value = "";
-      if (expectedField && data[expectedField] !== undefined) {
-        value = data[expectedField] ?? "";
-      } else {
-        const firstKey = Object.keys(data)[0];
-        value = firstKey ? (data[firstKey] ?? "") : "";
-      }
-
-      const span = btn.nextElementSibling;
-      span.textContent = value;
-
-      btn.remove();
-    } catch (err) {
-      btn.disabled = false;
-      btn.textContent = originalText;
-      console.error(err);
-      alert("Nepodařilo se načíst údaj.");
-    }
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}  ${url}`);
   }
 
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".email-reveal, .phone-reveal");
+  return await response.json();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("click", async (event) => {
+    const btn = event.target.closest('button[data-field="email"], button[data-field="phone"]');
     if (!btn) return;
-    reveal(btn);
+
+    event.preventDefault();
+
+    const field = btn.dataset.field;
+    const url = btn.dataset.url;
+
+    try {
+      const data = await fetchReveal(url);
+      const value = data[field];
+      const safeValue = String(value ?? "");
+
+      if (field === "email") {
+        const a = document.createElement("a");
+        a.href = `mailto:${safeValue}`;
+        a.textContent = safeValue;
+        btn.replaceWith(a);
+      } else {
+        btn.replaceWith(document.createTextNode(safeValue));
+      }
+    } catch (err) {
+      console.error("REVEAL ERROR:", err);
+    }
   });
-</script>
+});
+
+
+
+
+
+
+
+    </script>
 
 {% endblock %}

@@ -148,5 +148,5 @@ class ContactPersonRevealPhoneView(View):
             raise Http404
 
         return JsonResponse({
-            "email": p.phone,
+            "phone": p.phone,
         })
