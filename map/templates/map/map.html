@@ -40,11 +40,39 @@
             font: 14px Arial, sans-serif;
         }
 
-        #feature-warning {
+        .feature-counter {
+            margin-bottom: 6px;
+        }
+
+        #feature-warning,
+        #polygon-warning {
             display: none;
             margin-top: 8px;
             color: #b45309;
             font-weight: bold;
+        }
+
+        #polygon-loading {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            color: #c62828;
+        }
+
+        .loading-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #f4cccc;
+            border-top-color: #c62828;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         #feature-info {
@@ -55,8 +83,13 @@
             margin: 0 0 10px;
             font-size: 15px;
         }
+
+        #feature-info div {
+            margin-top: 5px;
+        }
     </style>
 </head>
+
 <body>
 
 <div id="map"></div>
@@ -64,31 +97,59 @@
 <div id="info-panels">
 
     <div id="info-panel" class="info-panel">
-        <div>
-            Features in view:
+
+        <div class="feature-counter">
+            KDK lines in view:
             <strong id="feature-count">Loading...</strong>
         </div>
-        <div id="feature-warning">
-            Too many features. Please zoom in.
+
+        <div class="feature-counter">
+            PovIV_W polygons in view:
+            <strong id="polygon-count">Loading...</strong>
         </div>
+
+        <div id="feature-warning">
+            Too many lines (max. 20,000). Please zoom in.
+        </div>
+
+        <div id="polygon-loading" role="status">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <span>Loading PovIV_W polygons...</span>
+        </div>
+
+        <div id="polygon-warning">
+            Too many polygons (max. 5,000). Please zoom in.
+        </div>
+
     </div>
 
     <div id="feature-info" class="info-panel">
         <h3>Selected feature</h3>
+
         <div>
-            ID: <strong id="selected-feature-id"></strong>
+            Layer:
+            <strong id="selected-feature-layer"></strong>
+        </div>
+
+        <div>
+            ID:
+            <strong id="selected-feature-id"></strong>
         </div>
     </div>
 
 </div>
 
 <script>
-    const MAX_FEATURES = 15000;
+    // Feature limits
+    const MAX_LINE_FEATURES = 20000;
+    const MAX_POLYGON_FEATURES = 5000;
 
+    // Initialize map
     const map = L.map('map', {
         preferCanvas: true
     }).setView([49.8, 15.5], 8);
 
+    // Base map
     L.tileLayer(
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
@@ -98,30 +159,88 @@
         }
     ).addTo(map);
 
+    // Information elements
     const featureCount = document.getElementById('feature-count');
+    const polygonCount = document.getElementById('polygon-count');
+
     const featureWarning = document.getElementById('feature-warning');
+    const polygonWarning = document.getElementById('polygon-warning');
+    const polygonLoading = document.getElementById('polygon-loading');
+
     const featureInfo = document.getElementById('feature-info');
+    const selectedFeatureLayer = document.getElementById('selected-feature-layer');
     const selectedFeatureId = document.getElementById('selected-feature-id');
 
-    // KDK layer
-    const kdkLayer = L.geoJSON(null, {
+    let activeController = null;
+
+    // Selected feature information
+    function selectFeature(layerName, featureId) {
+        selectedFeatureLayer.textContent = layerName;
+        selectedFeatureId.textContent = featureId ?? 'Unknown';
+        featureInfo.style.display = 'block';
+    }
+
+    // Polygon layer - bottom (red)
+    const polygonLayer = L.geoJSON(null, {
         style: {
-            color: '#0066cc',
-            weight: 4,
-            opacity: 0.8
+            color: '#c62828',
+            weight: 1,
+            opacity: 0.9,
+            fillColor: '#e53935',
+            fillOpacity: 0.20
         },
+
         interactive: true,
 
         onEachFeature: function(feature, layer) {
             layer.on('click', function() {
-                selectedFeatureId.textContent = feature.id;
-                featureInfo.style.display = 'block';
+                selectFeature('PovIV_W', feature.id);
             });
         }
     }).addTo(map);
 
-    let activeController = null;
+    // Line layer - top (blue)
+    const kdkLayer = L.geoJSON(null, {
+        style: {
+            color: '#0066cc',
+            weight: 2,
+            opacity: 0.9
+        },
 
+        interactive: true,
+
+        onEachFeature: function(feature, layer) {
+            layer.on('click', function() {
+                selectFeature('KDK', feature.id);
+            });
+        }
+    }).addTo(map);
+
+    // Layer visibility control
+    L.control.layers(
+        null,
+        {
+            'PovIV_W (polygons)': polygonLayer,
+            'KDK (lines)': kdkLayer
+        },
+        {
+            position: 'topleft',
+            collapsed: false
+        }
+    ).addTo(map);
+
+    // Keep lines above polygons
+    function bringLinesToFront() {
+        if (!map.hasLayer(kdkLayer)) {
+            return;
+        }
+
+        kdkLayer.eachLayer(function(layer) {
+            layer.bringToFront();
+        });
+    }
+
+    // Current map bounds
     function getMapBounds() {
         const bounds = map.getBounds();
 
@@ -133,8 +252,141 @@
         ].join(',');
     }
 
+    // Fetch JSON with abort support
+    async function fetchJson(url, signal) {
+        const response = await fetch(url, {
+            signal: signal
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
+    }
+
+    // Load KDK feature count and geometries
+    async function loadKDK(bbox, controller) {
+        try {
+            const countData = await fetchJson(
+                `/map/bounds/?bbox=${bbox}`,
+                controller.signal
+            );
+
+            if (controller.signal.aborted) {
+                return;
+            }
+
+            const count = countData.count;
+
+            featureCount.textContent =
+                count.toLocaleString('en-US');
+
+            if (!map.hasLayer(kdkLayer)) {
+                return;
+            }
+
+            if (count > MAX_LINE_FEATURES) {
+                featureWarning.style.display = 'block';
+                return;
+            }
+
+            const linesData = await fetchJson(
+                `/map/lines/?bbox=${bbox}`,
+                controller.signal
+            );
+
+            if (
+                controller.signal.aborted ||
+                !map.hasLayer(kdkLayer)
+            ) {
+                return;
+            }
+
+            if (
+                linesData.too_many ||
+                (
+                    linesData.count != null &&
+                    linesData.count > MAX_LINE_FEATURES
+                )
+            ) {
+                featureWarning.style.display = 'block';
+                return;
+            }
+
+            // Render lines
+            kdkLayer.addData(linesData);
+
+            bringLinesToFront();
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return;
+            }
+
+            console.error('Failed to load KDK:', error);
+            featureCount.textContent = 'Unavailable';
+        }
+    }
+
+    // Load PovIV_W polygon count and geometries
+    async function loadPolygons(bbox, controller) {
+        try {
+            const polygonData = await fetchJson(
+                `/map/polygons/?bbox=${bbox}`,
+                controller.signal
+            );
+
+            if (
+                controller.signal.aborted ||
+                !map.hasLayer(polygonLayer)
+            ) {
+                return;
+            }
+
+            // Update polygon count
+            const count = polygonData.count ??
+                polygonData.features?.length ?? 0;
+
+            polygonCount.textContent =
+                count.toLocaleString('en-US');
+
+            // Check polygon limit
+            if (
+                polygonData.too_many ||
+                count > MAX_POLYGON_FEATURES
+            ) {
+                polygonWarning.style.display = 'block';
+                return;
+            }
+
+            // Render polygons
+            polygonLayer.addData(polygonData);
+
+            // Preserve layer ordering
+            bringLinesToFront();
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return;
+            }
+
+            console.error('Failed to load PovIV_W:', error);
+
+            if (activeController === controller) {
+                polygonCount.textContent = 'Unavailable';
+            }
+
+        } finally {
+            // Hide loading indicator only for current request
+            if (activeController === controller) {
+                polygonLoading.style.display = 'none';
+            }
+        }
+    }
+
+    // Update all visible map layers
     async function updateMap() {
-        // Cancel previous requests
         if (activeController) {
             activeController.abort();
         }
@@ -142,71 +394,48 @@
         const controller = new AbortController();
         activeController = controller;
 
-        // Clear previous geometries and selection
+        // Clear previous geometries
+        polygonLayer.clearLayers();
         kdkLayer.clearLayers();
+
+        // Clear selection
         featureInfo.style.display = 'none';
 
+        // Reset counters
         featureCount.textContent = 'Loading...';
+
+        polygonCount.textContent =
+            map.hasLayer(polygonLayer) ? 'Loading...' : 'Off';
+
+        // Reset warnings
         featureWarning.style.display = 'none';
+        polygonWarning.style.display = 'none';
+
+        // Polygon loading indicator
+        polygonLoading.style.display =
+            map.hasLayer(polygonLayer) ? 'flex' : 'none';
 
         const bbox = encodeURIComponent(getMapBounds());
 
-        try {
-            // Get feature count
-            const countResponse = await fetch(
-                `/map/bounds/?bbox=${bbox}`,
-                { signal: controller.signal }
+        const requests = [
+            loadKDK(bbox, controller)
+        ];
+
+        // Load polygons only when enabled
+        if (map.hasLayer(polygonLayer)) {
+            requests.push(
+                loadPolygons(bbox, controller)
             );
-
-            if (!countResponse.ok) {
-                throw new Error(`HTTP ${countResponse.status}`);
-            }
-
-            const countData = await countResponse.json();
-            const count = countData.count;
-
-            featureCount.textContent = count.toLocaleString('en-US');
-
-            // Do not load geometries above the limit
-            if (count > MAX_FEATURES) {
-                featureWarning.style.display = 'block';
-                return;
-            }
-
-            // Load KDK geometries
-            const linesResponse = await fetch(
-                `/map/lines/?bbox=${bbox}`,
-                { signal: controller.signal }
-            );
-
-            if (!linesResponse.ok) {
-                throw new Error(`HTTP ${linesResponse.status}`);
-            }
-
-            const linesData = await linesResponse.json();
-
-            if (linesData.too_many) {
-                featureWarning.style.display = 'block';
-                return;
-            }
-
-            // Render geometries
-            kdkLayer.addData(linesData);
-
-        } catch (error) {
-            if (error.name === 'AbortError') {
-                return;
-            }
-
-            console.error('Failed to load map data:', error);
-
-            featureCount.textContent = 'Unavailable';
-            featureWarning.style.display = 'none';
         }
+
+        await Promise.all(requests);
     }
 
-    // Update after moving or zooming the map
+    // Update after moving or zooming
     map.on('moveend', updateMap);
+
+    // Update when switching layers
+    map.on('overlayadd overlayremove', updateMap);
 
     // Initial load
     updateMap();

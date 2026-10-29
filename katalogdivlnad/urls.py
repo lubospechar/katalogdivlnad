@@ -12,7 +12,7 @@ from catalog.views import (
     ContactPersonRevealPhoneView,
 )
 
-from map.views import MapView, MapBoundsView, KDKLinesView
+from map.views import MapView, MapBoundsView, KDKLinesView, PovIVWPolygonsView
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -44,7 +44,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('i18n/set_language/', set_language, name='set_language'),
+    path("i18n/set_language/", set_language, name="set_language"),
+    path("map/polygons/", PovIVWPolygonsView.as_view(), name="map_polygons",),
 ]
 
 if settings.DEBUG and settings.ENVIRONMENT == 'local':

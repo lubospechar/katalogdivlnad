@@ -163,3 +163,79 @@ class KDK(models.Model):
 
     def __str__(self):
         return f"{self.naz_tok or 'Unnamed'} ({self.pk})"
+
+
+
+
+class PovIVW(models.Model):
+
+    """
+    PovIV_W hydrological dataset.
+
+    Contains all original attributes from PovIV_W.dbf
+    and geometries from PovIV_W.shp.
+
+    Coordinate reference system: EPSG:5514 (S-JTSK).
+    """
+    
+    globalid = models.CharField(
+        max_length=38, null=True, blank=True, db_index=True
+    )
+
+    chp_4 = models.CharField(
+        max_length=17, null=True, blank=True, db_index=True
+    )
+    chp_u = models.CharField(max_length=12, null=True, blank=True)
+    chp_d = models.CharField(max_length=12, null=True, blank=True)
+
+    naz_tok = models.CharField(max_length=50, null=True, blank=True)
+    naz_tok_2 = models.CharField(max_length=50, null=True, blank=True)
+
+    a_km2 = models.FloatField(null=True, blank=True)
+    asum_km2 = models.FloatField(null=True, blank=True)
+    aa_km2 = models.FloatField(null=True, blank=True)
+
+    area = models.FloatField(
+        db_column="Area", null=True, blank=True
+    )
+
+    frequency = models.IntegerField(
+        db_column="FREQUENCY", null=True, blank=True
+    )
+
+    mean_f = models.FloatField(
+        db_column="MEAN_F", null=True, blank=True
+    )
+    mean_w_skl = models.FloatField(
+        db_column="MEAN_W_skl", null=True, blank=True
+    )
+    mean_w_lan = models.FloatField(
+        db_column="MEAN_W_lan", null=True, blank=True
+    )
+    mean_w_cn = models.FloatField(
+        db_column="MEAN_W_CN", null=True, blank=True
+    )
+    w_conn = models.FloatField(
+        db_column="W_conn", null=True, blank=True
+    )
+
+    shape_leng = models.FloatField(
+        db_column="Shape_Leng", null=True, blank=True
+    )
+    shape_area = models.FloatField(
+        db_column="Shape_Area", null=True, blank=True
+    )
+
+    geom = models.MultiPolygonField(
+        srid=5514,
+        spatial_index=True
+    )
+
+    class Meta:
+        db_table = "map_poviv_w"
+        verbose_name = "PovIV W"
+        verbose_name_plural = "PovIV W"
+
+    def __str__(self):
+        return self.chp_4 or str(self.pk)
+
