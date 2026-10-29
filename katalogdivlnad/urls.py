@@ -12,7 +12,7 @@ from catalog.views import (
     ContactPersonRevealPhoneView,
 )
 
-from map.views import MapView, MapBoundsView
+from map.views import MapView, MapBoundsView, KDKLinesView
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -40,6 +40,7 @@ urlpatterns = [
 
     path("map/", MapView.as_view(), name="map"),
     path("map/bounds/", MapBoundsView.as_view(), name="map_bounds"),
+    path("map/lines/", KDKLinesView.as_view(), name="map_lines"),
 ]
 
 urlpatterns += [

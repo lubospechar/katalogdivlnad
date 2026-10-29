@@ -145,10 +145,11 @@ LOGGING = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",
         },
     },
     "loggers": {
-        "your_app": {
+        "map.bounds": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": False,

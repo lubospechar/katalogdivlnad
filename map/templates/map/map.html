@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Divland - mapa</title>
+    <title>Map</title>
 
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -21,14 +21,73 @@
             width: 100%;
             height: 100%;
         }
+
+        #info-panels {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-panel {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font: 14px Arial, sans-serif;
+        }
+
+        #feature-warning {
+            display: none;
+            margin-top: 8px;
+            color: #b45309;
+            font-weight: bold;
+        }
+
+        #feature-info {
+            display: none;
+        }
+
+        #feature-info h3 {
+            margin: 0 0 10px;
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
 
 <div id="map"></div>
 
+<div id="info-panels">
+
+    <div id="info-panel" class="info-panel">
+        <div>
+            Features in view:
+            <strong id="feature-count">Loading...</strong>
+        </div>
+        <div id="feature-warning">
+            Too many features. Please zoom in.
+        </div>
+    </div>
+
+    <div id="feature-info" class="info-panel">
+        <h3>Selected feature</h3>
+        <div>
+            ID: <strong id="selected-feature-id"></strong>
+        </div>
+    </div>
+
+</div>
+
 <script>
-    const map = L.map('map').setView([49.8, 15.5], 8);
+    const MAX_FEATURES = 15000;
+
+    const map = L.map('map', {
+        preferCanvas: true
+    }).setView([49.8, 15.5], 8);
 
     L.tileLayer(
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -39,24 +98,118 @@
         }
     ).addTo(map);
 
-    function sendMapBounds() {
+    const featureCount = document.getElementById('feature-count');
+    const featureWarning = document.getElementById('feature-warning');
+    const featureInfo = document.getElementById('feature-info');
+    const selectedFeatureId = document.getElementById('selected-feature-id');
+
+    // KDK layer
+    const kdkLayer = L.geoJSON(null, {
+        style: {
+            color: '#0066cc',
+            weight: 4,
+            opacity: 0.8
+        },
+        interactive: true,
+
+        onEachFeature: function(feature, layer) {
+            layer.on('click', function() {
+                selectedFeatureId.textContent = feature.id;
+                featureInfo.style.display = 'block';
+            });
+        }
+    }).addTo(map);
+
+    let activeController = null;
+
+    function getMapBounds() {
         const bounds = map.getBounds();
 
-        const bbox = [
+        return [
             bounds.getWest(),
             bounds.getSouth(),
             bounds.getEast(),
             bounds.getNorth()
         ].join(',');
-
-        fetch(`/map/bounds/?bbox=${encodeURIComponent(bbox)}`);
     }
 
-    // Send bounds whenever the map is moved or zoomed
-    map.on('moveend', sendMapBounds);
+    async function updateMap() {
+        // Cancel previous requests
+        if (activeController) {
+            activeController.abort();
+        }
 
-    // Send initial bounds
-    sendMapBounds();
+        const controller = new AbortController();
+        activeController = controller;
+
+        // Clear previous geometries and selection
+        kdkLayer.clearLayers();
+        featureInfo.style.display = 'none';
+
+        featureCount.textContent = 'Loading...';
+        featureWarning.style.display = 'none';
+
+        const bbox = encodeURIComponent(getMapBounds());
+
+        try {
+            // Get feature count
+            const countResponse = await fetch(
+                `/map/bounds/?bbox=${bbox}`,
+                { signal: controller.signal }
+            );
+
+            if (!countResponse.ok) {
+                throw new Error(`HTTP ${countResponse.status}`);
+            }
+
+            const countData = await countResponse.json();
+            const count = countData.count;
+
+            featureCount.textContent = count.toLocaleString('en-US');
+
+            // Do not load geometries above the limit
+            if (count > MAX_FEATURES) {
+                featureWarning.style.display = 'block';
+                return;
+            }
+
+            // Load KDK geometries
+            const linesResponse = await fetch(
+                `/map/lines/?bbox=${bbox}`,
+                { signal: controller.signal }
+            );
+
+            if (!linesResponse.ok) {
+                throw new Error(`HTTP ${linesResponse.status}`);
+            }
+
+            const linesData = await linesResponse.json();
+
+            if (linesData.too_many) {
+                featureWarning.style.display = 'block';
+                return;
+            }
+
+            // Render geometries
+            kdkLayer.addData(linesData);
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return;
+            }
+
+            console.error('Failed to load map data:', error);
+
+            featureCount.textContent = 'Unavailable';
+            featureWarning.style.display = 'none';
+        }
+    }
+
+    // Update after moving or zooming the map
+    map.on('moveend', updateMap);
+
+    // Initial load
+    updateMap();
 </script>
 
 </body>
