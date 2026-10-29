@@ -12,6 +12,8 @@ from catalog.views import (
     ContactPersonRevealPhoneView,
 )
 
+from map.views import MapView, MapBoundsView
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,6 +37,9 @@ urlpatterns = [
 
     path("contacts/email/<int:pk>/reveal/", ContactPersonRevealEmailView.as_view(), name="email-reveal"),
     path("contacts/phone/<int:pk>/reveal/", ContactPersonRevealPhoneView.as_view(), name="phone-reveal"),
+
+    path("map/", MapView.as_view(), name="map"),
+    path("map/bounds/", MapBoundsView.as_view(), name="map_bounds"),
 ]
 
 urlpatterns += [
