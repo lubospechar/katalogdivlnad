@@ -32,6 +32,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "catalog",
+    "map",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -70,7 +71,7 @@ WSGI_APPLICATION = "katalogdivlnad.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("DATABASE_NAME"),
         "USER": config("DATABASE_USER"),
         "PASSWORD": config("DATABASE_PASSWORD"),
