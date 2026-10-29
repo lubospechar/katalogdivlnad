@@ -77,6 +77,10 @@
 
         #feature-info {
             display: none;
+            width: min(350px, calc(100vw - 40px));
+            box-sizing: border-box;
+            max-height: 65vh;
+            overflow-y: auto;
         }
 
         #feature-info h3 {
@@ -84,8 +88,39 @@
             font-size: 15px;
         }
 
-        #feature-info div {
+        #feature-info .feature-detail {
             margin-top: 5px;
+        }
+
+        #feature-info h4 {
+            margin: 16px 0 10px;
+            padding-top: 12px;
+            border-top: 1px solid #dddddd;
+            font-size: 14px;
+        }
+
+        #measure-status {
+            color: #666666;
+            font-size: 13px;
+        }
+
+        #measure-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        #measure-list li {
+            margin-bottom: 9px;
+            line-height: 1.4;
+        }
+
+        #measure-list a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        #measure-list a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -96,6 +131,7 @@
 
 <div id="info-panels">
 
+    <!-- Feature counters -->
     <div id="info-panel" class="info-panel">
 
         <div class="feature-counter">
@@ -113,7 +149,8 @@
         </div>
 
         <div id="polygon-loading" role="status">
-            <span class="loading-spinner" aria-hidden="true"></span>
+            <span class="loading-spinner"
+                  aria-hidden="true"></span>
             <span>Loading PovIV_W polygons...</span>
         </div>
 
@@ -123,18 +160,27 @@
 
     </div>
 
+    <!-- Selected feature information -->
     <div id="feature-info" class="info-panel">
+
         <h3>Selected feature</h3>
 
-        <div>
+        <div class="feature-detail">
             Layer:
             <strong id="selected-feature-layer"></strong>
         </div>
 
-        <div>
+        <div class="feature-detail">
             ID:
             <strong id="selected-feature-id"></strong>
         </div>
+
+        <h4>Measures (mock data)</h4>
+
+        <div id="measure-status" role="status"></div>
+
+        <ol id="measure-list"></ol>
+
     </div>
 
 </div>
@@ -160,24 +206,162 @@
     ).addTo(map);
 
     // Information elements
-    const featureCount = document.getElementById('feature-count');
-    const polygonCount = document.getElementById('polygon-count');
+    const featureCount =
+        document.getElementById('feature-count');
 
-    const featureWarning = document.getElementById('feature-warning');
-    const polygonWarning = document.getElementById('polygon-warning');
-    const polygonLoading = document.getElementById('polygon-loading');
+    const polygonCount =
+        document.getElementById('polygon-count');
 
-    const featureInfo = document.getElementById('feature-info');
-    const selectedFeatureLayer = document.getElementById('selected-feature-layer');
-    const selectedFeatureId = document.getElementById('selected-feature-id');
+    const featureWarning =
+        document.getElementById('feature-warning');
 
+    const polygonWarning =
+        document.getElementById('polygon-warning');
+
+    const polygonLoading =
+        document.getElementById('polygon-loading');
+
+    const featureInfo =
+        document.getElementById('feature-info');
+
+    const selectedFeatureLayer =
+        document.getElementById('selected-feature-layer');
+
+    const selectedFeatureId =
+        document.getElementById('selected-feature-id');
+
+    const measureStatus =
+        document.getElementById('measure-status');
+
+    const measureList =
+        document.getElementById('measure-list');
+
+    // Active requests
     let activeController = null;
+    let activeSelectionController = null;
 
-    // Selected feature information
-    function selectFeature(layerName, featureId) {
+    // Fetch JSON with abort support
+    async function fetchJson(url, signal) {
+        const response = await fetch(url, {
+            signal: signal
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
+    }
+
+    // Hide selected feature and cancel pending request
+    function hideFeatureInfo() {
+        if (activeSelectionController) {
+            activeSelectionController.abort();
+            activeSelectionController = null;
+        }
+
+        featureInfo.style.display = 'none';
+        measureList.replaceChildren();
+        measureStatus.textContent = '';
+    }
+
+    // Select map feature and load its mock measures
+    async function selectFeature(
+        featureType,
+        layerName,
+        featureId
+    ) {
+        // Cancel previous selection request
+        if (activeSelectionController) {
+            activeSelectionController.abort();
+        }
+
+        const controller = new AbortController();
+        activeSelectionController = controller;
+
+        // Display selected feature information
         selectedFeatureLayer.textContent = layerName;
-        selectedFeatureId.textContent = featureId ?? 'Unknown';
+        selectedFeatureId.textContent =
+            featureId ?? 'Unknown';
+
+        measureList.replaceChildren();
+
+        measureStatus.textContent =
+            'Loading measures...';
+
         featureInfo.style.display = 'block';
+
+        // Check feature ID
+        if (featureId == null) {
+            measureStatus.textContent =
+                'Feature ID is missing.';
+            return;
+        }
+
+        try {
+            // Request mock measures
+            const url =
+                `/map/feature/${encodeURIComponent(featureType)}/` +
+                `${encodeURIComponent(featureId)}/`;
+
+            const data = await fetchJson(
+                url,
+                controller.signal
+            );
+
+            if (
+                controller.signal.aborted ||
+                activeSelectionController !== controller
+            ) {
+                return;
+            }
+
+            if (!Array.isArray(data.measures)) {
+                throw new Error(
+                    'Invalid measures response.'
+                );
+            }
+
+            measureStatus.textContent = '';
+
+            // No measures found
+            if (data.measures.length === 0) {
+                measureStatus.textContent =
+                    'No measures available.';
+                return;
+            }
+
+            // Display measures as clickable links
+            for (const measure of data.measures) {
+                const item = document.createElement('li');
+                const link = document.createElement('a');
+
+                link.textContent = measure.name;
+                link.href = measure.url;
+
+                // Open measure details in a new tab
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+
+                item.appendChild(link);
+                measureList.appendChild(item);
+            }
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return;
+            }
+
+            console.error(
+                'Failed to load feature measures:',
+                error
+            );
+
+            if (activeSelectionController === controller) {
+                measureStatus.textContent =
+                    'Unable to load measures.';
+            }
+        }
     }
 
     // Polygon layer - bottom (red)
@@ -194,7 +378,11 @@
 
         onEachFeature: function(feature, layer) {
             layer.on('click', function() {
-                selectFeature('PovIV_W', feature.id);
+                selectFeature(
+                    'poviv_w',
+                    'PovIV_W',
+                    feature.id
+                );
             });
         }
     }).addTo(map);
@@ -211,7 +399,11 @@
 
         onEachFeature: function(feature, layer) {
             layer.on('click', function() {
-                selectFeature('KDK', feature.id);
+                selectFeature(
+                    'kdk',
+                    'KDK',
+                    feature.id
+                );
             });
         }
     }).addTo(map);
@@ -252,22 +444,10 @@
         ].join(',');
     }
 
-    // Fetch JSON with abort support
-    async function fetchJson(url, signal) {
-        const response = await fetch(url, {
-            signal: signal
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        return await response.json();
-    }
-
-    // Load KDK feature count and geometries
+    // Load KDK count and geometries
     async function loadKDK(bbox, controller) {
         try {
+            // Request feature count
             const countData = await fetchJson(
                 `/map/bounds/?bbox=${bbox}`,
                 controller.signal
@@ -282,15 +462,18 @@
             featureCount.textContent =
                 count.toLocaleString('en-US');
 
+            // Skip geometry loading if layer is disabled
             if (!map.hasLayer(kdkLayer)) {
                 return;
             }
 
+            // Check feature limit
             if (count > MAX_LINE_FEATURES) {
                 featureWarning.style.display = 'block';
                 return;
             }
 
+            // Request line geometries
             const linesData = await fetchJson(
                 `/map/lines/?bbox=${bbox}`,
                 controller.signal
@@ -314,9 +497,10 @@
                 return;
             }
 
-            // Render lines
+            // Render KDK lines
             kdkLayer.addData(linesData);
 
+            // Keep lines above polygons
             bringLinesToFront();
 
         } catch (error) {
@@ -324,14 +508,21 @@
                 return;
             }
 
-            console.error('Failed to load KDK:', error);
-            featureCount.textContent = 'Unavailable';
+            console.error(
+                'Failed to load KDK:',
+                error
+            );
+
+            if (activeController === controller) {
+                featureCount.textContent = 'Unavailable';
+            }
         }
     }
 
     // Load PovIV_W polygon count and geometries
     async function loadPolygons(bbox, controller) {
         try {
+            // Request polygon geometries
             const polygonData = await fetchJson(
                 `/map/polygons/?bbox=${bbox}`,
                 controller.signal
@@ -360,7 +551,7 @@
                 return;
             }
 
-            // Render polygons
+            // Render PovIV_W polygons
             polygonLayer.addData(polygonData);
 
             // Preserve layer ordering
@@ -371,22 +562,26 @@
                 return;
             }
 
-            console.error('Failed to load PovIV_W:', error);
+            console.error(
+                'Failed to load PovIV_W:',
+                error
+            );
 
             if (activeController === controller) {
                 polygonCount.textContent = 'Unavailable';
             }
 
         } finally {
-            // Hide loading indicator only for current request
+            // Hide indicator for the current request
             if (activeController === controller) {
                 polygonLoading.style.display = 'none';
             }
         }
     }
 
-    // Update all visible map layers
+    // Update all map layers
     async function updateMap() {
+        // Cancel previous map requests
         if (activeController) {
             activeController.abort();
         }
@@ -398,25 +593,33 @@
         polygonLayer.clearLayers();
         kdkLayer.clearLayers();
 
-        // Clear selection
-        featureInfo.style.display = 'none';
+        // Clear previous feature selection
+        hideFeatureInfo();
 
         // Reset counters
         featureCount.textContent = 'Loading...';
 
         polygonCount.textContent =
-            map.hasLayer(polygonLayer) ? 'Loading...' : 'Off';
+            map.hasLayer(polygonLayer)
+                ? 'Loading...'
+                : 'Off';
 
         // Reset warnings
         featureWarning.style.display = 'none';
         polygonWarning.style.display = 'none';
 
-        // Polygon loading indicator
+        // Show polygon loading indicator when enabled
         polygonLoading.style.display =
-            map.hasLayer(polygonLayer) ? 'flex' : 'none';
+            map.hasLayer(polygonLayer)
+                ? 'flex'
+                : 'none';
 
-        const bbox = encodeURIComponent(getMapBounds());
+        // Current bounds
+        const bbox = encodeURIComponent(
+            getMapBounds()
+        );
 
+        // Load KDK independently
         const requests = [
             loadKDK(bbox, controller)
         ];

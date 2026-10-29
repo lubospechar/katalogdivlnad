@@ -6,9 +6,11 @@ from django.contrib.gis.db.models.functions import Transform
 from django.contrib.gis.db.models.functions import AsGeoJSON
 from django.contrib.gis.geos import Polygon
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
+from catalog.models import Measure
 from .models import KDK, PovIVW
 
 logger = logging.getLogger("map.bounds")
@@ -189,3 +191,61 @@ class PovIVWPolygonsView(View):
             "count": count,
             "too_many": False,
         })
+
+
+class MapFeatureMeasuresView(View):
+    """
+    Return mock measures for a selected map feature.
+
+    Supported feature types:
+    - kdk
+    - poviv_w
+
+    The relationship between features and measures
+    is currently simulated using random measures.
+    """
+
+    FEATURE_TYPES = {
+        "kdk": "KDK",
+        "poviv_w": "PovIV_W",
+    }
+
+    MEASURE_LIMIT = 10
+
+    def get(self, request, feature_type, feature_id):
+        layer_name = self.FEATURE_TYPES.get(feature_type)
+
+        if layer_name is None:
+            return JsonResponse(
+                {"error": "Unsupported feature type."},
+                status=400,
+            )
+
+        # Mock: select up to 10 random measures
+        measures = Measure.objects.order_by("?")[
+            :self.MEASURE_LIMIT
+        ]
+
+        result = [
+            {
+                "id": measure.pk,
+                "name": measure.measure_name,
+                "url": reverse(
+                    "measure-detail",
+                    kwargs={"pk": measure.pk},
+                ),
+            }
+            for measure in measures
+        ]
+
+        response = JsonResponse({
+            "feature_type": feature_type,
+            "feature_id": feature_id,
+            "layer": layer_name,
+            "measures": result,
+        })
+
+        # Prevent caching of random mock results
+        response["Cache-Control"] = "no-store"
+
+        return response
