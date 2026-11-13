@@ -30,9 +30,14 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            width: 350px;
+            max-width: calc(100vw - 20px);
         }
 
         .info-panel {
+            box-sizing: border-box;
+            width: 100%;
+            overflow-wrap: break-word;
             background: white;
             padding: 12px 18px;
             border-radius: 6px;
@@ -42,6 +47,48 @@
 
         .feature-counter {
             margin-bottom: 6px;
+        }
+
+        #limits-form {
+            margin: 12px 0 8px;
+            padding-top: 10px;
+            border-top: 1px solid #dddddd;
+        }
+
+        .limit-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .limit-field input {
+            box-sizing: border-box;
+            width: 100px;
+            padding: 4px 6px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font: inherit;
+        }
+
+        #limits-form button {
+            padding: 5px 10px;
+            border: 1px solid #bbbbbb;
+            border-radius: 4px;
+            background: #f5f5f5;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        #limits-form button:hover {
+            background: #e9e9e9;
+        }
+
+        #limit-error {
+            display: none;
+            margin-top: 8px;
+            color: #b91c1c;
         }
 
         #feature-warning,
@@ -77,8 +124,6 @@
 
         #feature-info {
             display: none;
-            width: min(350px, calc(100vw - 40px));
-            box-sizing: border-box;
             max-height: 65vh;
             overflow-y: auto;
         }
@@ -144,8 +189,25 @@
             <strong id="polygon-count">Loading...</strong>
         </div>
 
+        <form id="limits-form">
+            <div class="limit-field">
+                <label for="line-limit">Max. KDK lines:</label>
+                <input id="line-limit" type="number" min="1" step="1"
+                       value="20000" required>
+            </div>
+
+            <div class="limit-field">
+                <label for="polygon-limit">Max. PovIV_W polygons:</label>
+                <input id="polygon-limit" type="number" min="1" step="1"
+                       value="5000" required>
+            </div>
+
+            <button type="submit">Apply limits</button>
+            <div id="limit-error" role="alert"></div>
+        </form>
+
         <div id="feature-warning">
-            Too many lines (max. 20,000). Please zoom in.
+            Too many lines. Please zoom in.
         </div>
 
         <div id="polygon-loading" role="status">
@@ -155,7 +217,7 @@
         </div>
 
         <div id="polygon-warning">
-            Too many polygons (max. 5,000). Please zoom in.
+            Too many polygons. Please zoom in.
         </div>
 
     </div>
@@ -186,9 +248,9 @@
 </div>
 
 <script>
-    // Feature limits
-    const MAX_LINE_FEATURES = 20000;
-    const MAX_POLYGON_FEATURES = 5000;
+    // User-adjustable feature limits
+    let maxLineFeatures = 20000;
+    let maxPolygonFeatures = 5000;
 
     // Initialize map
     const map = L.map('map', {
@@ -235,6 +297,19 @@
 
     const measureList =
         document.getElementById('measure-list');
+
+    const limitsForm = document.getElementById('limits-form');
+    const lineLimitInput = document.getElementById('line-limit');
+    const polygonLimitInput = document.getElementById('polygon-limit');
+    const limitError = document.getElementById('limit-error');
+
+    // Prevent map interaction while using the information panels
+    L.DomEvent.disableClickPropagation(
+        document.getElementById('info-panels')
+    );
+    L.DomEvent.disableScrollPropagation(
+        document.getElementById('info-panels')
+    );
 
     // Active requests
     let activeController = null;
@@ -444,12 +519,24 @@
         ].join(',');
     }
 
+    // Send the current bounding box and both user-selected limits
+    // to each map endpoint. The backend will consume these parameters.
+    function getMapRequestQuery() {
+        const params = new URLSearchParams({
+            bbox: getMapBounds(),
+            line_limit: String(maxLineFeatures),
+            polygon_limit: String(maxPolygonFeatures)
+        });
+
+        return params.toString();
+    }
+
     // Load KDK count and geometries
-    async function loadKDK(bbox, controller) {
+    async function loadKDK(query, controller) {
         try {
             // Request feature count
             const countData = await fetchJson(
-                `/map/bounds/?bbox=${bbox}`,
+                `/map/bounds/?${query}`,
                 controller.signal
             );
 
@@ -468,14 +555,18 @@
             }
 
             // Check feature limit
-            if (count > MAX_LINE_FEATURES) {
+            if (count > maxLineFeatures) {
+                featureWarning.textContent =
+                    `Too many lines (${count.toLocaleString('en-US')}; ` +
+                    `selected max. ${maxLineFeatures.toLocaleString('en-US')}). ` +
+                    'Please zoom in or increase the limit.';
                 featureWarning.style.display = 'block';
                 return;
             }
 
             // Request line geometries
             const linesData = await fetchJson(
-                `/map/lines/?bbox=${bbox}`,
+                `/map/lines/?${query}`,
                 controller.signal
             );
 
@@ -486,13 +577,22 @@
                 return;
             }
 
+            if (linesData.too_many) {
+                // The server did not provide geometries. Do not imply
+                // that the user-selected limit was exceeded.
+                featureWarning.textContent =
+                    'KDK lines could not be displayed for this view.';
+                featureWarning.style.display = 'block';
+                return;
+            }
+
             if (
-                linesData.too_many ||
-                (
-                    linesData.count != null &&
-                    linesData.count > MAX_LINE_FEATURES
-                )
+                linesData.count != null &&
+                linesData.count > maxLineFeatures
             ) {
+                featureWarning.textContent =
+                    'Too many lines for the selected limit. ' +
+                    'Please zoom in or increase the limit.';
                 featureWarning.style.display = 'block';
                 return;
             }
@@ -520,11 +620,11 @@
     }
 
     // Load PovIV_W polygon count and geometries
-    async function loadPolygons(bbox, controller) {
+    async function loadPolygons(query, controller) {
         try {
             // Request polygon geometries
             const polygonData = await fetchJson(
-                `/map/polygons/?bbox=${bbox}`,
+                `/map/polygons/?${query}`,
                 controller.signal
             );
 
@@ -543,10 +643,27 @@
                 count.toLocaleString('en-US');
 
             // Check polygon limit
-            if (
-                polygonData.too_many ||
-                count > MAX_POLYGON_FEATURES
-            ) {
+            if (polygonData.too_many) {
+                // The server did not provide geometries. Do not imply
+                // that the user-selected limit was exceeded.
+                if (count > maxPolygonFeatures) {
+                    polygonWarning.textContent =
+                        `Too many polygons (${count.toLocaleString('en-US')}; ` +
+                        `selected max. ${maxPolygonFeatures.toLocaleString('en-US')}). ` +
+                        'Please zoom in or increase the limit.';
+                } else {
+                    polygonWarning.textContent =
+                        'PovIV_W polygons could not be displayed for this view.';
+                }
+                polygonWarning.style.display = 'block';
+                return;
+            }
+
+            if (count > maxPolygonFeatures) {
+                polygonWarning.textContent =
+                    `Too many polygons (${count.toLocaleString('en-US')}; ` +
+                    `selected max. ${maxPolygonFeatures.toLocaleString('en-US')}). ` +
+                    'Please zoom in or increase the limit.';
                 polygonWarning.style.display = 'block';
                 return;
             }
@@ -614,25 +731,57 @@
                 ? 'flex'
                 : 'none';
 
-        // Current bounds
-        const bbox = encodeURIComponent(
-            getMapBounds()
-        );
+        // Include bounding box and both selected limits in each request
+        const query = getMapRequestQuery();
 
         // Load KDK independently
         const requests = [
-            loadKDK(bbox, controller)
+            loadKDK(query, controller)
         ];
 
         // Load polygons only when enabled
         if (map.hasLayer(polygonLayer)) {
             requests.push(
-                loadPolygons(bbox, controller)
+                loadPolygons(query, controller)
             );
         }
 
         await Promise.all(requests);
     }
+
+    // Apply new limits only when the user submits the form
+    limitsForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const newLineLimit = Number(lineLimitInput.value);
+        const newPolygonLimit = Number(polygonLimitInput.value);
+
+        if (
+            !Number.isSafeInteger(newLineLimit) ||
+            !Number.isSafeInteger(newPolygonLimit) ||
+            newLineLimit < 1 ||
+            newPolygonLimit < 1
+        ) {
+            limitError.textContent =
+                'Enter a positive whole number for each layer.';
+            limitError.style.display = 'block';
+            return;
+        }
+
+        limitError.textContent = '';
+        limitError.style.display = 'none';
+
+        if (
+            newLineLimit === maxLineFeatures &&
+            newPolygonLimit === maxPolygonFeatures
+        ) {
+            return;
+        }
+
+        maxLineFeatures = newLineLimit;
+        maxPolygonFeatures = newPolygonLimit;
+        updateMap();
+    });
 
     // Update after moving or zooming
     map.on('moveend', updateMap);
