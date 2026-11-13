@@ -531,6 +531,31 @@
         return params.toString();
     }
 
+    // Keep warning messages in sync with the user's applied limits.
+    function showFeatureLimitWarning(element, label, count, limit) {
+        const formattedLimit = limit.toLocaleString('en-US');
+        const formattedCount = Number.isFinite(count)
+            ? count.toLocaleString('en-US')
+            : 'Unknown';
+
+        if (Number.isFinite(count) && count > limit) {
+            element.textContent =
+                `Too many ${label} (${formattedCount}; ` +
+                `selected max. ${formattedLimit}). ` +
+                'Please zoom in or increase the limit.';
+        } else {
+            // The server returned no geometries even though the
+            // requested count does not exceed the selected limit.
+            // Do not incorrectly claim that the user limit was exceeded.
+            const layerName = label === 'lines' ? 'KDK lines' : 'PovIV_W polygons';
+            element.textContent =
+                `${layerName} could not be displayed ` +
+                `(${formattedCount} in view; selected max. ${formattedLimit}).`;
+        }
+
+        element.style.display = 'block';
+    }
+
     // Load KDK count and geometries
     async function loadKDK(query, controller) {
         try {
@@ -556,11 +581,9 @@
 
             // Check feature limit
             if (count > maxLineFeatures) {
-                featureWarning.textContent =
-                    `Too many lines (${count.toLocaleString('en-US')}; ` +
-                    `selected max. ${maxLineFeatures.toLocaleString('en-US')}). ` +
-                    'Please zoom in or increase the limit.';
-                featureWarning.style.display = 'block';
+                showFeatureLimitWarning(
+                    featureWarning, 'lines', count, maxLineFeatures
+                );
                 return;
             }
 
@@ -578,11 +601,12 @@
             }
 
             if (linesData.too_many) {
-                // The server did not provide geometries. Do not imply
-                // that the user-selected limit was exceeded.
-                featureWarning.textContent =
-                    'KDK lines could not be displayed for this view.';
-                featureWarning.style.display = 'block';
+                showFeatureLimitWarning(
+                    featureWarning,
+                    'lines',
+                    linesData.count ?? count,
+                    maxLineFeatures
+                );
                 return;
             }
 
@@ -590,10 +614,9 @@
                 linesData.count != null &&
                 linesData.count > maxLineFeatures
             ) {
-                featureWarning.textContent =
-                    'Too many lines for the selected limit. ' +
-                    'Please zoom in or increase the limit.';
-                featureWarning.style.display = 'block';
+                showFeatureLimitWarning(
+                    featureWarning, 'lines', linesData.count, maxLineFeatures
+                );
                 return;
             }
 
@@ -644,27 +667,16 @@
 
             // Check polygon limit
             if (polygonData.too_many) {
-                // The server did not provide geometries. Do not imply
-                // that the user-selected limit was exceeded.
-                if (count > maxPolygonFeatures) {
-                    polygonWarning.textContent =
-                        `Too many polygons (${count.toLocaleString('en-US')}; ` +
-                        `selected max. ${maxPolygonFeatures.toLocaleString('en-US')}). ` +
-                        'Please zoom in or increase the limit.';
-                } else {
-                    polygonWarning.textContent =
-                        'PovIV_W polygons could not be displayed for this view.';
-                }
-                polygonWarning.style.display = 'block';
+                showFeatureLimitWarning(
+                    polygonWarning, 'polygons', count, maxPolygonFeatures
+                );
                 return;
             }
 
             if (count > maxPolygonFeatures) {
-                polygonWarning.textContent =
-                    `Too many polygons (${count.toLocaleString('en-US')}; ` +
-                    `selected max. ${maxPolygonFeatures.toLocaleString('en-US')}). ` +
-                    'Please zoom in or increase the limit.';
-                polygonWarning.style.display = 'block';
+                showFeatureLimitWarning(
+                    polygonWarning, 'polygons', count, maxPolygonFeatures
+                );
                 return;
             }
 

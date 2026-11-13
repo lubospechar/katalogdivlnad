@@ -13,6 +13,9 @@ from django.views.generic import TemplateView
 from catalog.models import Measure
 from .models import KDK, PovIVW
 
+from django.db.models import F, Value, FloatField
+from django.db.models.functions import Abs
+
 logger = logging.getLogger("map.bounds")
 
 class MapView(TemplateView):
@@ -44,10 +47,23 @@ class MapBoundsView(View):
 
 
 
+
 class KDKLinesView(View):
-    MAX_FEATURES = 15000
+    """
+    Return KDK line geometries within the map bounds.
+
+    Coordinate reference system:
+    Input: EPSG:4326
+    Database: EPSG:5514
+    Output: EPSG:4326
+
+    The feature limit is provided by the frontend.
+    """
+
+    DEFAULT_FEATURE_LIMIT = 20000
 
     def get(self, request, *args, **kwargs):
+        # Parse bounding box
         try:
             west, south, east, north = map(
                 float,
@@ -59,17 +75,52 @@ class KDKLinesView(View):
                 status=400,
             )
 
-        bbox = Polygon.from_bbox((west, south, east, north))
+        if (
+            not all(math.isfinite(v) for v in (west, south, east, north))
+            or west >= east
+            or south >= north
+        ):
+            return JsonResponse(
+                {"error": "Invalid bbox"},
+                status=400,
+            )
+
+        # Parse frontend feature limit
+        try:
+            line_limit = int(
+                request.GET.get(
+                    "line_limit",
+                    self.DEFAULT_FEATURE_LIMIT,
+                )
+            )
+        except (ValueError, TypeError):
+            return JsonResponse(
+                {"error": "Invalid line_limit"},
+                status=400,
+            )
+
+        if line_limit < 1:
+            return JsonResponse(
+                {"error": "line_limit must be greater than zero"},
+                status=400,
+            )
+
+        # Transform map bounds to database CRS
+        bbox = Polygon.from_bbox(
+            (west, south, east, north)
+        )
         bbox.srid = 4326
         bbox.transform(5514)
 
+        # Find intersecting lines
         queryset = KDK.objects.filter(
             geom__intersects=bbox
         )
 
         count = queryset.count()
 
-        if count > self.MAX_FEATURES:
+        # Respect the frontend limit
+        if count > line_limit:
             return JsonResponse({
                 "type": "FeatureCollection",
                 "features": [],
@@ -77,6 +128,7 @@ class KDKLinesView(View):
                 "too_many": True,
             })
 
+        # Transform geometries to GeoJSON coordinates
         queryset = queryset.annotate(
             geometry_json=AsGeoJSON(
                 Transform("geom", 4326),
@@ -95,7 +147,9 @@ class KDKLinesView(View):
             features.append({
                 "type": "Feature",
                 "id": record["id"],
-                "geometry": json.loads(record["geometry_json"]),
+                "geometry": json.loads(
+                    record["geometry_json"]
+                ),
                 "properties": {
                     "naz_tok": record["naz_tok"],
                     "arcid": record["arcid"],
@@ -110,6 +164,8 @@ class KDKLinesView(View):
         })
 
 
+
+
 class PovIVWPolygonsView(View):
     """
     Return PovIV_W polygon geometries within the map bounds.
@@ -118,14 +174,18 @@ class PovIVWPolygonsView(View):
     Input: EPSG:4326
     Database: EPSG:5514
     Output: EPSG:4326
+
+    The feature limit is provided by the frontend.
     """
 
-    MAX_FEATURES = 5000
+    DEFAULT_FEATURE_LIMIT = 5000
 
     def get(self, request, *args, **kwargs):
+        # Parse bounding box
         try:
             west, south, east, north = map(
-                float, request.GET["bbox"].split(",")
+                float,
+                request.GET["bbox"].split(",")
             )
         except (KeyError, ValueError):
             return JsonResponse(
@@ -143,8 +203,30 @@ class PovIVWPolygonsView(View):
                 status=400,
             )
 
+        # Parse frontend feature limit
+        try:
+            polygon_limit = int(
+                request.GET.get(
+                    "polygon_limit",
+                    self.DEFAULT_FEATURE_LIMIT,
+                )
+            )
+        except (ValueError, TypeError):
+            return JsonResponse(
+                {"error": "Invalid polygon_limit"},
+                status=400,
+            )
+
+        if polygon_limit < 1:
+            return JsonResponse(
+                {"error": "polygon_limit must be greater than zero"},
+                status=400,
+            )
+
         # Transform map bounds to database CRS
-        bbox = Polygon.from_bbox((west, south, east, north))
+        bbox = Polygon.from_bbox(
+            (west, south, east, north)
+        )
         bbox.srid = 4326
         bbox.transform(5514)
 
@@ -155,8 +237,8 @@ class PovIVWPolygonsView(View):
 
         count = queryset.count()
 
-        # Do not return geometries above the limit
-        if count > self.MAX_FEATURES:
+        # Respect the frontend limit
+        if count > polygon_limit:
             return JsonResponse({
                 "type": "FeatureCollection",
                 "features": [],
@@ -181,7 +263,9 @@ class PovIVWPolygonsView(View):
             features.append({
                 "type": "Feature",
                 "id": record["id"],
-                "geometry": json.loads(record["geometry_json"]),
+                "geometry": json.loads(
+                    record["geometry_json"]
+                ),
                 "properties": {},
             })
 
@@ -193,16 +277,19 @@ class PovIVWPolygonsView(View):
         })
 
 
+
+
 class MapFeatureMeasuresView(View):
     """
-    Return mock measures for a selected map feature.
+    Return the 10 closest measures for a selected map feature.
 
-    Supported feature types:
-    - kdk
-    - poviv_w
+    KDK:
+        Compare KDK.f_kdk with Measure.f_score.
 
-    The relationship between features and measures
-    is currently simulated using random measures.
+    PovIV_W:
+        Compare PovIVW.w_conn with Measure.f_score.
+
+    Measures are ordered by the smallest absolute difference.
     """
 
     FEATURE_TYPES = {
@@ -221,10 +308,51 @@ class MapFeatureMeasuresView(View):
                 status=400,
             )
 
-        # Mock: select up to 10 random measures
-        measures = Measure.objects.order_by("?")[
-            :self.MEASURE_LIMIT
-        ]
+        # Get the comparison value from the selected feature
+        if feature_type == "kdk":
+            try:
+                feature = KDK.objects.only("f_kdk").get(
+                    pk=feature_id
+                )
+            except KDK.DoesNotExist:
+                return JsonResponse(
+                    {"error": "KDK feature not found."},
+                    status=404,
+                )
+
+            feature_score = feature.f_kdk
+
+        else:
+            try:
+                feature = PovIVW.objects.only("w_conn").get(
+                    pk=feature_id
+                )
+            except PovIVW.DoesNotExist:
+                return JsonResponse(
+                    {"error": "PovIV_W feature not found."},
+                    status=404,
+                )
+
+            feature_score = feature.w_conn
+
+        # Select measures by absolute score difference
+        if feature_score is None:
+            measures = Measure.objects.none()
+        else:
+            measures = (
+                Measure.objects
+                .filter(f_score__isnull=False)
+                .annotate(
+                    score_difference=Abs(
+                        F("f_score") - Value(
+                            feature_score,
+                            output_field=FloatField(),
+                        )
+                    )
+                )
+                .order_by("score_difference", "pk")
+                [:self.MEASURE_LIMIT]
+            )
 
         result = [
             {
@@ -242,10 +370,10 @@ class MapFeatureMeasuresView(View):
             "feature_type": feature_type,
             "feature_id": feature_id,
             "layer": layer_name,
+            "feature_score": feature_score,
             "measures": result,
         })
 
-        # Prevent caching of random mock results
         response["Cache-Control"] = "no-store"
 
         return response

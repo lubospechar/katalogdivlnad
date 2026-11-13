@@ -266,6 +266,7 @@ class MeasureAdmin(admin.ModelAdmin):
         "price_czk_max",
         "price_eu_min",
         "price_eu_max",
+        "f_score"
     )
 
     # Filters available in the sidebar
@@ -278,6 +279,7 @@ class MeasureAdmin(admin.ModelAdmin):
         "difficulty_of_implementation",
         "quantification",
         "time_horizon",
+        "f_score"
     )
 
     # Fields to include in the search functionality
@@ -317,7 +319,8 @@ class MeasureAdmin(admin.ModelAdmin):
                     "measure_name_en",
                     "code",
                     "advantages",
-                    "disadvantages"
+                    "disadvantages",
+                    "f_score"
                 ]
             },
         ),

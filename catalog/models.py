@@ -751,6 +751,12 @@ class Measure(models.Model, TranslateMixin):
         null=True,
     )
 
+    f_score = models.FloatField(
+        verbose_name=_("F-score"),
+        blank=True,
+        null=True,
+    )
+
     def clean(self):
         # Example: Validate that descriptions in Czech and English are different
         super().clean()
