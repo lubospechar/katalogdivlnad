@@ -12,6 +12,11 @@ from django.conf import settings
 from django.utils.translation import get_language
 from markdownx.utils import markdownify
 
+from decimal import Decimal
+
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 class TranslateMixin:
     def translate(self, base: str):
@@ -758,6 +763,7 @@ class Measure(models.Model, TranslateMixin):
     )
 
     p_conn = models.DecimalField(
+        default=0.0,
         max_digits=3,
         decimal_places=2,
         validators=[
@@ -767,6 +773,7 @@ class Measure(models.Model, TranslateMixin):
     )
 
     p_sklon = models.DecimalField(
+        default=0.0,
         max_digits=3,
         decimal_places=2,
         validators=[
@@ -776,6 +783,7 @@ class Measure(models.Model, TranslateMixin):
     )
 
     p_landuse = models.DecimalField(
+        default=0.0,
         max_digits=3,
         decimal_places=2,
         validators=[
@@ -785,6 +793,7 @@ class Measure(models.Model, TranslateMixin):
     )
 
     p_cn = models.DecimalField(
+        default=0.0,
         db_column="p_CN",
         max_digits=3,
         decimal_places=2,
