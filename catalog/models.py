@@ -575,6 +575,44 @@ class Measure(models.Model):
         null=True,
     )
 
+
+    p_conn = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("1.00")),
+        ],
+    )
+
+    p_sklon = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("1.00")),
+        ],
+    )
+
+    p_landuse = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("1.00")),
+        ],
+    )
+
+    p_cn = models.DecimalField(
+        db_column="p_CN",
+        max_digits=3,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("1.00")),
+        ],
+    )
+
     def clean(self):
         # Example: Validate that descriptions in Czech and English are different
         super().clean()

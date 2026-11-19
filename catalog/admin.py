@@ -305,6 +305,10 @@ class MeasureAdmin(admin.ModelAdmin):
                     "code",
                     "advantages",
                     "disadvantages"
+                    "p_conn",
+                    "p_sklon",
+                    "p_landuse",
+                    "p_cn",
                 ]
             },
         ),
