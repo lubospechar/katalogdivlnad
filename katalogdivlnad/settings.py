@@ -22,6 +22,8 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
+
 ]
 
 THIRD_PARTY_APPS = [
@@ -156,3 +158,5 @@ LOGGING = {
         },
     },
 }
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"

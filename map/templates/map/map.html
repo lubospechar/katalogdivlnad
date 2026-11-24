@@ -167,6 +167,12 @@
         #measure-list a:hover {
             text-decoration: underline;
         }
+
+        #measure-list .measure-scores {
+            display: block;
+            color: #666666;
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -237,7 +243,7 @@
             <strong id="selected-feature-id"></strong>
         </div>
 
-        <h4>Measures (mock data)</h4>
+        <h4>Measures</h4>
 
         <div id="measure-status" role="status"></div>
 
@@ -340,7 +346,7 @@
         measureStatus.textContent = '';
     }
 
-    // Select map feature and load its mock measures
+    // Select map feature and load its measures
     async function selectFeature(
         featureType,
         layerName,
@@ -374,7 +380,7 @@
         }
 
         try {
-            // Request mock measures
+            // Request measures
             const url =
                 `/map/feature/${encodeURIComponent(featureType)}/` +
                 `${encodeURIComponent(featureId)}/`;
@@ -419,6 +425,22 @@
                 link.rel = 'noopener noreferrer';
 
                 item.appendChild(link);
+
+                // Display both the calculated and normalized scores.
+                const scoreValues = [];
+                if (measure.score !== null && measure.score !== undefined) {
+                    scoreValues.push(`score: ${measure.score}`);
+                }
+                if (measure.score_100 !== null && measure.score_100 !== undefined) {
+                    scoreValues.push(`score100: ${measure.score_100}`);
+                }
+                if (scoreValues.length > 0) {
+                    const scoreLine = document.createElement('span');
+                    scoreLine.className = 'measure-scores';
+                    scoreLine.textContent = scoreValues.join(' | ');
+                    item.appendChild(scoreLine);
+                }
+
                 measureList.appendChild(item);
             }
 

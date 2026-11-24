@@ -1,5 +1,6 @@
 
 from django.contrib.gis.db import models
+from django.db.models import F
 
 
 class KDK(models.Model):
@@ -238,4 +239,81 @@ class PovIVW(models.Model):
 
     def __str__(self):
         return self.chp_4 or str(self.pk)
+
+    def get_measures_by_score(self):
+        """
+        Return related measure scores ordered from highest to lowest.
+        """
+        return (
+            self.measure_scores
+            .select_related("measure")
+            .order_by(F("score").desc(nulls_last=True), "measure_id")
+        )
+
+
+
+class PovIVWMeasureScore(models.Model):
+    """
+    Calculated suitability score for a measure
+    within a specific PovIV_W polygon.
+
+    The score combines polygon characteristics,
+    measure weights, and measure effectiveness.
+
+    Each polygon-measure combination is unique.
+    """
+
+    polygon = models.ForeignKey(
+        "PovIVW",
+        on_delete=models.CASCADE,
+        related_name="measure_scores",
+    )
+
+    measure = models.ForeignKey(
+        "catalog.Measure",
+        on_delete=models.CASCADE,
+        related_name="polygon_scores",
+    )
+
+    score = models.FloatField(
+        verbose_name="Calculated score",
+        null=True,
+        blank=True,
+    )
+
+    score_100 = models.FloatField(
+        verbose_name="Normalized score (0-100)",
+        null=True,
+        blank=True,
+    )
+
+    calculated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        db_table = "map_povivw_measure_score"
+
+        verbose_name = "PovIV W measure score"
+        verbose_name_plural = "PovIV W measure scores"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["polygon", "measure"],
+                name="unique_povivw_measure_score",
+            ),
+        ]
+
+        indexes = [
+            models.Index(
+                fields=["polygon", "-score"],
+                name="povivw_score_idx",
+            ),
+        ]
+
+    def __str__(self):
+        return (
+            f"Polygon {self.polygon_id} - "
+            f"Measure {self.measure_id}: {self.score}"
+        )
 

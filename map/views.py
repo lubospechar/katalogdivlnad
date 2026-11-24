@@ -279,101 +279,80 @@ class PovIVWPolygonsView(View):
 
 
 
+
 class MapFeatureMeasuresView(View):
     """
-    Return the 10 closest measures for a selected map feature.
+    Return the 10 highest-scoring measures for a selected
+    PovIVW polygon.
 
-    KDK:
-        Compare KDK.f_kdk with Measure.f_score.
+    KDK features return an empty measure list.
 
-    PovIV_W:
-        Compare PovIVW.w_conn with Measure.f_score.
-
-    Measures are ordered by the smallest absolute difference.
+    Scores are retrieved from previously calculated
+    PovIVWMeasureScore records.
     """
-
-    FEATURE_TYPES = {
-        "kdk": "KDK",
-        "poviv_w": "PovIV_W",
-    }
 
     MEASURE_LIMIT = 10
 
     def get(self, request, feature_type, feature_id):
-        layer_name = self.FEATURE_TYPES.get(feature_type)
 
-        if layer_name is None:
-            return JsonResponse(
-                {"error": "Unsupported feature type."},
-                status=400,
-            )
-
-        # Get the comparison value from the selected feature
         if feature_type == "kdk":
-            try:
-                feature = KDK.objects.only("f_kdk").get(
-                    pk=feature_id
-                )
-            except KDK.DoesNotExist:
+
+            if not KDK.objects.filter(pk=feature_id).exists():
                 return JsonResponse(
                     {"error": "KDK feature not found."},
                     status=404,
                 )
 
-            feature_score = feature.f_kdk
+            layer_name = "KDK"
+            measures = []
 
-        else:
+        elif feature_type == "poviv_w":
+
             try:
-                feature = PovIVW.objects.only("w_conn").get(
-                    pk=feature_id
-                )
+                polygon = PovIVW.objects.get(pk=feature_id)
             except PovIVW.DoesNotExist:
                 return JsonResponse(
                     {"error": "PovIV_W feature not found."},
                     status=404,
                 )
 
-            feature_score = feature.w_conn
+            layer_name = "PovIV_W"
 
-        # Select measures by absolute score difference
-        if feature_score is None:
-            measures = Measure.objects.none()
-        else:
-            measures = (
-                Measure.objects
-                .filter(f_score__isnull=False)
-                .annotate(
-                    score_difference=Abs(
-                        F("f_score") - Value(
-                            feature_score,
-                            output_field=FloatField(),
-                        )
-                    )
-                )
-                .order_by("score_difference", "pk")
+            scores = (
+                polygon.get_measures_by_score()
+                .filter(score__isnull=False)
                 [:self.MEASURE_LIMIT]
             )
 
-        result = [
-            {
-                "id": measure.pk,
-                "name": measure.measure_name,
-                "url": reverse(
-                    "measure-detail",
-                    kwargs={"pk": measure.pk},
-                ),
-            }
-            for measure in measures
-        ]
+            measures = [
+                {
+                    "id": result.measure_id,
+                    "name": result.measure.measure_name,
+                    "url": reverse(
+                        "measure-detail",
+                        kwargs={"pk": result.measure_id},
+                    ),
+                    "score": round(result.score, 2),
+                    "score_100": round(result.score_100)
+                }
+                for result in scores
+            ]
+
+        else:
+            return JsonResponse(
+                {"error": "Unsupported feature type."},
+                status=400,
+            )
 
         response = JsonResponse({
             "feature_type": feature_type,
             "feature_id": feature_id,
             "layer": layer_name,
-            "feature_score": feature_score,
-            "measures": result,
+            "feature_score": None,
+            "measures": measures,
         })
 
         response["Cache-Control"] = "no-store"
 
         return response
+
