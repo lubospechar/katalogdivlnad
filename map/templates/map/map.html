@@ -434,6 +434,9 @@
                 if (measure.score_100 !== null && measure.score_100 !== undefined) {
                     scoreValues.push(`score100: ${measure.score_100}`);
                 }
+                if (measure.f !== null && measure.f !== undefined) {
+                    scoreValues.push(`f: ${measure.f}`);
+                }
                 if (scoreValues.length > 0) {
                     const scoreLine = document.createElement('span');
                     scoreLine.className = 'measure-scores';

@@ -333,7 +333,8 @@ class MapFeatureMeasuresView(View):
                         kwargs={"pk": result.measure_id},
                     ),
                     "score": round(result.score, 2),
-                    "score_100": round(result.score_100)
+                    "score_100": round(result.score_100),
+                    "f": round(polygon.mean_f, 2),
                 }
                 for result in scores
             ]
